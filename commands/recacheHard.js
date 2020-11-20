@@ -1,12 +1,15 @@
 import '../prototypes/tempReply.js';
-import 'chalk';
-import { developer } from '../coagulators/configCoagulator.js';
+import chalk from 'chalk';
+import { developer, client } from '../coagulators/configCoagulator.js';
 
 export default async function (message) {
     if(message.author.id == developer.id){
-        console.log(client.guilds.map() + `\n${chalk.redBright.underline.red('====================')}`);
-        console.log(client.channels.cache.map() + `\n${chalk.redBright.underline.red('====================')}`);
-        console.log(client.users.cache.map() + `\n${chalk.redBright.underline.red('====================')}`);
+        client.guilds.cache.map(console.log);
+        console.log(`\n${chalk.redBright.underline.red('====================')}`);
+        client.channels.cache.map(console.log);
+        console.log(`\n${chalk.redBright.underline.red('====================')}`);
+        client.users.cache.map(console.log);
+        console.log(`\n${chalk.redBright.underline.red('====================')}`);
         console.log(chalk.bold('Recaching...'));
         for (const g of client.guilds.cache.values()) {
             await g.fetch()
