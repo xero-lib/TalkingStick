@@ -1,5 +1,6 @@
-import * as fs from 'fs';
-import moment from 'moment';
+import * as fs from 'fs/promises';
+import path from 'path';
+import util from 'util'
 import '../prototypes/tempReply.js';
 import chalk from 'chalk';
 import { developer, client, roles } from '../coagulators/configCoagulator.js';
@@ -7,53 +8,55 @@ import { developer, client, roles } from '../coagulators/configCoagulator.js';
 export default async function (message) {
     if(message.author.id == developer.id){
 
-        function eCall(e){if(e){throw e;}};
-
-        function ObjectRecurse(value, func){
-            if(typeof value === Object) {
-                for(const [key2, value2] of Object.entries(value)) func
-            }
-            else{
-                func
-            }
-
-        }
-
-        if(!fs.existsSync('./logs/')) {fs.mkdir('./logs/', eCall)}
-        if(!fs.existsSync('./logs/tscache')) {fs.mkdir('./logs/tscache', eCall)}
-        
-        var file = `/home/helix/guildsCache_${moment().format("YYYY[-]MM[-]DD_HH:mm:ss")}.txt`;
-
-        client.guilds.cache.map(g => {
-            fs.appendFileSync(file,('Guild object:\n'), eCall);
-            for(const [key, value] of Object.entries(g)) fs.appendFile(file,`\t${key}: ${value}\n`, eCall);
-            fs.appendFileSync(file,`Roles for ${g.name}\n`, eCall);
-            g.roles.cache.map(r => {
-                fs.appendFileSync(file,`${r.name}:\n`, eCall);
-                for(const [key, value] of Object.entries(r)) {
-                    if(typeof value === Object) {
-                        for(const [key2, value2] of Object.entries(value)) fs.appendFileSync(file,`\t${key2}: ${value2}\n`, eCall)
-                    }
-                    else{
-                        fs.appendFileSync(file,`\t${key}: ${value}\n`, eCall);
-                    }
-                }
-            })
+        // function ObjectRecurse(value){
+        //     let objMap = '';
+        //     if(value instanceof Map) {
+        //         value.map(v => objMap = objMap.concat(objMap,'\t'+v+',\n'))
+        //     }
+        //     else if(typeof value === 'object') {
+        //         objMap = objMap.concat(objMap, util.inspect(value, true, 5));
+        //     }
             
-            client.channels.cache.map(c => {
-                fs.appendFileSync(file,(`Channel object for ${c.name} in ${c.guild.name}:\n`),eCall)
-                for(const [key, value] of Object.entries(c)) fs.appendFileSync(file,`\t${key}: ${value}\n`, eCall);
-            });
-        })
+        //     else{
+        //         objMap = objMap.concat(objMap,'\t'+value);
+        //     }
+        //     return objMap;
+        // }
 
-        client?.guilds?.cache?.map(g => {
-            console.log('Guild object:'.big,g.toString());
-            console.log(`Roles for ${g.name}`.big);
+        const tscacheDir = path.join(process.cwd(), "logs", "tscache");
+
+        await fs.mkdir(path.join(tscacheDir), { recursive: true })
+            .then(() => console.log(`Created directory at ${tscacheDir}`))
+            .catch(e => console.log(`Could not create directory at ${tscacheDir}:`,e))
+
+        const file = `${path.join(tscacheDir,`guildsCache${new Date().toISOString()}.txt`)}`;
+        
+        client.guilds.cache.map(g => {
+            // fs.appendFile(file,`${util.inspect(g)}\nRoles for ${g.name}: {\n`).catch(e => console.log('bp1',e));
+            util.inspect(g);
+            console.log(chalk.redBright(`Roles for ${g.name}`));
             g.roles.cache.map(r => {
-                console.log((r.name in roles.values) ? chalk.greenBright(r.name) : r.name);
-                console.log(r);
+                // fs.appendFile(file,`\t${r.name} {\n${util.inspect(r)}`).catch(e => console.log('bp2',e));
+                console.log(chalk.redBright(`Role object for ${r.name}`));
+                util.inspect(r)
             })
         })
+        
+            
+        // client.channels.cache.map(c => {
+            // var cObj = ObjectRecurse(c); 
+            // fs.appendFile(file,(`Channel object for ${c.name} in ${c.guild.name} {\n${cObj},`)).catch(() => console.log('gg6'))
+        // for(const [key, value] of Object.entries(c)) {
+        //     if(typeof value != 'object' && typeof value != 'object') fs.appendFileSync(file,`\t${key}: ${value},\n`, eCall);    
+        //     else if(typeof value === 'object' && value!=null) {
+        //         for(const [key3, value3] of Object.entries(value)) fs.appendFileSync(file,`\t${key3}: ${value3},\n`, eCall);
+        //     }
+        //     else {
+        //         value.map(v =>)
+        //     }
+        // }
+        // });
+
         console.log(`\n${chalk.redBright.underline.red('====================')}\n${chalk.redBright('Channel Cache')}`);
         client?.channels?.cache?.map(c => console.log(c));
         console.log(`\n${chalk.redBright.underline.red('====================')}\n${chalk.redBright('User Cache')}`);

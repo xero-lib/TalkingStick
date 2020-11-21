@@ -11,7 +11,7 @@ export default async function (message) {
             .addField('Online Status', 'Online')
             .addField('Server Count', client.guilds.cache.array().length)
             .addField('User Count', client.users.cache.array().length)
-            .addField('Uptime', (`${client.uptime/100/60} minutes`));
+            .addField('Uptime', (`${client.uptime/1000/60} minutes`));
 
         message.tempSend(statusEmbed);
         console.log(`Server Count: ${client.guilds.cache.array().length}\nUser Count: ${client.users.cache.array().length}\nUptime: ${client.uptime}`);
