@@ -31,14 +31,24 @@ export default async function (message) {
 
         const file = `${path.join(tscacheDir,`guildsCache${new Date().toISOString()}.txt`)}`;
         
+        console.log(`\n${chalk.redBright.underline.red('====================')}\n${chalk.redBright('User Cache')}`);
+        client.users.cache.map(u => {
+            console.log(chalk.redBright(`User object for ${u.username}: `));
+            console.log(util.inspect(u))
+        })
+        console.log(`\n${chalk.redBright.underline.red('====================')}\n${chalk.redBright('Guild Cache')}`);
         client.guilds.cache.map(g => {
             // fs.appendFile(file,`${util.inspect(g)}\nRoles for ${g.name}: {\n`).catch(e => console.log('bp1',e));
-            util.inspect(g);
-            console.log(chalk.redBright(`Roles for ${g.name}`));
+            console.log(util.inspect(g));
+            console.log(`\n${chalk.redBright.underline.red('====================')}\n${chalk.redBright('Channel Cache')}`);
+            g.channels.cache.map(c => {
+                console.log(chalk.redBright(`Channel object for ${c.name}:`,util.inspect(c)));
+            })
+            
+            console.log(chalk.redBright(`Roles for ${g.name}:\n`));
             g.roles.cache.map(r => {
                 // fs.appendFile(file,`\t${r.name} {\n${util.inspect(r)}`).catch(e => console.log('bp2',e));
-                console.log(chalk.redBright(`Role object for ${r.name}`));
-                util.inspect(r)
+                console.log(chalk.redBright(`\tRole object for ${r.name}:`,util.inspect(r)));
             })
         })
         
@@ -57,12 +67,7 @@ export default async function (message) {
         // }
         // });
 
-        console.log(`\n${chalk.redBright.underline.red('====================')}\n${chalk.redBright('Channel Cache')}`);
-        client?.channels?.cache?.map(c => console.log(c));
-        console.log(`\n${chalk.redBright.underline.red('====================')}\n${chalk.redBright('User Cache')}`);
         client.users?.cache.map(u => console.log(u));
-        console.log(`\n${chalk.redBright.underline.red('====================')}\n${chalk.redBright('Emoji Cache')}`);
-        client?.emojis?.cache?.map(e => console.log(e));
         console.log(`\n${chalk.redBright.underline.red('====================')}\n${chalk.redBright('Recaching...')}`);
 
         for (const g of client?.guilds?.cache?.values()) {

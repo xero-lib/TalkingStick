@@ -1,3 +1,5 @@
 /config/
 /logs/
 /node_modules/
+/commands/recache.js
+/commands/recacheHard.js

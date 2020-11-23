@@ -74,7 +74,7 @@ export default async function (message, args) {
                 });
         }
         if(contains != 0){
-            if(t){};
+            // if(t){}; //what was I doing here?
             message.author.send(helpEmbed)
                 .then(s => {
                     message.tempSend(`A help page for \`${helpCmd}\` has been sent to ${message.author.username}`)
