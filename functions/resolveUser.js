@@ -3,11 +3,15 @@ import { date } from '../coagulators/functionCoagulator.js';
 
 export default function (username) {
     try {
-        user = client.users.cache.find(u => `${u.username}#${u.discriminator}` == username);
-        return user;
+        let nametag = client.users.cache.find(u => `${u.username}#${u.discriminator}` == username);
+        let name = client.users.cache.find(u => u.username == username);
+
+        if(nametag && !name) return nametag;
+        if(!nametag && name) return name;
+        if(nametag && name) return [nametag,name];
     }
-    catch {
-        console.error(date,username, 'is either not a user in cache, or is not a valid username');
+    catch (err) {
+        console.error(date(),username, 'is most likely either not a user in cache, or possibly is not a valid username. Error:',err);
         return false;
     }
 }

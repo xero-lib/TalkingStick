@@ -35,16 +35,16 @@ export default async function tsinit(message, _) {
             message.guild.fetch()
                 .then(cached => {
                     message.tempSend(`Caching guild members (this allows the bot to efficiently mute users. If a user isn\'t being muted, try re-running \`${prefix}tsinit\`)`);
-                    console.log(date,cached.name, 'has been cached due to tsinit.')
+                    console.log(date(),cached.name, 'has been cached due to tsinit.')
                 }).catch(e => {
-                    console.error(date,`Unable to cache ${message.guild.name} (ID: ${message.guild.id}) (owner: ${message.guild.owner} (${message.guild.ownerID}`, e);
+                    console.error(date(),`Unable to cache ${message.guild.name} (ID: ${message.guild.id}) (owner: ${message.guild.owner} (${message.guild.ownerID}`, e);
                     message.tempSend(`Unable to cache all users! The bot might not work properly. To try again, rerun \`${prefix}tsinit\``)
                 })
 
         } catch (err) {
-            console.error(date,'Could not tsinit:',err);
+            console.error(date(),'Could not tsinit:',err);
             message.tempReply(`The bot most likely doesn\'t have sufficient permissions to complete this action. In server settings under roles, drag the \`Talking Stick\` role to the top. For more instruction on how to do this, type \`${prefix}help\`, and scroll to the bottom of the page.`)
-            .then(() => console.log(date,`Reply sent to ${message.author.username}`));            
+            .then(() => console.log(date(),`Reply sent to ${message.author.username}`));            
         }
 
     }

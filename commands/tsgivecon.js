@@ -18,7 +18,7 @@ export default async function tsgivecon(message, _) {
                         message.tempSend(tsgiveconEmbed);
                     })
                     .catch(err => {
-                        console.error(date,err);
+                        console.error(date(),'Error in tsgivecon:',err);
                         message.tempReply('In order for Talking Stick to work properly, you must drag the \`Talking Stick\` role to the top of the list in server settings.');
                     });
 

@@ -17,14 +17,16 @@ export default async function tsjoin(message, args, command) {
                     SPEAK: true
                 })
                 .catch((err) => {
-                    console.error(err);
-                    message.channel.send('In order for Talking Stick to work properly, you must drag the \`Talking Stick\` role to the top of the list in server settings. Talking Stick will attempt to run without this, but will not be able to function properly, and is strongly disadvized.').catch(console.error);
+                    console.error(date,`Error in updateOverwrite for role Stick Holder in ${message.guild.name}:`,err);
+                    // message.channel.send('In order for Talking Stick to work properly, you must drag the \`Talking Stick\` role to the top of the list in server settings. Talking Stick will attempt to run without this, but will not be able to function properly, and is strongly disadvized.').catch(console.error);
+                    message.tempSend('The bot has encountered a problem. Please contact the developer by DMing the bot.')
+                        .then(() => console.log(date(),`Sent request to ${message.author.tag} (${message.author.id}) in ${message.guild.name} for them to contact developer.`));
                 });
                 
                 message.member.voice.channel.updateOverwrite(message.guild.roles.everyone, {
                     SPEAK: false
                 })
-                .catch(e => console.error('Error in tsjoin: voice: updateOverwrite everyone'));
+                .catch(e => console.error(date(),'Error in tsjoin: voice: updateOverwrite everyone:',e));
                 
                 tsEmbed
                     .setAuthor(message.author.username, message.author.avatarURL())
@@ -36,15 +38,14 @@ export default async function tsjoin(message, args, command) {
                 for (const [_, member] of message.member.voice.channel.members) {
                     if (member != message.member){
                         member.voice.setMute(true)
-                            .catch(err => message.tempReply(`Unable to mute members in ${message.member.voice.channel.name}, please report this by DMing the bot.`));
-
+                            .catch(err => {
+                                message.tempReply(`Unable to mute members in ${message.member.voice.channel.name}, please report this by DMing the bot.`);
+                                console.error(date(),`Unable to mute voice in ${message.guild.name}:`,err);
+                            })
                         member.roles.add(findRole(member.guild, 'Stick Listener'))
                             .catch(e => {
-                                console.log(e, `\nUnable to update role for ${member.user.username}#${member.user.discriminator} (${member.id})`)
-                                message.tempReply(`Unable to update role for ${member.user.username}#${member.user.discriminator}. Please DM the bot about this incident. A possible solution is to move the Talking Stick role above all others under Server Settings > Roles and my ensuring that the Talking Stick role has Manage Roles permissions.`)
-                                    .catch(e2 => {
-                                        console.log(e2)
-                                    });
+                                console.error(date(),`Unable to update role for ${member.user.username}#${member.user.discriminator} (${member.id}):`,e)
+                                message.tempReply(`Unable to update role for ${member.user.username}#${member.user.discriminator}. Please DM the bot about this incident. A possible solution is to move the Talking Stick role above all others under Server Settings > Roles and my ensuring that the Talking Stick role has Manage Roles permissions.`);
                             });
                     }
                 }
@@ -56,7 +57,7 @@ export default async function tsjoin(message, args, command) {
                     if(!r.name == 'muted' && !r.name == 'Muted') {
                         message.channel.updateOverwrite(r, {SEND_MESSAGES: false})
                             .then(c => console.log(`The channel ${message.channel.name} now has the talking stick in ${message.guild.name}`))
-                            .catch(e => console.log(`Could not update permissions for ${r.name} in ${message.channel.name} in ${message.guild.name} requested by ${message.author.username}#${message.author.discriminator} (${message.member.id}) :`, e));
+                            .catch(e => console.error(`Could not update permissions for ${r.name} in ${message.channel.name} in ${message.guild.name} requested by ${message.author.username}#${message.author.discriminator} (${message.member.id}) :`, e));
                     }
                 })
 

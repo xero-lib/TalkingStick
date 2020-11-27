@@ -1,6 +1,6 @@
 import '../prototypes/tempReply.js';
 import Discord from 'discord.js';
-import {developer} from '../coagulators/configCoagulator.js';
+import { developer } from '../coagulators/configCoagulator.js';
 
 export default async function (message) {
     const dnwEmbed = new Discord.MessageEmbed()

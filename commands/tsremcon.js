@@ -1,5 +1,5 @@
 import '../prototypes/tempReply.js';
-import { someRole, findRole } from '../coagulators/functionCoagulator.js';
+import { someRole, findRole, date } from '../coagulators/functionCoagulator.js';
 import { defaultPrefix as prefix, developer } from '../coagulators/configCoagulator.js';
 
 export default async function (message) {
@@ -7,8 +7,7 @@ export default async function (message) {
         if(someRole(message.guild, 'Stick Controller')){
             if(message.mentions.users.first()){
                 if(someRole(message.mentions.users.first(), 'Stick Controller')){
-                    
-                    message.mentions.members.first().roles.remove(findRole(message.guild, 'Stick Controller')).catch(console.error);
+                    message.mentions.members.first().roles.remove(findRole(message.guild, 'Stick Controller')).catch(e => console.error(date(),'Error in tsremcon: cannot remove role:',e));
                 } else {
                     message.tempReply(`${message.mentions.members.first()} does not have Stick Controller.`);
                 }

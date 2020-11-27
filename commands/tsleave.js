@@ -1,8 +1,8 @@
 import '../prototypes/tempReply.js';
 import '../prototypes/tempSend.js';
 import Discord from 'discord.js';
-import  {defaultPrefix as prefix} from '../coagulators/configCoagulator.js';
-import {someRole, findRole} from '../coagulators/functionCoagulator.js';
+import { defaultPrefix as prefix } from '../coagulators/configCoagulator.js';
+import { someRole, findRole } from '../coagulators/functionCoagulator.js';
 
 export default async function tsleave(message, args, command) {
     const tsLeaveEmbed = new Discord.MessageEmbed();

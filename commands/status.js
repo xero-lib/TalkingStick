@@ -15,6 +15,6 @@ export default async function (message) {
             .addField('Uptime', (`${client.uptime/1000/60} minutes`));
 
         message.tempSend(statusEmbed);
-        console.log(date,`Server Count: ${client.guilds.cache.array().length}\nUser Count: ${client.users.cache.array().length}\nUptime: ${client.uptime}`);
+        console.log(date(),`Server Count: ${client.guilds.cache.array().length}\nUser Count: ${client.users.cache.array().length}\nUptime: ${client.uptime}`);
     }
 }

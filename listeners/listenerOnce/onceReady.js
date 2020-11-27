@@ -1,6 +1,6 @@
 
 import { client } from '../../coagulators/configCoagulator.js';
-import {date, setPresence } from '../../coagulators/functionCoagulator.js';
+import { date, setPresence } from '../../coagulators/functionCoagulator.js';
 import chalk from 'chalk';
 
 export default async function () {
@@ -20,7 +20,7 @@ export default async function () {
     //         });
     // }
 
-    console.log(date,`Currently in ${chalk.yellow(client.guilds.cache.map(guild => guild.name).length)} servers:\n`);
-    console.log(date,chalk.greenBright('Ready!'));
-    setPresence;
+    console.log(date(),`Currently in ${chalk.yellow(client.guilds.cache.map(guild => guild.name).length)} servers`);
+    console.log(date(),chalk.greenBright('Ready!'));
+    setPresence();
 }

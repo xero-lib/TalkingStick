@@ -1,10 +1,11 @@
 import { setPresence, date } from '../../coagulators/functionCoagulator.js';
 
-export default async function () {
+export default async function (args) {
+  console.log(date(),`Recconnecting...\n\t`,args)
   try {  
-    setPresence;
+    setPresence();
   }
   catch (err) {
-     console.error(date,'setStatus didnt really work lol:', err);
+     console.error(date(),'An error was encountered while running setPresence during reconnect:', err);
   }
 }

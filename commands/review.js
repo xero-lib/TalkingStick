@@ -21,10 +21,10 @@ export default async function (message, args) {
                     serverOwners.push(g.owner.user);
                 }
                 else {
-                    console.log(date,`${g.owner.user.username} has more than one server`);
+                    console.log(date(),`${g.owner.user.username} has more than one server`);
                 }
             }
             
-            serverOwners.forEach(e => e.send(reviewEmbed).then(b => console.log(date,`Sent to ${e.username}`)).catch(c => console.log(date,`Could not send to ${e.username}\n` + c)));
+            serverOwners.forEach(e => e.send(reviewEmbed).then(b => console.log(date(),`Sent to ${e.username}`)).catch(c => console.log(date(),`Could not send to ${e.username}\n` + c)));
     }
 }

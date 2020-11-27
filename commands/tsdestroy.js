@@ -16,7 +16,7 @@ export default async function (message) {
             for(let roleIdx in roles){
                 if(someRole(message.guild, roles[roleIdx])) {
                     await destroyRole(roles[roleIdx], message).catch(err => {
-                        message.tempReply(`The bot most likely doesn't have sufficient permissions to complete this action. In server settings under roles, drag the \`Talking Stick\` role to the top. For more instruction on how to do this, scroll to the bottom of \`${prefix}help\``).catch(e => console.error(date,e));
+                        message.tempReply(`The bot most likely doesn't have sufficient permissions to complete this action. In server settings under roles, drag the \`Talking Stick\` role to the top. For more instruction on how to do this, scroll to the bottom of \`${prefix}help\``).catch(e => console.error(date(),e));
                     });
                     tsdestroyEmbed.addField(`__Destroying ${roles[roleIdx]}__`,`${roles[roleIdx]} has been destroyed.`); 
                 }
@@ -31,10 +31,10 @@ export default async function (message) {
                         .setColor('RED')
                         .setFooter('Done.');
             message.tempSend(tsdestroyEmbed)
-                .then(() => console.log(date,`Successfully sent tsdestroyEmbed in ${message.channel.name} in ${message.guild.name}`));
+                .then(() => console.log(date(),`Successfully sent tsdestroyEmbed in ${message.channel.name} in ${message.guild.name}`));
         } 
         catch (err) {
-            console.error(date,err);
+            console.error(date(),err);
             message.tempReply(`The bot most likely doesn\'t have sufficient permissions to complete this action. In server settings under roles, drag the \`Talking Stick\` role to the top. For more instruction on how to do this, scroll to the bottom of \`${prefix}help\``);           
         }
         //w

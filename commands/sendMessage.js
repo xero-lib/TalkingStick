@@ -12,7 +12,7 @@ export default async function (message, args, command) {
     
     if(sentUser) sentUser.send(sendMessageEmbed)
         .then(s => {
-            console.log(date,`Successfully sent message to ${sentUser.username}#${sentUser.discriminator} (${args})`);
+            console.log(date(),`Successfully sent message to ${sentUser.username}#${sentUser.discriminator} (${args})`);
             sendMessageEmbed
                 .setAuthor(`From ${message.author.username}#${message.author.discriminator} to ${sentUser.username}#${sentUser.discriminator} (${sentUser.id})`, developer.avatarURL())
                 .setTitle(`Sent to ${sentUser.username}#${sentUser.discriminator} (${sentUser.id})`)
@@ -21,11 +21,11 @@ export default async function (message, args, command) {
             developer.send(sendMessageEmbed);
         })
         .catch(e => {
-            console.log(date,`There was an error sending the message to ${sentUser.username}#${sentUser.discriminator} (${args})\n` + e);
+            console.log(date(),`There was an error sending the message to ${sentUser.username}#${sentUser.discriminator} (${args})\n` + e);
             message.author.send(`There was an error sending the message to ${sentUser.username}#${sentUser.discriminator} (${args})\n \`\`\`js\n${e}\n\`\`\``);
         });
     else{
-        console.log(date,`Could not send message to ${args} as they are most likely not in the cache.`);
+        console.log(date(),`Could not send message to ${args} as they are most likely not in the cache.`);
         message.tempReply(`Unable to send message to ${args}`);
     }
 }

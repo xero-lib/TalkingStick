@@ -62,15 +62,15 @@ export default async function (message, args) {
         if(contains == 0) {
             message.tempReply(`${args} is not a valid command. For a list of commands, run \`${prefix}help\``)
                 .then(s => {
-                    console.log(date,`Successfully sent invalid command reply to ${message.author.username}#${message.author.discriminator} (${message.author.id}) in ${message.channel.name} in server "${message.guild.name}".`);
+                    console.log(date(),`Successfully sent invalid command reply to ${message.author.username}#${message.author.discriminator} (${message.author.id}) in ${message.channel.name} in server "${message.guild.name}".`);
                 })
                 .catch(e => {
                     message.author.send(`${args} is not a valid command. For a list of commands, run \`${prefix}help\``)
                         .then(s => {
-                            console.log(date,`Sent invalid command response to  ${chalk.yellow(message.author.username)}#${chalk.yellow(message.author.discriminator)} (${message.author.id}) from ${message.guild.name} (${message.guild.id})`)
+                            console.log(date(),`Sent invalid command response to  ${chalk.yellow(message.author.username)}#${chalk.yellow(message.author.discriminator)} (${message.author.id}) from ${message.guild.name} (${message.guild.id})`)
                         })
                         .catch(e1 => {
-                            console.log(date,`\nCannot send invalid command response to ${chalk.yellow(message.author.username)}#${chalk.yellow(message.author.discriminator)} (${message.author.id}) from ${message.guild.name} (${message.guild.id}) through DMs:`,e1);
+                            console.log(date(),`\nCannot send invalid command response to ${chalk.yellow(message.author.username)}#${chalk.yellow(message.author.discriminator)} (${message.author.id}) from ${message.guild.name} (${message.guild.id}) through DMs:`,e,'\nSecond error:'+e1);
                         });
                 });
         }
@@ -79,10 +79,10 @@ export default async function (message, args) {
             message.author.send(helpEmbed)
                 .then(s => {
                     message.tempSend(`A help page for \`${helpCmd}\` has been sent to ${message.author.username}`)
-                        .then(s => console.log(date,`${chalk.green('help')} has been sent to ${message.author.username}#${message.author.discriminator} (${message.author.id}) in ${message.channel.name} from "${message.guild.name}"`));
+                        .then(s => console.log(date(),`${chalk.green('help')} has been sent to ${message.author.username}#${message.author.discriminator} (${message.author.id}) in ${message.channel.name} from "${message.guild.name}"`));
                 })
                 .catch(e => {
-                    console.error(date,e);
+                    console.error(date(),e);
                     message.tempSend(`Could not send DM to ${message.author.username}, sending temporary help message here.`, helpEmbed);
             });
         }
@@ -97,6 +97,6 @@ export default async function (message, args) {
             .addField('Available help pages', `\`${helpArr.map((e) => e[0]).join('\n')}\``);
 
         message.tempSend(genHelpEmbed)
-            .then(s => console.log(date,`Successfully sent genHelpEmbed in ${message.channel.name} in ${message.guild.name} in response to ${message.author.username}#${message.author.discriminator} (${message.author.id})`))
+            .then(s => console.log(date(),`Successfully sent genHelpEmbed in ${message.channel.name} in ${message.guild.name} in response to ${message.author.username}#${message.author.discriminator} (${message.author.id})`))
     }
 }
