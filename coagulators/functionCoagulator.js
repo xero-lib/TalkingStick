@@ -5,3 +5,5 @@ export {default as someRole     } from '../functions/someRole.js'       ;
 export {default as resolveUser  } from '../functions/resolveUser.js'    ;
 export {default as resolveUserID} from '../functions/resolveUserID.js'  ;
 export {default as guildHasRoles} from '../functions/guildHasRoles.js'  ;
+export {default as setPresence  } from '../functions/setPresence.js'    ;
+export const date = `[${new Date().toISOString()}]\t`;

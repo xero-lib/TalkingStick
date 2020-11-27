@@ -1,4 +1,5 @@
-import {client} from '../coagulators/configCoagulator.js';
+import { client } from '../coagulators/configCoagulator.js';
+import { date } from '../coagulators/functionCoagulator.js';
 
 export default function (username) {
     try {
@@ -6,7 +7,7 @@ export default function (username) {
         return user;
     }
     catch {
-        console.log(username, 'is either not a user in cache, or is not a valid username');
+        console.error(date,username, 'is either not a user in cache, or is not a valid username');
         return false;
     }
 }

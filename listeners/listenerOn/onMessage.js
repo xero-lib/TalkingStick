@@ -1,9 +1,9 @@
 import '../../prototypes/tempReply.js';
 import '../../prototypes/tempSend.js';
 import chalk from 'chalk';
-import {Discord, client, botPfp, botName, developer, defaultPrefix as prefix} from '../../coagulators/configCoagulator.js';
+import { Discord, client, botPfp, botName, developer, defaultPrefix as prefix } from '../../coagulators/configCoagulator.js';
 import CommandMap from '../../functions/CommandMap.js';
-
+import { date } from '../../coagulators/functionCoagulator.js';
 
 const helpArr = [
     ['help'      , `DMs the user help for a given command.`                                                                                                                                                                   , 'Takes one argument:', '<command>'                        , `\`${prefix}help tsjoin\``              , 'everyone'        ], 
@@ -30,18 +30,18 @@ export default async function (message) {
             let command = string.split(' ');
             // Check to see if command is defined in CommandMap
             if (command[0] in CommandMap) {
-                console.log(`${chalk.green(command)} command issued by ${chalk.yellow(message.author.username)}#${chalk.yellow(message.author.discriminator)} (${message.member.id}) in ${message.guild.name} (${message.guild.id}): \n\t${message.content}`);
+                console.log(date,`${chalk.green(command)} command issued by ${chalk.yellow(message.author.username)}#${chalk.yellow(message.author.discriminator)} (${message.member.id}) in ${message.guild.name} (${message.guild.id}): \n\t${message.content}`);
                 let args = message.content.substring(prefix.length+command.length+1).split(/ +/)[1];
                 CommandMap[command[0]](message, args, command[0]);
             } else {
-                console.log(`Invalid command issued by ${message.author.username}#${message.author.discriminator} (${message.author.id}) in ${message.guild.name}: ${message.content}`);
-                message.tempReply(`**\`${prefix}${command}\` is an invalid command.**`)
-                    .then(s => console.log(`Successfully sent invalid command notification to ${message.author.username}#${message.author.discriminator} (${message.author.id}) in ${message.guild.name}`));
+                console.log(date,`Invalid command issued by ${message.author.username}#${message.author.discriminator} (${message.author.id}) in ${message.guild.name}: ${message.content}`);
+                message.tempReply(`**\`${prefix}${command}\` not a valid command.**`)
+                    .then(s => console.log(date,`Successfully sent invalid command notification to ${message.author.username}#${message.author.discriminator} (${message.author.id}) in ${message.guild.name}`));
             }
         }
     }
     else if (!message.author.bot) {
-        console.log(`DM from ${message.author.username}#${message.author.discriminator}\n\t${message.content}`);
+        console.log(date,`DM from ${message.author.username}#${message.author.discriminator}\n\t${message.content}`);
         if (message.content.startsWith(prefix)) {
             const genHelpEmbed = new Discord.MessageEmbed();
             let string = message.content.substring(prefix.length).split(/ +/,1)[0];
@@ -66,16 +66,17 @@ export default async function (message) {
                     });
                     if(contains == 0) {
                         message.channel.send(`${args} is not a valid command. For a list of commands, run \`${prefix}help\``)
-                            .then(s => console.log(`Successfully sent invalid command notification to ${message.author.username}#${message.author.discriminator} (${message.author.id}) in DMs`))
-                            .catch(e => console.log(e, `Could not send invalid command notification to ${message.author.username}#${message.author.discriminator} (${message.author.id}) in DMs`));
+                            .then(() => console.log(date,`Successfully sent invalid command notification to ${message.author.username}#${message.author.discriminator} (${message.author.id}) in DMs`))
+                            .catch(e => console.log(date,`Could not send invalid command notification to ${message.author.username}#${message.author.discriminator} (${message.author.id}) in DMs:`,e));
                     }
                     if(contains != 0){
                         message.author.send(helpEmbed)
-                            .then((s) => {
-                                console.log(`Help has been sent to ${message.author.username} in DMs`);
+                            .then(() => {
+                                console.log(date,`Help has been sent to ${message.author.username} in DMs`);
                             })
-                            .catch((err) => {
-                                console.error(err, `Could not send Help Embed to ${message.author.username}#${message.author.discriminator} (${message.author.id}) in DMs`);
+                            .catch(e => {
+                                console.error(date,`Could not send Help Embed to ${message.author.username}#${message.author.discriminator} (${message.author.id}) in DMs:`,e);
+
                         });
                     }
                 }
@@ -88,16 +89,16 @@ export default async function (message) {
                         .addField('Example',  `\`${prefix}help tsjoin\`.`)
                         .addField('Available help pages', `\`${helpArr.map((e) => e[0]).join('\n')}\``)
                     message.channel.send(genHelpEmbed)
-                        .then((s) => {
-                            console.log(`Help has been sent to ${message.author.username} in DMs`);
+                        .then(() => {
+                            console.log(date,`Help has been sent to ${message.author.username} in DMs`);
                         })
-                        .catch((err) => {
-                            console.error(`Could not send Help Embed to ${message.author.username}#${message.author.discriminator} (${message.author.id}) in DMs:`, err);
+                        .catch(e => {
+                            console.error(date,`Could not send Help Embed to ${message.author.username}#${message.author.discriminator} (${message.author.id}) in DMs:`,e);
                         });
                 }
             } else if(command[0] in CommandMap) {
                 message.channel.send(`The command \`${message.content}\` must be ran in a server.`)
-                    .catch(e => console.log(`Could not send "Must use command in server" notification to ${message.author.username}#${message.author.discriminator} (${message.author.id})`));
+                    .catch(e => console.log(date, `Could not send "Must use command in server" notification to ${message.author.username}#${message.author.discriminator} (${message.author.id}):`,e));
             } else {
                 message.channel.send(`\`${message.content}\` is not a valid command.`).catch(console.err);
             }
@@ -110,7 +111,7 @@ export default async function (message) {
                     }
                 })
             })
-            console.log(chalk.green('Related Servers to bot:\n') + relatedServers.join(chalk.redBright('\n')));
+            console.log(date, chalk.green('Related Servers to bot:\n') + relatedServers.join(chalk.redBright('\n')));
             var related = relatedServers.join('\n');
             const dmEmbed = new Discord.MessageEmbed()
                 .setAuthor(`${message.author.username}#${message.author.discriminator} (${message.author.id})`, message.author.avatarURL())
@@ -137,7 +138,7 @@ export default async function (message) {
                     message.react("✅");
                 })
                 .catch(e => {
-                    console.log(e, `Error sending message from ${message.author.username}#${message.author.discriminator} (${message.author.id})`)
+                    console.log(date,`Error sending message from ${message.author.username}#${message.author.discriminator} (${message.author.id}):`,e)
                     message.channel.send('There was an error sending the message, try again in a little while, add Silence#6134, or join the support server: https://discord.gg/Jxe7mK2dHT');
                 });  
         }       

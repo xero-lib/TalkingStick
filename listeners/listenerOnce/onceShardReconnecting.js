@@ -1,14 +1,10 @@
-import {client, defaultPrefix} from '../../coagulators/configCoagulator.js';
+import { setPresence, date } from '../../coagulators/functionCoagulator.js';
 
 export default async function () {
-    console.log('Reconnecting...');
-    client?.user?.setPresence({
-        status: 'online',
-        activity: {
-          name: `${defaultPrefix}help`,
-          type: 'LISTENING'  
-        }
-    })
-    .then(s => console.log('Reconnected.', s))
-    .catch(e => console.log('Could not set status, check if bot is online/status is set.'));
+  try {  
+    setPresence;
+  }
+  catch (err) {
+     console.error(date,'setStatus didnt really work lol:', err);
+  }
 }

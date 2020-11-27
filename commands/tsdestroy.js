@@ -1,10 +1,10 @@
 import '../prototypes/tempReply.js';
 import '../prototypes/tempSend.js';
-import {someRole, findRole, destroyRole} from '../coagulators/functionCoagulator.js';
-import {Discord, roles, defaultPrefix as prefix} from '../coagulators/configCoagulator.js';
+import { someRole, findRole, destroyRole, date } from '../coagulators/functionCoagulator.js';
+import { Discord, roles, defaultPrefix as prefix } from '../coagulators/configCoagulator.js';
 
 export default async function (message) {
-    if(message.member.permissions.has(8) || message.member.id == developer.id) { //if message author has admin perms
+    if(message.member.hasPermissions(8) || message.member.id == developer.id) { //if message author has admin perms
         const tsdestroyEmbed = new Discord.MessageEmbed();
         const s = "";
         if(findRole(message.guild, 'TSLeft')){
@@ -16,7 +16,7 @@ export default async function (message) {
             for(let roleIdx in roles){
                 if(someRole(message.guild, roles[roleIdx])) {
                     await destroyRole(roles[roleIdx], message).catch(err => {
-                        message.tempReply(`The bot most likely doesn't have sufficient permissions to complete this action. In server settings under roles, drag the \`Talking Stick\` role to the top. For more instruction on how to do this, scroll to the bottom of \`${prefix}help\``).catch(console.error);
+                        message.tempReply(`The bot most likely doesn't have sufficient permissions to complete this action. In server settings under roles, drag the \`Talking Stick\` role to the top. For more instruction on how to do this, scroll to the bottom of \`${prefix}help\``).catch(e => console.error(date,e));
                     });
                     tsdestroyEmbed.addField(`__Destroying ${roles[roleIdx]}__`,`${roles[roleIdx]} has been destroyed.`); 
                 }
@@ -31,10 +31,10 @@ export default async function (message) {
                         .setColor('RED')
                         .setFooter('Done.');
             message.tempSend(tsdestroyEmbed)
-                .then(s => console.log(`Successfully sent tsdestroyEmbed in ${message.channel.name} in ${message.guild.name}`));
+                .then(() => console.log(date,`Successfully sent tsdestroyEmbed in ${message.channel.name} in ${message.guild.name}`));
         } 
         catch (err) {
-            console.error(err);
+            console.error(date,err);
             message.tempReply(`The bot most likely doesn\'t have sufficient permissions to complete this action. In server settings under roles, drag the \`Talking Stick\` role to the top. For more instruction on how to do this, scroll to the bottom of \`${prefix}help\``);           
         }
         //w

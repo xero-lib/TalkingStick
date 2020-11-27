@@ -1,7 +1,6 @@
 import '../prototypes/tempReply.js';
-import {someRole, findRole, guildHasRoles } from '../coagulators/functionCoagulator.js';
-import {developer} from '../coagulators/configCoagulator.js';
-
+import { someRole, findRole, guildHasRoles, date } from '../coagulators/functionCoagulator.js';
+import { developer } from '../coagulators/configCoagulator.js';
 
 export default async function (message) {
     if(guildHasRoles(message)) {
@@ -13,11 +12,11 @@ export default async function (message) {
                 if(message.member.voice.channel) {
                     if(message.mentions.members.first().voice.channelID == message.member.voice.channelID) {
                         message.mentions.members.first().roles.add(findRole(message.guild, 'Stick Holder'))
-                            .then(s => console.log(`Successfully added the Stick Holder role to ${message.mentions.members.first().username}#${message.mentions.members.first().discriminator} (${message.mentions.members.first().id}) by ${message.member.user.username}#${message.member.user.discriminator} (${message.member.id}) in ${message.guild.name}`))
-                            .catch(err => console.error(`Could not add the Stick Holder role to ${message.mentions.members.first().username}#${message.mentions.members.first().discriminator} (${message.mentions.members.first().id}) by ${message.member.user.username}#${message.member.user.discriminator} (${message.member.id}) in ${message.guild.name}:`, err));
+                            .then(() => console.log(date,`Successfully added the Stick Holder role to ${message.mentions.members.first().username}#${message.mentions.members.first().discriminator} (${message.mentions.members.first().id}) by ${message.member.user.username}#${message.member.user.discriminator} (${message.member.id}) in ${message.guild.name}`))
+                            .catch(err => console.error(date,`Could not add the Stick Holder role to ${message.mentions.members.first().username}#${message.mentions.members.first().discriminator} (${message.mentions.members.first().id}) by ${message.member.user.username}#${message.member.user.discriminator} (${message.member.id}) in ${message.guild.name}:`, err));
                         message.mentions.members.first().voice.setMute(false)
-                            .then(s => console.log(`Successfully unmuted ${message.mentions.members.first()}#${message.mentions.members.first().discriminator} (${message.mentions.members.first().id}) by ${message.member.user.username}#${message.member.user.discriminator} (${message.member.id}) in ${message.guild.name}`))
-                            .catch(err => console.error(`Could not unmute ${message.mentions.members.first().username}#${message.mentions.members.first().discriminator} (${message.mentions.members.first().id}) by ${message.member.user.username}#${message.member.user.discriminator} (${message.member.id}) in ${message.guild.name}:`, err));
+                            .then(() => console.log(date,`Successfully unmuted ${message.mentions.members.first()}#${message.mentions.members.first().discriminator} (${message.mentions.members.first().id}) by ${message.member.user.username}#${message.member.user.discriminator} (${message.member.id}) in ${message.guild.name}`))
+                            .catch(err => console.error(date,`Could not unmute ${message.mentions.members.first().username}#${message.mentions.members.first().discriminator} (${message.mentions.members.first().id}) by ${message.member.user.username}#${message.member.user.discriminator} (${message.member.id}) in ${message.guild.name}:`, err));
                     }
                     else {
                         message.tempReply(`${message.mentions.members.first().name} is not in your voice channel.`);

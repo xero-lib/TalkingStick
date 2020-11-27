@@ -20,8 +20,9 @@ export const
     application = (await client.fetchApplication());
 
 // Listener.once //
-client.once('ready'            , onceReady            );
-client.once('shardReconnecting', onceShardReconnecting);
+client
+    .once('ready'            , onceReady            )
+    .once('shardReconnecting', onceShardReconnecting);
 
 // Listener.on //
     // Process.on //
@@ -30,11 +31,12 @@ client.once('shardReconnecting', onceShardReconnecting);
         // process.on('SIGINT'            , n     => console.error('SIGINT recieved:'            , n    ));
 
     // Client.on //
-        client.on('message'         , onMessage         );
-        client.on('channelCreate'   , onChannelCreate   );
-        client.on('channelDelete'   , onChannelDelete   );
-        client.on("voiceStateUpdate", onVoiceStateUpdate);
-        client.on('messageUpdate'   , onMessageUpdate   );
+        client
+            .on('message'         , onMessage         )
+            .on('channelCreate'   , onChannelCreate   )
+            .on('channelDelete'   , onChannelDelete   )
+            .on("voiceStateUpdate", onVoiceStateUpdate)
+            .on('messageUpdate'   , onMessageUpdate   );
 
 
 

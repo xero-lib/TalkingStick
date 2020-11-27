@@ -1,4 +1,5 @@
-import {client} from '../coagulators/configCoagulator.js'
+import { client } from '../coagulators/configCoagulator.js'
+import { date } from '../coagulators/functionCoagulator.js';
 
 export default function (id) {
     try {
@@ -6,7 +7,7 @@ export default function (id) {
         return id;    
     }
     catch {
-        console.log(id, 'is either not a user in cache, or is not a valid user id');
+        console.error(date,id,'is either not a user in cache, or is not a valid user id');
         return false;
     }
 }

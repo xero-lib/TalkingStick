@@ -1,7 +1,9 @@
-export default async function (e) {
-    if(e.name){
-        await e.fetch()
-            .then(s => console.log(`Fetching deleted channel ${e.name})`))
-            .catch(e => console.log(`Could not refetch ${e.id}`));
+import {date} from '../../coagulators/functionCoagulator.js';
+
+export default async function (c) {
+    if(c.name){
+        await c.fetch()
+            .then(c => console.log(date,`Fetching deleted channel ${c.name})`))
+            .catch(e => console.log(date,`Could not refetch ${c?.id}`));
     }
 }

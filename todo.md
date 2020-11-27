@@ -1,4 +1,6 @@
 # Todo
+##        add updateOverwrite for delete
+##        enable aliases for commands
 ##        Add resolve servers command/function
 ##        FINISH REFACTORING
 ##        add better notifications for missing access errors: in progress
@@ -16,3 +18,4 @@
 ##        add guild/member list to database and get diff of names to see which is/are new and which one(s) removed Talking Stick
 ##        Finish readme
 ##        Turn resusr into embed
+##        Improve logging in remstick

@@ -1,8 +1,9 @@
 import '../prototypes/tempReply.js';
 import '../prototypes/tempSend.js';
 import Discord from 'discord.js';
-import {findRole, someRole, guildHasRoles} from '../coagulators/functionCoagulator.js';
-import { defaultPrefix as prefix, developer} from '../coagulators/configCoagulator.js';
+import { findRole, someRole, guildHasRoles } from '../coagulators/functionCoagulator.js';
+import { client, defaultPrefix as prefix, developer } from '../coagulators/configCoagulator.js';
+import { date } from '../coagulators/functionCoagulator.js';
 
 export default async function (message, args) {
     if(guildHasRoles(message.guild)) {
@@ -15,22 +16,16 @@ export default async function (message, args) {
                     if(message.mentions.members.first().voice.channelID && message.mentions.members.first().voice.channelID == message.member.voice.channelID) {
                         message.mentions.members.first().voice.setMute(false).catch(console.error);
                         if(message.member.id != message.mentions.members.first().id) {
-                            message.member.voice.setMute(true)
-                                .catch(err => {
-                                    console.error(err);
-                                    console.log('TSPass Error in message.member.voice.setMute');
-                                });
-                                message.member.roles.add(findRole(message.guild, 'Stick Listener'))
-                                    .catch(err => {
-                                        console.error(err);
-                                        console.log('TSPass Error in message.member.roles.add');
-                                    });
-                                message.member.roles.remove(findRole(message.guild, 'Stick Holder'))
-                                    .catch(err => {
-                                        console.error(err);
-                                        console.log('TSPass Error in message.member.roles.remove');
-                                        message.tempReply('In order for Talking Stick to work properly, you must drag the \`Talking Stick\` role to the top of the list in server settings.');
-                                    });
+                            message.member.voice.setMute(true).catch(err => {
+                                console.error(date,'TSPass Error in message.member.voice.setMute:',err);
+                            });
+                            message.member.roles.add(findRole(message.guild, 'Stick Listener')).catch(err => {
+                                console.error(date,'TSPass Error in message.member.roles.add:',err);
+                            });
+                            message.member.roles.remove(findRole(message.guild, 'Stick Holder')).catch(err => {
+                                console.error(date,'TSPass Error in message.member.roles.remove:',err);
+                                message.tempReply('In order for Talking Stick to work properly, you must drag the \`Talking Stick\` role to the top of the list in server settings.');
+                            });
                         }
                         message.mentions.members.first().roles.add(findRole(message.guild, 'Stick Holder')).catch(console.error);
                         tspassEmbed.addField('TSPass', `Passed stick to ${message.mentions.members.first().displayName} in ${message.mentions.members.first().voice.channel.name}`);
@@ -38,8 +33,8 @@ export default async function (message, args) {
                     } 
                     else if(!message.mentions.members.first().voice.channelID && !message.member.voice.channelID) {
                         message.mentions.members.first().roles.add(findRole(message.guild, 'Stick Holder'))
-                            .then(s => tspassEmbed.addField('TSPass', `Passed stick to ${message.mentions.members.first()} in ${message.channel.name}`))
-                            .catch(console.error);
+                            .then(() => tspassEmbed.addField('TSPass', `Passed stick to ${message.mentions.members.first()} in ${message.channel.name}`))
+                            .catch(e => console.error(date,e));
                         message.member.roles.remove(findRole(message.guild, 'Stick Holder')).catch(console.error);
                         message.tempSend(tspassEmbed);
                     }
@@ -55,17 +50,17 @@ export default async function (message, args) {
                     if(message.mentions.members.first()) {
                         message.member.roles.remove(findRole(message.guild, 'Stick Holder'))
                             .catch(err => {
-                                console.error('TSPass Error in message.member.roles.remove:',err);
+                                console.error(date,'TSPass Error in message.member.roles.remove:',err);
                                 message.tempReply('In order for Talking Stick to work properly, you must drag the \`Talking Stick\` role to the top of the list in server settings.');
                             });
                         message.mentions.members.first().roles.add(findRole(message.guild, 'Stick Holder')).catch(console.error);
                         tspassEmbed.addField('TSPass', `Passed stick to ${message.mentions.members.first().displayName} in ${message.channel.name}`);
 
                         message.mentions.members.first().roles.add(findRole(message.guild, 'Stick Holder'))
-                            .then(s => {
+                            .then(() => {
                                 tspassEmbed.addField('TSPass', `Passed stick to ${message.mentions.members.first().displayName} in ${message.channel.name}`)
                             })
-                            .catch(console.error);
+                            .catch(e => console.error(date,`Unable to add stick holder to ${message.author.tag}:`,e));
                             
                         message.member.roles.remove(findRole(message.guild, 'Stick Holder')).catch(console.error);
                         message.tempSend(tspassEmbed);

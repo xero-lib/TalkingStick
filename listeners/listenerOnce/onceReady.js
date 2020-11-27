@@ -1,5 +1,6 @@
 
-import {client, defaultPrefix as prefix} from '../../coagulators/configCoagulator.js';
+import { client } from '../../coagulators/configCoagulator.js';
+import {date, setPresence } from '../../coagulators/functionCoagulator.js';
 import chalk from 'chalk';
 
 export default async function () {
@@ -19,14 +20,7 @@ export default async function () {
     //         });
     // }
 
-    console.log(`Currently in ${chalk.yellow(client.guilds.cache.map(guild => guild.name).length)} servers:\n`);
-    console.log(chalk.greenBright('Ready!'));
-
-    client.user.setPresence({
-        status: 'online',
-        activity: {
-          name: `${prefix}help`,
-          type: 'LISTENING'  
-        }
-    });
+    console.log(date,`Currently in ${chalk.yellow(client.guilds.cache.map(guild => guild.name).length)} servers:\n`);
+    console.log(date,chalk.greenBright('Ready!'));
+    setPresence;
 }

@@ -1,7 +1,7 @@
 import '../prototypes/tempReply.js';
 import '../prototypes/tempSend.js';
-import { findRole }      from '../coagulators/functionCoagulator.js';
-import { defaultPrefix, developer, Discord } from '../coagulators/configCoagulator.js'
+import { findRole, date } from '../coagulators/functionCoagulator.js';
+import { defaultPrefix, developer, Discord } from '../coagulators/configCoagulator.js';
 
 export default async function tsgivecon(message, _) {
     if(message.member.hasPermission(8) || message.member.id == developer.id) {
@@ -18,7 +18,7 @@ export default async function tsgivecon(message, _) {
                         message.tempSend(tsgiveconEmbed);
                     })
                     .catch(err => {
-                        console.error(err);
+                        console.error(date,err);
                         message.tempReply('In order for Talking Stick to work properly, you must drag the \`Talking Stick\` role to the top of the list in server settings.');
                     });
 

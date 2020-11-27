@@ -32,12 +32,10 @@ export default async function (message) {
                         .catch(err => {
                             message.tempSend('In order for Talking Stick to work properly, you must drag the \`Talking Stick\` role to the top of the list in server settings.');
                         });
-
                     tsremstickEmbed.addField(`Took stick from ${message.mentions.members.first().username}`);
                     message.tempSend(tsremstickEmbed);
                 }
             }
-        
         }
         else {
             message.tempReply('You do not have permission to do this.');
