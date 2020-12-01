@@ -1,5 +1,6 @@
 # Todo
-##        add updateOverwrite for delete
+##        if user tries to tsleave in the wrong channel, list channels with the overwrite for stick holder
+##        add updateOverwrite for ts delete permissions
 ##        enable aliases for commands
 ##        Add resolve servers command/function
 ##        FINISH REFACTORING
