@@ -16,8 +16,8 @@ client
 client.login(token);
 
 export const
-    developer = (await client.fetchApplication()).owner,
-    application = (await client.fetchApplication());
+    developer = (client.fetchApplication()).owner,
+    application = (client.fetchApplication());
 
 // Listener.once //
 client
