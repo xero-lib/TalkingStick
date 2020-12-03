@@ -1,8 +1,8 @@
 
 export const
     botName = 'Talking Stick',
-    // token = 'MzQ3ODQ1OTQ0Mzc4OTE2ODY3.WZYCxw.E8fyXByZCNZ8sKKPC9-YB6g82U0', //testing
-    token = 'NjA5MjMzNjc2NDcxMTA3NTg0.XUzvEw.x8EKr07easi4zUj_ZQPYMd9W5s0',  //main
+    // token = 'lol!!!!! again!????', //testing
+    token = 'literally bruh',  //main
     defaultPrefix = "//",
     roles = ['Stick Holder', 'Stick Controller', 'Stick Listener', 'TSLeft'],
     botPage = 'https://top.gg/bot/609233676471107584',
