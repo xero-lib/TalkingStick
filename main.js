@@ -1,15 +1,16 @@
 // Imports //
 import { token, Discord } from './coagulators/configCoagulator.js';
 import { onMessage, onVoiceStateUpdate, onceReady, onChannelCreate, onChannelDelete, onMessageUpdate, onceShardReconnecting } from './coagulators/listenerCoagulator.js';
+import { date } from './coagulators/functionCoagulator.js';
 
 export const client = new Discord.Client({fetchAllMembers: true});
 console.log(client.options);
 
 client
-  .on("debug", d => {if(!(d.startsWith('[WS => Shard 0] [HeartbeatTimer]') || d.startsWith('[WS => Shard 0] Heartbeat acknowledged'))) console.log(d)})
-  .on("warn", e => console.log('Warn:',e))
-  .on("shardError", console.log)
-  .on("shardResume", console.log)
+  .on("debug", d => {if(!(d.startsWith('[WS => Shard 0] [HeartbeatTimer]') || d.startsWith('[WS => Shard 0] Heartbeat acknowledged' || d.startsWith('[WS => Shard 0] [ReadyHeartbeat] Sending a heartbeat.')))) console.log(date(), 'Debug:', d)})
+  .on("warn", e => console.log(date(), 'Warn:',e))
+  .on("shardError", e => console.log(date(), 'Shard Error:', e))
+  .on("shardResume", r => console.log(date(), 'Shard Resume:', r))
   .on("webhookUpdate", console.log);
 
 // Login //
@@ -28,7 +29,7 @@ client
     // Process.on //
         process.on("unhandledRejection", error => console.error("Unhandled promise rejection:", error));
         process.on('exit'              , e     => console.error('Exit:'                       , e    ));
-        // process.on('SIGINT'            , n     => console.error('SIGINT recieved:'            , n    ));
+        // process.on('SIGINT'            , n     => {console.error('SIGINT recieved:'            , n    ); process.exit});
 
     // Client.on //
         client
@@ -37,6 +38,3 @@ client
             .on('channelDelete'   , onChannelDelete   )
             .on("voiceStateUpdate", onVoiceStateUpdate)
             .on('messageUpdate'   , onMessageUpdate   );
-
-
-

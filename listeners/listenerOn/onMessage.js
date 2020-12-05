@@ -25,6 +25,9 @@ export default async function (message) {
         // if (message.mentions.members.first() == client.member){
         //     message.tempReply(`Please use \`${prefix}help\` for help`);
         // }
+        if (message.mentions.members.first()?.id == client.user.id && message.content.toLowerCase().startsWith('welcome')) {
+            message.channel.send('Hello!');
+        }
         if (message.content.startsWith(prefix)) {
             let string = message.content.substring(prefix.length).split(/ +/,1)[0];
             let command = string.split(' ');
