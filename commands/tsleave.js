@@ -4,11 +4,21 @@ import Discord from 'discord.js';
 import { defaultPrefix as prefix } from '../coagulators/configCoagulator.js';
 import { someRole, findRole } from '../coagulators/functionCoagulator.js';
 
-export default async function tsleave(message, args, command) {
+export default async function (message, args, command) {
+    console.log('entered')
     const tsLeaveEmbed = new Discord.MessageEmbed();
     if ((someRole(message.member, 'Stick Controller') || message.member.hasPermission(8))) {
-        if(someRole(message.guild, 'Stick Holder')) {        
+        console.log('entered2')
+        if(someRole(message.guild, 'Stick Holder')) {    
+            if(!args) {
+                message.tempReply(`You must supply one argument. If you are in a voice channel, use \`${prefix}tsleave voice\`. If you are in a text channel, use \`${prefix}tsleave text.\``);
+            }
+            else if (args !== 'text' && args !== 'voice') {
+                message.tempReply(`${args} is not understood with ${command}`);
+            }
+            
             if (message.member.voice.channel && args == "voice") {
+                console.log('entered3')
                 for (const [_, member] of message.guild.members.cache) {
                     if(member.voice.channelID && member.voice.channelID == message.member.voice.channelID) {
                         member.voice.setMute(false).catch(console.error);
@@ -36,8 +46,10 @@ export default async function tsleave(message, args, command) {
                 message.tempSend(tsLeaveEmbed);
             } 
             else if (args == "text") {
+                console.log('entered4')
                 message.guild.roles.cache.array().forEach(r => {
                     if(!r.name == 'muted' && !r.name == 'Muted') {
+                        console.log('entered6')
                         message.channel.updateOverwrite(r, {SEND_MESSAGES: null})
                             .then(c => console.log(`The channel ${message.channel.name} now has the talking stick in ${message.guild.name}`))
                             .catch(e => console.log(`Could not update permissions for ${r.name} for ${message.channel.name} in ${message.guild.name} requested by ${message.author.username}#${message.author.discriminator} (${message.member.id}) :`, e));
@@ -60,12 +72,6 @@ export default async function tsleave(message, args, command) {
 
                 message.tempSend(tsLeaveEmbed);
             }
-        }
-        else if(!args) {
-            message.tempReply(`You must supply one argument. If you are in a voice channel, use \`${prefix}tsleave voice\`. If you are in a text channel, use \`${prefix}tsleave text.\``);
-        }
-        else if (args != 'text' && args != 'voice') {
-                message.tempReply(`${args} is not understood with ${command}`);
         }
         else {
                 message.tempReply(`Please run \`${prefix}tsinit\` to create all requried roles.`);

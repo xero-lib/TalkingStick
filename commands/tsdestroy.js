@@ -4,7 +4,7 @@ import { someRole, findRole, destroyRole, date } from '../coagulators/functionCo
 import { Discord, roles, defaultPrefix as prefix } from '../coagulators/configCoagulator.js';
 
 export default async function (message) {
-    if(message.member.hasPermissions(8) || message.member.id == developer.id) { //if message author has admin perms
+    if(message.member.hasPermission(8) || message.member.id == developer.id) { //if message author has admin perms
         const tsdestroyEmbed = new Discord.MessageEmbed();
         const s = "";
         if(findRole(message.guild, 'TSLeft')){
