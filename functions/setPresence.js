@@ -1,23 +1,23 @@
-import {client, defaultPrefix} from '../coagulators/configCoagulator.js';
-import { date } from '../coagulators/functionCoagulator.js';
+import { client, defaultPrefix } from "../coagulators/configCoagulator.js";
+import { date } from "../coagulators/functionCoagulator.js";
 
 const intervalObj = setInterval(() => {
-  console.log(date(), 'SetPresence due to interval...')
+  console.log(date(), "SetPresence due to interval...");
   client?.user?.setPresence({
-    status: 'online',
+    status: "online",
     activity: {
       name: `${defaultPrefix}help`,
-      type: 'LISTENING'  
-    }
-  })
+      type: "LISTENING",
+    },
+  });
 }, 3600000);
 
-export default async function() {
+export default async function () {
   client?.user?.setPresence({
-    status: 'online',
+    status: "online",
     activity: {
       name: `${defaultPrefix}help`,
-      type: 'LISTENING'  
-    }
-  })
+      type: "LISTENING",
+    },
+  });
 }

@@ -1,3 +1,3 @@
-export default function(){
-    return `[${new Date().toLocaleString()}] |`;
+export default function () {
+  return `[${new Date().toLocaleString()}] |`;
 }
