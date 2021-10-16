@@ -12,7 +12,7 @@ import {
 import { date } from "./exports/functionExports.js";
 import { Client, User } from "discord.js";
 
-export const /** @type {Client} */ client = new Client({fetchAllMembers: true});
+export const client = new Client();
 console.log(client.options);
 
 client
