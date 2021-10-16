@@ -13,10 +13,10 @@ import { date } from "./exports/functionExports.js";
 import { Client, User } from "discord.js";
 
 export const client = new Client();
-console.log(client.options);
+console.warn(client.options);
 
 client
-  .on("debug", d => {
+    .on("debug", (d) => { 
       if(
           !(
               d.startsWith("[WS => Shard 0] [HeartbeatTimer]") ||
@@ -24,10 +24,10 @@ client
               d.startsWith('[WS => Shard 0] [ReadyHeartbeat] Sending a heartbeat.')
             )
         ) console.log(date(), 'Debug:', d)})
-  .on("warn", (e) => console.log(date(), 'Warn:',e))
-  .on("shardError", (e) => console.log(date(), 'Shard Error:', e))
-  .on("shardResume", (r) => console.log(date(), 'Shard Resume:', r))
-  .on("webhookUpdate", console.log);
+    .on("warn",           (w) => console.warn(date(), 'Warn:',         w))
+    .on("shardError",     (e) => console.log (date(), 'Shard Error:',  e))
+    .on("shardResume",    (r) => console.log (date(), 'Shard Resume:', r))
+    .on("webhookUpdate", console.log);
 
 // Login //
 client.login(token);

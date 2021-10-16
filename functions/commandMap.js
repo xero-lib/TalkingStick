@@ -11,6 +11,5 @@ let CommandMap = {};
 function registerCommand(name, action) { CommandMap[name] = action }
 
 for(const [key, command] of Object.entries(commands)) registerCommand(key, command);
-console.log(CommandMap);
 
 export default CommandMap;

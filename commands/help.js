@@ -45,10 +45,10 @@ export const helpMap = new Map().set(
 ).set(
     "tspass",
     {
-        description: "If you have the talking stick, you can pass it to someone else.",
+        description: "If you have the talking stick, you can pass it to someone else by pinging them with this command.",
         argCount: "Takes two arguments",
         arguments: "<`voice` or `text`> <ping a user>",
-        example: `\`${prefix}tspass text @Thoth#6134\``,
+        example: `\`${prefix}tspass text @Thoth\``,
         minRole: "Stick Holder"
     }
 ).set(
@@ -63,37 +63,37 @@ export const helpMap = new Map().set(
 ).set(
     "tsgivecon",
     {
-        description: "Allows you to give another user the \`Stick Controller\` role.",
+        description: "Allows you to give another user the `Stick Controller` role by pinging them with this command.",
         argCount: "Takes one argument",
         arguments: "<ping a user>",
-        example: `\`${prefix}tsgivecon @Thoth#6134\``,
+        example: `\`${prefix}tsgivecon @Thoth\``,
         minRole: "Stick Controller"
     }
 ).set(
     "tsremcon",
     {
-        description: "Allows you to remove another user from the \`Stick Controller\` role.",
+        description: "Allows you to remove another user from the `Stick Controller` role by pinging them with this command.",
         argCount: "Takes one argument",
         arguments: "<ping a user>",
-        example: `\`${prefix}tsremcon @Thoth#6134\``,
+        example: `\`${prefix}tsremcon @Thoth\``,
         minRole: "Stick Controller"
     }
 ).set(
     "tsaddstick",
     {
-        description: "Allows you to give another user in the voice channel a talking stick, while keeping your own.",
+        description: "Allows you to give another user in the voice channel a talking stick, while keeping your own by pinging them with this command.",
         argCount: "Takes one argument",
         arguments: "<ping a usre>",
-        example: `\`${prefix}tsaddstick @Thoth#6134\``,
+        example: `\`${prefix}tsaddstick @Thoth\``,
         minRole: "Stick Controller"
     }
 ).set(
     "tsremstick",
     {
-        description: "Allows you to take a stick from a mentioned user.",
+        description: "Allows you to take a stick from a mentioned user by pinging them with this command.",
         argCount: "Takes one argument",
         arguments: "<ping a user>",
-        example: `\`${prefix}tsremstick @Thoth#6134\``,
+        example: `\`${prefix}tsremstick @Thoth\``,
         minRole: "Stick Controller"
     }
 );
