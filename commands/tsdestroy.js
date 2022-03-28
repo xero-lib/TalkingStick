@@ -13,7 +13,7 @@ import "../prototypes/tempReply.js";
 export default async function (message) {
     if (message.member.hasPermission(8) || message.member.id == developer.id) { //if message author has admin perms
         const tsdestroyEmbed = new MessageEmbed();
-        const str = "";
+        let str = "";
         if (findRole(message.guild, "TSLeft")) findRole(message.guild, "TSLeft").members.map(member => member.user.username).forEach((member) => str += member + '\n');
         
         for (let roleIdx in roles) {
@@ -23,7 +23,7 @@ export default async function (message) {
             } else tsdestroyEmbed.addField(`__Creating ${roles[roleIdx]}__`,`${roles[roleIdx]} is not present.`);
         }
         
-        if (s != "") tsdestroyEmbed.addField("**Users still muted:**\n", `${str}\n**These users must be manually unmuted the next time they join a voice channel.**`);
+        if (str != "") tsdestroyEmbed.addField("**Users still muted:**\n", `${str}\n**These users must be manually unmuted the next time they join a voice channel.**`);
         tsdestroyEmbed.setAuthor(`${message.author.tag} executed TSDestroy`, message.author.avatarURL())
             .setColor("RED")
             .setFooter("Done.");
