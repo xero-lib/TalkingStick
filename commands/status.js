@@ -11,12 +11,14 @@ import "../prototypes/tempSend.js";
 
 export default async function (message) {
     if (message.author.id == developer.id) {
+        let memberCount = 0;
+        client.guilds.cache.forEach((guild) => memberCount += guild.memberCount);
         const statusEmbed = new MessageEmbed()
             .setAuthor("Talking Stick", botPfp)
             .setTitle("**STATUS**")
             .addField("Online Status", "Online")
             .addField("Server Count", client.guilds.cache.array().length)
-            .addField("User Count", client.users.cache.array().length)
+            .addField("User Count", memberCount)
             .addField("Uptime", (`${client.uptime/1000/60} minutes`));
 
         message.tempSend(statusEmbed).catch(datedErr);
