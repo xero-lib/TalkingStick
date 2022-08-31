@@ -1,23 +1,33 @@
-import { date, datedErr } from "../exports/functionExports.js";
-import { client, defaultPrefix } from "../exports/configExports.js";
+import { date } from "../exports/functionExports.js";
+import { client } from "../exports/configExports.js";
+import { ActivityType, Client } from "discord.js";
 
 setInterval(() => {
   console.log(date(), "SetPresence due to interval...")
   client.user.setPresence({
     status: "online",
     activity: {
-      name: `${defaultPrefix}help`,
+      name: `/help`,
       type: "LISTENING"  
     }
-  }).catch(datedErr)
+  })
 }, 3600000);
 
-export default async function () {
-  client.user.setPresence({
-    status: "online",
-    activity: {
-      name: `${defaultPrefix}help`,
-      type: "LISTENING"  
-    }
-  }).catch(datedErr)
+/**
+ * 
+ * @param {Client<true>} client 
+ * @returns {void}
+ */
+
+export default async function (client) {
+  console.log(client);
+  console.log(
+    client.user.setPresence({
+      status: "online",
+      activities: [{
+        name: `/help`,
+        type: ActivityType.Listening
+      }]
+    })
+  )
 }

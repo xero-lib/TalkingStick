@@ -1,20 +1,20 @@
 import { inspect } from "util";
-import { Message } from "discord.js";
+import { ChatInputCommandInteraction } from "discord.js";
 import { developer } from "../exports/configExports.js";
 import { resolveUser, datedErr } from "../exports/functionExports.js";
 
 import "../prototypes/tempSend.js";
 
 /**
- * @param {Message} message 
+ * @param {ChatInputCommandInteraction} interaction 
  * @param {string} args 
  * @returns {void}
  */
 
-export default async function (message, args) {
-    if(message.member.id == developer.id) {
+export default async function (interaction) {
+    if(interaction.member.id == developer.id) {
         let user = resolveUser(args);
-        if (user) message.channel.send(`\`\`\`json\n${inspect(user)}\n\`\`\``).catch(datedErr);
-        else message.tempSend(args + "\tresolveUser returned **`false`**").catch(datedErr);
+        if (user) interaction.reply({ content: `\`\`\`json\n${inspect(user)}\n\`\`\``, ephemeral: true }).catch(datedErr);
+        else interaction.reply({content: args + "\tresolveUser returned **`false`**", ephemeral: true }).catch(datedErr);
     }
 }

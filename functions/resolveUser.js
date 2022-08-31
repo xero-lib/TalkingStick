@@ -6,8 +6,4 @@ import { client } from "../exports/configExports.js";
  * @returns {User | undefined}
  */
 
-export default function (username) {
-        let user = client.users.cache.find((u) => u.tag == username);
-        if (user) return user;
-        else return undefined;
-}
+export default function (username) { return client.users.cache.find((u) => u.tag == username) }

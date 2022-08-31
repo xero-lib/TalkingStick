@@ -1,35 +1,33 @@
-import { MessageEmbed, Message } from "discord.js"
+import { EmbedBuilder, ChatInputCommandInteraction } from "discord.js"
 import { findRole, datedErr } from "../exports/functionExports.js";
-import { defaultPrefix, developer } from "../exports/configExports.js";
+import { developer } from "../exports/configExports.js";
 
 import "../prototypes/tempSend.js";
 import "../prototypes/tempReply.js";
 
 /**
- * @param {Message} message
+ * @param {ChatInputCommandInteraction} interaction
  * @returns {void}
  */
 
-export default async function tsgivecon(message) {
-    if(message.member.hasPermission(8) || message.member.id == developer.id) {
-        const tsgiveconEmbed = new MessageEmbed();
+export default async function tsgivecon(interaction) {
+    if(interaction.member.permissions.has(8) || interaction.member.id == developer.id) {
+        const tsgiveconEmbed = new EmbedBuilder();
         
-        if (findRole(message.guild, "Stick Controller")) {
-            if (message.mentions.members.first()) {
-                tsgiveconEmbed
-                    .setAuthor(message.author.username, message.author.avatarURL())
-                    .setColor("GREEN")
-                    .setTitle(`TSGiveCon executed by ${message.author.tag}`);
-                message.mentions.members.first().roles.add(findRole(message.guild, "Stick Controller"))
-                    .then(() => {
-                        tsgiveconEmbed.addField("TSGiveCon:", `${message.mentions.members.first().user.tag} has been given Stick Controller`)
-                        message.channel.send(tsgiveconEmbed).catch(datedErr);
-                    })
-                    .catch((e) => {
-                        datedErr("Error in tsgivecon:", e);
-                        message.tempReply("In order for Talking Stick to work properly, you must drag the \`Talking Stick\` role to the top of the list in server settings.").catch(datedErr);
-                    });
-            } else message.tempReply("**You must mention someone to give Stick Controller.**").catch(datedErr);
-        } else message.tempReply(`Please run \`${defaultPrefix}tsinit\` to create all required roles.`).catch(datedErr);
-    } else message.tempReply("You do not have permission to do this.").catch(datedErr);
+        if (findRole(interaction.guild, "Stick Controller")) {
+            tsgiveconEmbed
+                .setAuthor({ name: interaction.user.username, iconURL: interaction.user.avatarURL() })
+                .setColor("Green")
+                .setTitle(`TSGiveCon executed by ${interaction.user.tag}`);
+            interaction.options.getMember("recipient").roles.add(findRole(interaction.guild, "Stick Controller"))
+                .then(() => {
+                    tsgiveconEmbed.addFields({ name: "TSGiveCon:", value: `${interaction.options.getMember("recipient").user.tag} has been given Stick Controller` })
+                    interaction.reply({ embeds: [tsgiveconEmbed], ephemeral: true }).catch(datedErr);
+                })
+                .catch((e) => {
+                    datedErr("Error in tsgivecon:", e);
+                    interaction.reply({ content: "In order for Talking Stick to work properly, you must drag the \`Talking Stick\` role to the top of the list in server settings.", ephemeral: false }).catch(datedErr);
+                });
+        } else interaction.reply({ content: `Please run \`/tsinit\` to create all required roles.`, ephemeral: false }).catch(datedErr);
+    } else interaction.reply({ content: "You do not have permission to do this.", ephemeral: false }).catch(datedErr);
 }

@@ -1,17 +1,16 @@
-import { Message, Role } from "discord.js";
+import { ChatInputCommandInteraction, Role } from "discord.js";
 
 /**
  * @param {string} roleName 
- * @param {Message} message 
+ * @param {ChatInputCommandInteraction} interaction 
  * @param {string} roleColor 
  * @returns {Promise<Role>}
  */
 
-export default async function (roleName, message, roleColor) {
-    return message.guild.roles.create({
-        data: {
-            name: roleName,
-            color: roleColor
-        }, reason: `Created ${roleName}`
+export default async function (roleName, interaction, roleColor) {
+    return interaction.guild.roles.create({
+        name: roleName,
+        color: roleColor,
+        reason: `Created ${roleName}`
     });
 }

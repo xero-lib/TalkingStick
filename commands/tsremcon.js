@@ -1,30 +1,29 @@
-import { Message, MessageEmbed } from "discord.js";
+import { ChatInputCommandInteraction, EmbedBuilder } from "discord.js";
 import { someRole, findRole, datedErr } from "../exports/functionExports.js";
-import { defaultPrefix as prefix, developer } from "../exports/configExports.js";
-
-import "../prototypes/tempReply.js";
+import { developer } from "../exports/configExports.js";
 
 /**
- * @param {Message} message 
+ * @param {ChatInputCommandInteraction} interaction
  */
 
-export default async function (message) {
-    if (message.member.hasPermission(8) || message.member.id == developer.id) {
-        if (someRole(message.guild, "Stick Controller")) {
-            if (message.mentions.users.first()) {
-                if (someRole(message.mentions.members.first(), "Stick Controller")) {
-                    message.mentions.members.first().roles.remove(findRole(message.guild, "Stick Controller")).then(() => {
-                        message.channel.send(new MessageEmbed()
-                            .setAuthor(message.author.username, message.author.avatarURL())
-                            .setColor("RED")
+export default async function (interaction) {
+    if (interaction.member.permissions.has(8) || interaction.member.id == developer.id) {
+        let member = interaction.options.getMember("stick-controller");
+        if (someRole(interaction.guild, "Stick Controller")) {
+            if (someRole(member, "Stick Controller")) {
+                member.roles.remove(findRole(interaction.guild, "Stick Controller")).then(() => {
+                    interaction.reply({
+                        embeds: [new EmbedBuilder()
+                            .setAuthor({ name: interaction.author.username, iconURL: interaction.author.avatarURL() })
+                            .setColor("Red")
                             .setTitle("**Stick Controller Removed**")
-                            .addField("Controller removed from:", message.mentions.members.first().user.tag)
-                            .setDescription(`Stick Controller permissions have been removed from ${message.mentions.members.first().displayName} by ${message.author.tag}`)
-                        );
-                    })
-                    .catch((e) => datedErr("Error in tsremcon: cannot remove role:", e));
-                } else message.tempReply(`${message.mentions.members.first()} does not have Stick Controller.`).catch(datedErr);
-            } else message.tempReply("You must ping someone to remove Stick Controller from.").catch(datedErr);
-        } else message.tempReply(`Stick Controller not found. Please run \`${prefix}tsinit\` to create all required roles before attempting to use Talking Stick.`).catch(datedErr);
-    } else message.tempReply("You do not have permission to do this.").catch(datedErr);
+                            .addFields({ name: "Controller removed from:", value: member.user.tag })
+                            .setDescription(`Stick Controller permissions have been removed from ${member.displayName} by ${interaction.author.tag}`)
+                        ]
+                    });
+                })
+                .catch((e) => datedErr("Error in tsremcon: cannot remove role:", e));
+            } else interaction.reply({ content: `${member.displayName} does not have Stick Controller.`, ephemeral: true }).catch(datedErr);
+        } else interaction.reply({ content: `Stick Controller not found. Please run \`/tsinit\` to create all required roles before attempting to use Talking Stick.`, ephemeral: false }).catch(datedErr);
+    } else interaction.reply({ content: "You do not have permission to do this.", ephemeral: false }).catch(datedErr);
 }

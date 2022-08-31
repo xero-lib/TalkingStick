@@ -1,4 +1,4 @@
-import { MessageEmbed, Message } from "discord.js";
+import { EmbedBuilder, ChatInputCommandInteraction } from "discord.js";
 import { createRole, someRole, datedErr } from "../exports/functionExports.js";
 import { roles, developer, defaultPrefix as prefix } from "../exports/configExports.js";
 
@@ -6,34 +6,41 @@ import "../prototypes/tempSend.js";
 import "../prototypes/tempReply.js";
 
 /**
- * @param {Message} message 
+ * @param {ChatInputCommandInteraction} interaction 
  * @returns {void}
  */
 
-export default async function (message) {
-    if (message.member.permissions.has(8) || message.member.id == developer.id) {
-        const tsinitEmbed = new MessageEmbed()
+export default async function (interaction) {
+    if (interaction.member.permissions.has(8) || interaction.member.id == developer.id) {
+        const tsinitEmbed = new EmbedBuilder()
         
         for(let role of roles){
-            if(!someRole(message.guild, role)) {
-                if (role == "Stick Holder") await createRole(role, message, "#c79638").then(() => tsinitEmbed.addField(`__**Creating ${role}**__`,`${role} has been created.`)).catch(() => message.reply(`**Unable to create ${role}. Please ensure that the \`Talking Stick\` role is at the top of the roles list, and has sufficient permissions to create and manage roles.**`).catch(datedErr));
-                else await createRole(role, message).then(() => tsinitEmbed.addField(`__**Creating ${role}**__`,`${role} has been created.`)).catch(datedErr);
-            } else tsinitEmbed.addField(`__**Creating ${role}**__`,`${role} is present.`);
+            if(!someRole(interaction.guild, role)) {
+                if (role == "Stick Holder") {
+                    await createRole(role, interaction, "#c79638")
+                        .then(() => tsinitEmbed.addFields({ name: `__**Creating ${role}**__`, value: `${role} has been created.` }))
+                        .catch(() => interaction.reply({ content: `**Unable to create ${role}. Please ensure that the \`Talking Stick\` role is at the top of the roles list, and has sufficient permissions to create and manage roles.**`, ephemeral: true }).catch(datedErr));
+                } else {
+                    await createRole(role, interaction)
+                        .then(() => tsinitEmbed.addFields({ name: `__**Creating ${role}**__`, value: `${role} has been created.` }))
+                        .catch(datedErr);
+                }
+            } else tsinitEmbed.addFields({ name: `__**Creating ${role}**__`, value: `${role} is present.` });
         }
 
-        tsinitEmbed.setFooter("Done.")
-            .setColor("GREEN")
-            .setAuthor(`${message.author.tag} executed TSInit`, message.author.avatarURL());
+        tsinitEmbed.setFooter({ text: "Done." })
+            .setColor("Green")
+            .setAuthor({ name: `${interaction.user.tag} executed TSInit`, iconURL: interaction.user.avatarURL() });
         
-        message.channel.send(tsinitEmbed).catch(datedErr);
+        interaction.reply({ embeds: [tsinitEmbed], ephemeral: true }).catch(datedErr);
 
-        message.guild.fetch()
-            .then(() => message.tempSend(`Caching guild members (this allows the bot to efficiently mute users. If a user isn't being muted, try re-running \`${prefix}tsinit\`)`).catch(datedErr))
-            .catch((e) => {
-                datedErr(`Unable to cache ${message.guild.name} (ID: ${message.guild.id}) (owner: ${message.guild.owner.user.tag} (${message.guild.ownerID}`, e);
-                message.tempSend(`Unable to cache all users! The bot might not work properly. To try again, rerun \`${prefix}tsinit\``).catch(datedErr);
+        interaction.guild.fetch()
+            // .then(() => interaction.reply({ content: `Caching guild members (this allows the bot to efficiently mute users. If a user isn't being muted, try re-running \`${prefix}tsinit\`)`, ephemeral: true }).catch(datedErr))
+            .catch(async (e) => {
+                datedErr(`Unable to cache ${interaction.guild.name} (ID: ${interaction.guild.id}) (owner: ${(await interaction.guild.fetchOwner()).tag} (${interaction.guild.ownerID}`, e);
+                interaction.reply({ content: `Unable to cache all users! The bot might not work properly. To try again, rerun \`/tsinit\``, ephemeral: true }).catch(datedErr);
             })          
         
 
-    } else message.tempReply("You do not have permission to do this.").catch(datedErr);        
+    } else interaction.reply({ content: "You do not have permission to do this.", ephemeral: true }).catch(datedErr);        
 }

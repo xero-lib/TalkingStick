@@ -1,48 +1,46 @@
-import { MessageEmbed, Message } from "discord.js";
-import { developer, defaultPrefix as prefix } from "../exports/configExports.js";
+import { EmbedBuilder, ChatInputCommandInteraction } from "discord.js";
+import { developer } from "../exports/configExports.js";
 import { hasRoles, findRole, someRole, datedErr } from "../exports/functionExports.js";
 
 import "../prototypes/tempSend.js";
 import "../prototypes/tempReply.js";
 
 /**
- * @param {Message} message 
+ * @param {ChatInputCommandInteraction} interaction 
  */
 
-export default async function (message) {
-    if (hasRoles(message.guild) && hasRoles(message.member)) {
+export default async function (interaction) {
+    if (hasRoles(interaction.guild) && hasRoles(interaction.member)) {
         if (
-            someRole(message.guild, "Stick Holder" ||
-            message.member.hasPermission(8) ||
-            someRole(message.member, "Stick Controller") ||
-            message.member.id === developer.id)
+            someRole(interaction.guild, "Stick Holder" ||
+            interaction.member.permissions.has(8) ||
+            someRole(interaction.member, "Stick Controller") ||
+            interaction.member.id === developer.id)
         ) {
-            const tsremstickEmbed = new MessageEmbed()
-                .setAuthor(message.author.username, message.author.avatarURL())
-                .setColor("RED");
-            if (message.mentions.users.first()) {
-                if (message.member.voice.channelID && message.member.voice.channelID !== message.mentions.members.first().voice.channelID)
-                    tsremstickEmbed.addField("TSRemStick", `${message.mentions.members.first().name} is not in the voice channel.`);
-                else if (!message.member.voice.channelID && !message.mentions.members.first().voice.channelID) {
-                    if (someRole(message.mentions.members.first(), "Stick Holder"))
-                        message.mentions.members.first().roles.remove(findRole(message.mentions.members.first(), "Stick Holder")).catch(datedErr);
-                    else {
-                        tsremstickEmbed.addField("TSRemStick", `${message.mentions.members.first().username} is not a Stick Holder`);
-                        message.channel.send(tsremstickEmbed).catch(datedErr);
-                    }
-                }
-                const mmmFirst = message.mentions.members.first();
-                if (mmmFirst.voice.channelID === message.member.voice.channelID) {
-                    mmmFirst.roles.remove(findRole(message.guild, "Stick Holder")).catch(datedErr);
-                    mmmFirst.voice.setMute(true).catch(datedErr);
-                } else if (someRole(message.mentions.members.first(), "Stick Holder")) {
-                    message.mentions.members.first().roles.remove(findRole(message.mentions.members.first(), "Stick Holder")).catch(() =>
-                        message.tempSend("In order for Talking Stick to work properly, you must drag the \`Talking Stick\` role to the top of the list in server settings.").catch(datedErr)
-                    );
-                    tsremstickEmbed.addField(`Took stick from ${message.mentions.members.first().username}`);
-                    message.channel.send(tsremstickEmbed).catch(datedErr);
+            let member = interaction.options.getMember("stick-holder");
+            const tsremstickEmbed = new EmbedBuilder()
+                .setAuthor({ name: interaction.author.username, iconURL: interaction.member.avatarURL() })
+                .setColor("Red");
+            if (interaction.member.voice.channelId && interaction.member.voice.channelId !== member.voice.channelId)
+                tsremstickEmbed.addFields({ name: "TSRemStick", value: `${member.tag} is not in the voice channel.` });
+            else if (!interaction.member.voice.channelId && !member.voice.channelId) {
+                if (someRole(member, "Stick Holder"))
+                    member.roles.remove(findRole(member, "Stick Holder")).catch(datedErr);
+                else {
+                    tsremstickEmbed.addFields({ name: "TSRemStick", value: `${member.tag} is not a Stick Holder` });
+                    interaction.reply({ embeds: [tsremstickEmbed] }).catch(datedErr);
                 }
             }
-        } else message.tempReply("You do not have permission to do this.").catch(datedErr);
-    } else message.tempReply(`Please run \`${prefix}tsinit\` to create all required roles.`).catch(datedErr);
+            if (member.voice.channelId === interaction.member.voice.channelId) {
+                member.roles.remove(findRole(interaction.guild, "Stick Holder")).catch(datedErr);
+                member.voice.setMute(true).catch(datedErr);
+            } else if (someRole(member, "Stick Holder")) {
+                member.roles.remove(findRole(member, "Stick Holder")).catch(() =>
+                    interaction.reply({ content: "In order for Talking Stick to work properly, you must drag the \`Talking Stick\` role to the top of the list in server settings.", ephemeral: false }).catch(datedErr)
+                );
+                tsremstickEmbed.addFields({ name: "Took Stick", value: `Took stick from ${member.username}` });
+                interaction.reply({ embeds: [tsremstickEmbed] }).catch(datedErr);
+            }
+        } else interaction.reply({ content: "You do not have permission to do this.", ephemeral: false }).catch(datedErr);
+    } else interaction.reply({ content: `Please run \`/tsinit\` to create all required roles.`, ephemeral: false }).catch(datedErr);
 }

@@ -1,4 +1,4 @@
-import { Message } from "discord.js";
+import { ChatInputCommandInteraction } from "discord.js";
 import chalk from "chalk"; //have to import like this due to chalk being done entirely in module.exports
 import { date, datedErr } from "../exports/functionExports.js";
 import { developer, client } from "../exports/configExports.js";
@@ -6,12 +6,12 @@ import { developer, client } from "../exports/configExports.js";
 import "../prototypes/tempReply.js";
 
 /**
- * @param {Message} message
+ * @param {ChatInputCommandInteraction} interaction
  * @returns {void}
  */
 
-export default async function (message) {
-    if (message.author.id == developer.id) {
+export default async function (interaction) {
+    if (interaction.user.id == developer.id) {
         console.log(date(), chalk.bold("Recaching..."));
 
         for (const g of client.guilds.cache.values()) {
@@ -20,8 +20,8 @@ export default async function (message) {
                 .catch((e) => datedErr(chalk.redBright(`Error hard recaching "${g.name}"\n${e}`)));
         }
     } else {
-        message.tempReply("You do not have permission to execute this command. This incident has been reported.").catch(datedErr);
-        datedErr(chalk.redBright(`${message.author.tag} (${message.author.id}) attempted to execute HARDRECACHE without permission.`));
-        developer.send(`${message.author.tag} (${message.author.id}) attempted to execute HARDRECACHE without permission in ${message.guild.name}.`).catch(datedErr);
+        interaction.tempReply("You do not have permission to execute this command. This incident has been reported.").catch(datedErr);
+        datedErr(chalk.redBright(`${interaction.user.tag} (${interaction.user.id}) attempted to execute HARDRECACHE without permission.`));
+        developer.send(`${interaction.user.tag} (${interaction.user.id}) attempted to execute HARDRECACHE without permission in ${message.guild.name}.`).catch(datedErr);
     }
 }
