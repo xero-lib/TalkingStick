@@ -20,14 +20,11 @@ setInterval(() => {
  */
 
 export default async function (client) {
-  console.log(client);
-  console.log(
-    client.user.setPresence({
-      status: "online",
-      activities: [{
-        name: `/help`,
-        type: ActivityType.Listening
-      }]
-    })
-  )
+  client.user.setPresence({
+    status: "online",
+    activities: [{
+      name: `/help`,
+      type: ActivityType.Listening
+    }]
+  })
 }
