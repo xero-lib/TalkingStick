@@ -12,9 +12,13 @@ import "../prototypes/tempReply.js";
 export default async function (interaction) { //BIG WIP
     let msgSend = interaction.options.get("message")?.value
     // let sentUser = client.users.cache.get(interaction.options.get("id")?.value);
-    let sentUser = await client.users.fetch(interaction.options.getString("id")).catch(() => {
-        interaction.reply(`User with ID ${sentUser.id} not found.`)
+    let sentUser = await client.users.fetch(interaction.options.getString("id")).catch(async () => {
+        await interaction.reply(`User with ID ${sentUser.id} not found.`);
+        return undefined;
     })
+    
+    if (!sentUser) { return }
+
     let sender = interaction.user;
 
     const sendEmbedBuilder = new EmbedBuilder()

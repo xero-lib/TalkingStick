@@ -8,7 +8,7 @@ setInterval(() => {
     status: "online",
     activities: [{
       name: `/help`,
-      type: ActivityType.Listening  
+      type: ActivityType.Watching  
     }]
   })
 }, 3600000);
@@ -19,12 +19,12 @@ setInterval(() => {
  * @returns {void}
  */
 
-export default async function (client) {
+export default async function () {
   client.user.setPresence({
     status: "online",
     activities: [{
       name: `/help`,
-      type: ActivityType.Listening
+      type: ActivityType.Watching
     }]
   })
 }
