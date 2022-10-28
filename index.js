@@ -82,9 +82,9 @@ process.on("exit", (e) => console.error("Exit:", e));
 client
     .on("interactionCreate", onInteractionCreate)
     .on("messageCreate", onMessage)
-    .on("channelCreate", onChannelCreate)
-    .on("channelDelete", onChannelDelete)
-    .on("messageUpdate", onMessageUpdate)
+    // .on("channelCreate", onChannelCreate)
+    // .on("channelDelete", onChannelDelete)
+    // .on("messageUpdate", onMessageUpdate)
     .on("voiceStateUpdate", onVoiceStateUpdate);
 
 export { developer, application };

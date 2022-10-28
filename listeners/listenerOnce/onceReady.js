@@ -10,5 +10,5 @@ import { Client } from "discord.js";
 export default async function (client) {
     await client.guilds.fetch();
     console.log(date(),`Currently in ${chalk.yellow(client.guilds.cache.size)} servers`);
-    setPresence(client);
+    setPresence();
 }

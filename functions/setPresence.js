@@ -8,7 +8,7 @@ setInterval(() => {
     status: "online",
     activities: [{
       name: `/help`,
-      type: ActivityType.Watching  
+      type: ActivityType.Listening
     }]
   })
 }, 3600000);
@@ -24,7 +24,7 @@ export default async function () {
     status: "online",
     activities: [{
       name: `/help`,
-      type: ActivityType.Watching
+      type: ActivityType.Listening
     }]
   })
 }
