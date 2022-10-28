@@ -3,7 +3,7 @@ import chalk from "chalk"; //have to import like this due to chalk being done en
 import { date, datedErr } from "../exports/functionExports.js";
 import { developer, client } from "../exports/configExports.js";
 
-import "../prototypes/tempReply.js";
+// import "../prototypes/tempReply.js";
 
 /**
  * @param {ChatInputCommandInteraction} interaction
@@ -20,7 +20,7 @@ export default async function (interaction) {
                 .catch((e) => datedErr(chalk.redBright(`Error hard recaching "${g.name}"\n${e}`)));
         }
     } else {
-        interaction.tempReply("You do not have permission to execute this command. This incident has been reported.").catch(datedErr);
+        interaction.reply({ body: "You do not have permission to execute this command. This incident has been reported.", ephemeral: true }).catch(datedErr);
         datedErr(chalk.redBright(`${interaction.user.tag} (${interaction.user.id}) attempted to execute HARDRECACHE without permission.`));
         developer.send(`${interaction.user.tag} (${interaction.user.id}) attempted to execute HARDRECACHE without permission in ${message.guild.name}.`).catch(datedErr);
     }

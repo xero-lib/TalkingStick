@@ -2,7 +2,7 @@ import { ChatInputCommandInteraction, PermissionFlagsBits } from "discord.js";
 import { developer, } from "../exports/configExports.js";
 import { someRole, findRole, hasRoles, date, datedErr } from "../exports/functionExports.js";
 
-import "../prototypes/tempReply.js";
+// import "../prototypes/tempReply.js";
 
 /**
  * @param {ChatInputCommandInteraction} interaction

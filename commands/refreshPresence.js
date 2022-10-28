@@ -3,7 +3,7 @@ import { date } from "../exports/functionExports.js";
 import { developer } from "../exports/configExports.js";
 import { setPresence, datedErr } from "../exports/functionExports.js";
 
-import "../prototypes/tempSend.js";
+// import "../prototypes/tempSend.js";
 
 /**
  * @param {ChatInputCommandInteraction} interaction 

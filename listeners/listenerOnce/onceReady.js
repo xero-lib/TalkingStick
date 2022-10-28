@@ -1,7 +1,14 @@
 import { date, setPresence } from "../../exports/functionExports.js";
 import chalk from "chalk";
+import { Client } from "discord.js";
+
+/**
+ * 
+ * @param {Client<true>} client 
+ */
 
 export default async function (client) {
-    console.log(date(),`Currently in ${chalk.yellow(client.guilds.cache.map(guild => guild.name).length)} servers\n` + date(), chalk.greenBright(`Ready in ${client.guilds.cache.size} servers!`));
+    await client.guilds.fetch();
+    console.log(date(),`Currently in ${chalk.yellow(client.guilds.cache.size)} servers`);
     setPresence(client);
 }

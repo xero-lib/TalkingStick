@@ -19,15 +19,15 @@ export default async function (interaction) {
         for (let roleIdx in roles) {
             if (someRole(interaction.guild, roles[roleIdx])) {
                 destroyRole(roles[roleIdx], interaction);
-                tsdestroyEmbed.addFields({ name: `__Destroying ${roles[roleIdx]}__`, value: `${roles[roleIdx]} has been destroyed.` }); 
-            } else tsdestroyEmbed.addFields({ name: `__Destroying ${roles[roleIdx]}__`, value: `${roles[roleIdx]} is not present.` });
+                tsdestroyEmbed.addFields([{ name: `__Destroying ${roles[roleIdx]}__`, value: `${roles[roleIdx]} has been destroyed.` }]); 
+            } else tsdestroyEmbed.addFields([{ name: `__Destroying ${roles[roleIdx]}__`, value: `${roles[roleIdx]} is not present.` }]);
         }
         
-        if (str != "") tsdestroyEmbed.addFields({ name: "**Users still muted:**\n", value: `${str}\n**These users must be manually unmuted the next time they join a voice channel.**` });
+        if (str != "") tsdestroyEmbed.addFields([{ name: "**Users still muted:**\n", value: `${str}\n**These users must be manually unmuted the next time they join a voice channel.**` }]);
         tsdestroyEmbed.setAuthor({ name: `${interaction.user.tag} executed TSDestroy`, value: interaction.user.avatarURL() })
             .setColor("Red")
             .setFooter({ text: "Done." });
-        interaction.reply({ embeds: [tsdestroyEmbed], ephemeral: true }).catch(datedErr);
+        interaction.reply({ embeds: [tsdestroyEmbed], ephemeral: false }).catch(datedErr);
      
         
     } else interaction.reply({ content: "You do not have permission to do this.", ephemeral: true }).catch(datedErr);

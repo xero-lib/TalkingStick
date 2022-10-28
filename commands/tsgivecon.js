@@ -2,8 +2,8 @@ import { EmbedBuilder, ChatInputCommandInteraction } from "discord.js"
 import { findRole, datedErr } from "../exports/functionExports.js";
 import { developer } from "../exports/configExports.js";
 
-import "../prototypes/tempSend.js";
-import "../prototypes/tempReply.js";
+// import "../prototypes/tempSend.js";
+// import "../prototypes/tempReply.js";
 
 /**
  * @param {ChatInputCommandInteraction} interaction
@@ -11,7 +11,7 @@ import "../prototypes/tempReply.js";
  */
 
 export default async function tsgivecon(interaction) {
-    if(interaction.member.permissions.has(8) || interaction.member.id == developer.id) {
+    if(interaction.member.permissions.has(8) || interaction.member.id === developer.id) {
         const tsgiveconEmbed = new EmbedBuilder();
         
         if (findRole(interaction.guild, "Stick Controller")) {
@@ -21,7 +21,7 @@ export default async function tsgivecon(interaction) {
                 .setTitle(`TSGiveCon executed by ${interaction.user.tag}`);
             interaction.options.getMember("recipient").roles.add(findRole(interaction.guild, "Stick Controller"))
                 .then(() => {
-                    tsgiveconEmbed.addFields({ name: "TSGiveCon:", value: `${interaction.options.getMember("recipient").user.tag} has been given Stick Controller` })
+                    tsgiveconEmbed.addFields([{ name: "TSGiveCon:", value: `${interaction.options.getMember("recipient").user.tag} has been given Stick Controller` }])
                     interaction.reply({ embeds: [tsgiveconEmbed], ephemeral: true }).catch(datedErr);
                 })
                 .catch((e) => {

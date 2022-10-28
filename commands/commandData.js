@@ -20,6 +20,18 @@ let commands = [
                 .setRequired(false)
         ),
 
+    // dnw //
+    new SlashCommandBuilder()
+        .setName("dnw")
+        .setDescription("Bot not working? Use /dnw to submit a bug report to the developer.")
+        .addStringOption((option) => 
+            option
+                .setName("message")
+                .setMaxLength(2000)
+                .setMinLength(2)
+                .setDescription("Message to send with bug report")
+                .setRequired(true)
+        ),
     // tsinit //
     new SlashCommandBuilder()
         .setName("tsinit")
@@ -124,6 +136,90 @@ let commands = [
                 .setDescription(helpMap.get("tsremstick").argDesc)
                 .setRequired(true)
         )
+];
+
+export let devCommands = [
+    //send_message
+    new SlashCommandBuilder()
+        .setName("send_message")
+        .setDescription("Send a message")
+        .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator)
+        .addStringOption((option) => 
+            option
+                .setName("message")
+                .setDescription("Message to send")
+                .setRequired(true)
+        )
+        .addStringOption((option) => 
+            option
+                .setName("id")
+                .setDescription("ID for which user to send message to")
+                .setRequired(true)
+                .setMinLength(17)
+                .setMaxLength(19)
+        ),
+    // status
+    new SlashCommandBuilder()
+        .setName("status")
+        .setDescription("Returns embed of bot status")
+        .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator),
+    new SlashCommandBuilder()
+    // resolve_user
+        .setName("resolve_user")
+        .setDescription("Gets information about a user given an ID")
+        .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator)
+        .addStringOption((option) => 
+            option
+                .setName("tag")
+                .setDescription("Tag (Name#1234) for user to search")
+                .setRequired(true)
+                .setMinLength(17)
+                .setMaxLength(19)
+        ),
+    // recache_hard
+    new SlashCommandBuilder()
+        .setName("recache_hard")
+        .setDescription("Force recaches users and servers in event of API outage")
+        .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator),
+    // recache
+    new SlashCommandBuilder()
+        .setName("recache")
+        .setDescription("Attempt to recache")
+        .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator),
+    // resolve_user_id 
+    new SlashCommandBuilder()
+        .setName("resolve_user_id")
+        .setDescription("Resolves user by ID")
+        .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator)
+        .addStringOption((option) => 
+            option
+                .setName("id")
+                .setDescription("ID for user to search")
+                .setRequired(true)
+                .setMinLength(17)
+                .setMaxLength(19)
+        ),
+    // refresh_presence
+    new SlashCommandBuilder()
+        .setName("refresh_presence")
+        .setDescription("Refreshes presence in event of Discord being weird")
+        .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator),
+    // invite
+    new SlashCommandBuilder()
+        .setName("invite")
+        .setDescription("Sends bot invite to send to users")
+        .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator),
+    // description 
+    new SlashCommandBuilder()
+        .setName("description")
+        .setDescription("Sends description of the bot to the chat")
+        .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator),
+    // review
+     new SlashCommandBuilder()
+        .setName("review")
+        .setDescription("Oh lawd be careful (sends review request to every server)")
+        .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator)
+    
 ];
 
 export default commands;

@@ -9,7 +9,8 @@ import { datedErr } from "../exports/functionExports.js";
  */
 
 export default async function (interaction) {
-    interaction.reply({ content: botInv, ephemeral: true }).catch((e) => 
-        datedErr(`Could not send invite requested by ${interaction.user.tag} (${interaction.user.id}) in ${interaction.guild.name}:`, e)
-    );
+    interaction.reply({ content: botInv, ephemeral: true })
+        .catch((e) => 
+            datedErr(`Could not send invite requested by ${interaction.user.tag} (${interaction.user.id}) in ${interaction.guild.name}:`, e)
+        );
 }

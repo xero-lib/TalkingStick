@@ -1,5 +1,5 @@
 import { EmbedBuilder, ChatInputCommandInteraction } from "discord.js";
-import { someRole, findRole, datedErr } from "../exports/functionExports.js";
+import { someRole, findRole, datedErr, hasRoles } from "../exports/functionExports.js";
 import { developer } from "../exports/configExports.js";
 
 import "../prototypes/tempSend.js";
@@ -13,20 +13,18 @@ import "../prototypes/tempReply.js";
 
 export default async function (interaction) {
     const tsEmbed = new EmbedBuilder();
-    let type = interaction.options.get("channel-type").value
+    let type = interaction.options.get("channel-type").value;
     if (//if the guild has the Stick Controller, Stick Holder, and Stick Listener roles
-        someRole(interaction.guild, "Stick Controller") &&
-        someRole(interaction.guild, "Stick Holder")     &&
-        someRole(interaction.guild, "Stick Listener")
+        hasRoles(interaction.guild)
     ) {
         if (//if interaction author is in Stick Controller group, an admin, or the developer for prod debugging reasons
             someRole(interaction.member, "Stick Controller") ||
             interaction.member.permissions.has(8) ||
-            interaction.member.id == developer.id
+            interaction.member.id === developer.id
         ) {
-            if (interaction.member.voice.channel && type == "voice") {//if  the user is in a voice channel and also passed the "voice" argument
+            if (interaction.member.voice.channelId && type == "voice") {//if  the user is in a voice channel and also passed the "voice" argument
                 interaction.member.roles.add(findRole(interaction.guild, "Stick Holder")).catch(() =>
-                    datedErr("Could not add Stick holder to", `${interaction.user.displayName} (${interaction.user.id}) in ${interaction.guild.name}`)
+                    datedErr("Could not add Stick holder to", `${interaction.user.username} (${interaction.user.id}) in ${interaction.guild.name}`)
                 ); //Add interaction author to Stick Holder
 
                 interaction.member.voice.channel.permissionOverwrites.edit(findRole(interaction.guild, "Stick Holder"), { Speak: true }).catch((err) => {
@@ -42,7 +40,7 @@ export default async function (interaction) {
                     .setAuthor({ name: interaction.user.username, iconURL: interaction.user.avatarURL() })
                     .setColor("Green")
                     .setTitle("Talking Stick:")
-                    .addFields({ name: `${interaction.member.displayName} has the Talking Stick!`, value: `Currently in ${interaction.member.voice.channel.name}` })
+                    .addFields([{ name: `${interaction.user.username} has the Talking Stick!`, value: `Currently in ${interaction.member.voice.channel.name}` }])
                     .setFooter({ text: `To pass the Talking Stick, use /tspass <ping a user in the same channel as you>` });
 
                 for (const [_, member] of interaction.member.voice.channel.members) { //mute everyone in the channel except for the member who called ts
@@ -62,7 +60,7 @@ export default async function (interaction) {
 
             } else if (type == "text") {//if the user passed the argument "text"
                 interaction.guild.roles.cache.forEach((r) => {
-                    if(!["muted", "timeout"].includes(r.name.toLowerCase())) interaction.channel.permissionOverwrites.edit((r, { SendMessages: false })).catch((e) =>
+                    if(!["muted", "timeout"].includes(r.name.toLowerCase())) interaction.channel.permissionOverwrites.edit(r, { SendMessages: false }).catch((e) =>
                         datedErr(`Could not update permissions for ${r.name} in ${interaction.channel.name} in ${interaction.guild.name} requested by ${interaction.user.tag} (${interaction.member.id}) :`, e)
                     );
                     
@@ -77,7 +75,7 @@ export default async function (interaction) {
                     .setAuthor({ name: interaction.user.username, iconURL: interaction.user.avatarURL() })
                     .setColor("Green")
                     .setTitle("Talking Stick:")
-                    .addFields({ name: `${interaction.member.tag} has the Talking Stick!`, value: `Currently in ${interaction.channel.name}` })
+                    .addFields([{ name: `${interaction.user.tag} has the Talking Stick!`, value: `Currently in ${interaction.channel.name}` }])
                     .setFooter({ text: `To pass the Talking Stick, use /tspass <ping a user>` });
 
                 interaction.reply({ embeds: [tsEmbed] , ephemeral: false }).catch((e) =>
@@ -89,4 +87,3 @@ export default async function (interaction) {
         } else interaction.reply({ content: "You do not have permission to do this.", ephemeral: false }); 
     } else interaction.reply({ content: `Please run \`/tsinit\` to create the required roles`, ephemeral: false });
 }
- 

@@ -18,27 +18,26 @@ export default async function (interaction) {
             if(!someRole(interaction.guild, role)) {
                 if (role == "Stick Holder") {
                     await createRole(role, interaction, "#c79638")
-                        .then(() => tsinitEmbed.addFields({ name: `__**Creating ${role}**__`, value: `${role} has been created.` }))
+                        .then(() => tsinitEmbed.addFields([{ name: `__**Creating ${role}**__`, value: `${role} has been created.` }]))
                         .catch(() => interaction.reply({ content: `**Unable to create ${role}. Please ensure that the \`Talking Stick\` role is at the top of the roles list, and has sufficient permissions to create and manage roles.**`, ephemeral: true }).catch(datedErr));
                 } else {
                     await createRole(role, interaction)
-                        .then(() => tsinitEmbed.addFields({ name: `__**Creating ${role}**__`, value: `${role} has been created.` }))
+                        .then(() => tsinitEmbed.addFields([{ name: `__**Creating ${role}**__`, value: `${role} has been created.` }]))
                         .catch(datedErr);
                 }
-            } else tsinitEmbed.addFields({ name: `__**Creating ${role}**__`, value: `${role} is present.` });
+            } else tsinitEmbed.addFields([{ name: `__**Creating ${role}**__`, value: `${role} is present.` }]);
         }
 
         tsinitEmbed.setFooter({ text: "Done." })
             .setColor("Green")
             .setAuthor({ name: `${interaction.user.tag} executed TSInit`, iconURL: interaction.user.avatarURL() });
         
-        interaction.reply({ embeds: [tsinitEmbed], ephemeral: true }).catch(datedErr);
+        interaction.reply({ embeds: [tsinitEmbed], ephemeral: false }).catch(datedErr);
 
         interaction.guild.fetch()
-            // .then(() => interaction.reply({ content: `Caching guild members (this allows the bot to efficiently mute users. If a user isn't being muted, try re-running \`${prefix}tsinit\`)`, ephemeral: true }).catch(datedErr))
             .catch(async (e) => {
                 datedErr(`Unable to cache ${interaction.guild.name} (ID: ${interaction.guild.id}) (owner: ${(await interaction.guild.fetchOwner()).tag} (${interaction.guild.ownerID}`, e);
-                interaction.reply({ content: `Unable to cache all users! The bot might not work properly. To try again, rerun \`/tsinit\``, ephemeral: true }).catch(datedErr);
+                interaction.channel.send({ content: `Unable to cache all users! The bot might not work properly. To try again, rerun \`/tsinit\``, ephemeral: true }).catch(datedErr);
             })          
         
 

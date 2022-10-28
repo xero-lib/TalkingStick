@@ -3,8 +3,8 @@ import { datedErr } from "../exports/functionExports.js";
 import { defaultPrefix as prefix, developer } from "../exports/configExports.js";
 import { findRole, someRole, hasRoles } from "../exports/functionExports.js";
 
-import "../prototypes/tempSend.js";
-import "../prototypes/tempReply.js";
+// import "../prototypes/tempSend.js";
+// import "../prototypes/tempReply.js";
 
 /**
  * @param {ChatInputCommandInteraction} interaction
@@ -21,9 +21,9 @@ export default async function (interaction) {
             /** @type {GuildMember} */ let member = interaction.options.getMember("recipient");
             /** @type {String} */ let type = interaction.options.get("channel-type").value;
 
+            //todo: check if user is passing to self, say cannot pass to self
             const tspassEmbed = new EmbedBuilder()
-                .setAuthor({ name: interaction.user.username, iconURL: interaction.user.avatarURL() })
-                .setColor("Green");
+                .setAuthor({ name: interaction.user.username, iconURL: interaction.user.avatarURL() });
             if (type == "voice") { //ignore the pyramid of death, I'll be implementing SCE in the next commit
                 if (member.voice.channelId && member.voice.channelId === interaction.member.voice.channelId) {
                     member.voice.setMute(false).catch(datedErr);
@@ -41,30 +41,37 @@ export default async function (interaction) {
                     }
 
                     member.roles.add(findRole(interaction.guild, "Stick Holder")).catch(datedErr);
-                    tspassEmbed.addFields({ name: "TSPass", value: `Passed stick to ${member.displayName} in ${member.voice.channel.name}` });
+                    tspassEmbed
+                        .addFields([{ name: "TSPass", value: `Passed stick to ${member.user.username} in ${member.voice.channel.name}` }])
+                        .setColor("Green");
                     interaction.reply({ embeds: [tspassEmbed] }).catch(datedErr);
                 } else if(!member.voice.channelId && !interaction.member.voice.channelId) {
-                    member.roles.add(findRole(interaction.guild, "Stick Holder"))
-                        .then(() => tspassEmbed.addFields({ name: "TSPass", value: `Passed stick to ${member.user.tag} in ${interaction.channel.name}` }))
-                        .catch((e) => datedErr("Error in tspass:", e));
-                    interaction.member.roles.remove(findRole(interaction.guild, "Stick Holder")).catch(datedErr);
+                    // member.roles.add(findRole(interaction.guild, "Stick Holder"))
+                    //     .then(() => tspassEmbed.addFields([{ name: "TSPass", value: `Passed stick to ${member.user.tag} in ${interaction.channel.name}` }]))
+                    //     .catch((e) => datedErr("Error in tspass:", e));
+                    // interaction.member.roles.remove(findRole(interaction.guild, "Stick Holder")).catch(datedErr);
+                    tspassEmbed
+                        .addFields([{ name: "Failed to pass stick", value: "Both users must be in the same voice channel."}])
+                        .setColor("Red");
                     interaction.reply({ embeds: [tspassEmbed] }).catch(datedErr);
                 } else if(member.voice.channelId && member.voice.channelId != interaction.member.voice.channelId)
-                    tspassEmbed.addFields({ name: "TSPass", value: `**${member.displayName} is not in ${interaction.member.voice.channel.name}.**` });
+                    tspassEmbed.addFields([{ name: "TSPass", value: `**${member.user.username} is not in ${interaction.member.voice.channel.name}.**` }]);
             } else if(type == "text") {
-                if(member) {
-                    interaction.member.roles.remove(findRole(interaction.guild, "Stick Holder")).catch((err) => {
-                        datedErr("TSPass Error in interaction.member.roles.remove:",err);
-                        interaction.reply({ content: "In order for Talking Stick to work properly, you must drag the \`Talking Stick\` role to the top of the list in server settings.", ephemeral: false });
-                    });
+                interaction.member.roles.remove(findRole(interaction.guild, "Stick Holder")).catch((err) => {
+                    datedErr("TSPass Error in interaction.member.roles.remove:",err);
+                    interaction.reply({ content: "In order for Talking Stick to work properly, you must drag the \`Talking Stick\` role to the top of the list in server settings.", ephemeral: false });
+                });
 
-                    member.roles.add(findRole(interaction.guild, "Stick Holder")).then(() => 
-                        tspassEmbed.addFields({ name: "TSPass", value: `Passed stick to ${member.displayName} in ${interaction.channel.name}` })
-                    ).catch((e) => datedErr(`Unable to add stick holder to ${interaction.user.tag}:`,e));
-                        
-                    interaction.member.roles.remove(findRole(interaction.guild, "Stick Holder")).catch(datedErr);
-                    interaction.reply({ embeds: [tspassEmbed] }).catch(datedErr);
-                }
+                member.roles.add(findRole(interaction.guild, "Stick Holder")).then(() => 
+                    tspassEmbed.addFields([{ name: "TSPass", value: `Passed stick to ${member.user.username} in ${interaction.channel.name}` }])
+                ).catch((e) => datedErr(`Unable to add stick holder to ${interaction.user.tag}:`,e));
+                    
+                interaction.member.roles.remove(findRole(interaction.guild, "Stick Holder")).catch(datedErr);
+
+                tspassEmbed
+                        .addFields([{ name: "TSPass", value: `Passed stick to ${member.user.username} in ${interaction.channel.name}` }])
+                        .setColor("Green");
+                interaction.reply({ embeds: [tspassEmbed] }).catch(datedErr);
             } else interaction.reply({ content: "**This command takes two arguments: `voice` or `text` and <ping a user>**", ephemeral: true }).catch(datedErr);
         } else interaction.reply({ content: "You do not have permission to do this.", ephemeral: false }).catch(datedErr);
     } else interaction.reply({ content: `You must run \`/tsinit\` to initialize all required roles for Talking Stick to work properly.`, ephemeral: false }).catch(datedErr);

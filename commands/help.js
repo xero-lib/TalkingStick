@@ -1,18 +1,17 @@
 import { EmbedBuilder, ChatInputCommandInteraction } from "discord.js";
 import { datedErr } from "../exports/functionExports.js";
-// import { defaultPrefix as prefix, botPfp } from "../exports/configExports.js";
-import { defaultPrefix as prefix, botPfp } from "../config/botConfig.js";
+import { /* defaultPrefix as prefix, */ botPfp } from "../config/botConfig.js";
 
-import "../prototypes/tempSend.js";
-import "../prototypes/tempReply.js";
+// import "../prototypes/tempSend.js";
+// import "../prototypes/tempReply.js";
 
 // I apologize for me horrendous formatting here, my OCD took over.
 export const helpMap = new Map()
     .set(
         "help",
         {
-            description: "DMs the user help for a given command.",
-            shortDesc: "DMs the user help for a given command",
+            description: "Sends the user help for a given command.",
+            shortDesc: "Sends the user help for a given command",
             argCount: "Takes one argument",
             args: "command",
             argDesc: "Which command to get help for",
@@ -73,7 +72,7 @@ export const helpMap = new Map()
             shortDesc: "Deletes all roles created by the bot",
             argCount: "Takes no argument",
             example: "N/A",
-            arguments: `\`$/tsdestroy\``,
+            arguments: `\`/tsdestroy\``,
             minRole: "Administrator"
         }
     ).set(
@@ -125,8 +124,9 @@ export const helpMap = new Map()
             minRole: "Stick Controller"
         }
     );
-// helpMap.set("getstarted", ["**CURRENTLY NOT IMPLEMENTED** Sets you on your way towards using Talking Stick!", "Takes no argument", "N/A", `\`${prefix}getstarted`, "User"])
-// helpMap.set("dnw", ["This segment is currently under construction","User","Takes undefined argument/s", `\`${prefix}dnw\``]);
+
+helpMap.set("getstarted", ["**CURRENTLY NOT IMPLEMENTED** Sets you on your way towards using Talking Stick!", "Takes no argument", "N/A", `\`/getstarted`, "User"])
+helpMap.set("dnw", ["This segment is currently under construction","User","Takes undefined argument/s", `\`/dnw\``]);
 
 const genHelpEmbed = new EmbedBuilder()
     .setTitle("**Help**")
@@ -190,6 +190,6 @@ export default async function (interaction) {
 
 //     interaction.channel.send(helpEmbed).catch((e) => {
 //         datedErr(e);
-//         interaction.user.send(`Could not send help for \`${args}\` in ${interaction.channel?.name ? interaction.channel.name : interaction.author.username}, sending help message here.\n` + helpEmbed).catch(datedErr);
+//         interaction.user.send(`Could not send help for \`${args}\` in ${interaction.channel?.name ? interaction.channel.name : interaction.user.username}, sending help message here.\n` + helpEmbed).catch(datedErr);
 //     });
-// } else interaction.reply({ content: `${args} is not a valid command. For a list of commands, run \`${prefix}help\``, ephemeral: true }).catch(datedErr);
+// } else interaction.reply({ content: `${args} is not a valid command. For a list of commands, run \`/help\``, ephemeral: true }).catch(datedErr);

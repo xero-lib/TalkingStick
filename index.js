@@ -11,10 +11,19 @@ import {
     onceShardReconnecting,
 } from "./exports/listenerExports.js";
 import { date } from "./exports/functionExports.js";
-import { Client, User, IntentsBitField } from "discord.js";
+import { Client, User, IntentsBitField, Partials } from "discord.js";
 // import { setTimeout as wait } from 'node:timers/promises';
 
-export const client = new Client({ intents: [IntentsBitField.Flags.Guilds, IntentsBitField.Flags.DirectMessages] });
+export const client = new Client({
+    intents: [
+        IntentsBitField.Flags.Guilds,
+        IntentsBitField.Flags.DirectMessages,
+        IntentsBitField.Flags.GuildMembers,
+    ],
+    partials: [
+        Partials.Channel
+    ]
+ });
 console.warn(client.options);
 
 // Login //
@@ -72,7 +81,7 @@ process.on("exit", (e) => console.error("Exit:", e));
 // Client.on //
 client
     .on("interactionCreate", onInteractionCreate)
-    .on("message", onMessage)
+    .on("messageCreate", onMessage)
     .on("channelCreate", onChannelCreate)
     .on("channelDelete", onChannelDelete)
     .on("messageUpdate", onMessageUpdate)

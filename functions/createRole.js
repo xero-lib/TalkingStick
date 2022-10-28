@@ -11,6 +11,6 @@ export default async function (roleName, interaction, roleColor) {
     return interaction.guild.roles.create({
         name: roleName,
         color: roleColor,
-        reason: `Created ${roleName}`
+        reason: `Created ${roleName} for Talking Stick`
     });
 }

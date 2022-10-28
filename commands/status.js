@@ -15,13 +15,13 @@ export default async function (interaction) {
             .setAuthor({ name: "Talking Stick", iconURL: botPfp })
             .setTitle("**STATUS**")
             .addFields([
-                { name: "Online Status",    value: client.isReady() ? "Online" : "Starting" },
-                { name: "Server Count",     value: (await client.guilds.fetch()).size       },
-                { name: "User Count",       value: client.users.cache.size                  },
+                { name: "Online Status",    value: client.isReady() ? "Online" : "Starting" }, //pointless, as it would be unable to respond if not ready
+                { name: "Server Count",     value: `${(await client.guilds.fetch()).size}`  },
+                { name: "User Count",       value: `${client.users.cache.size}`             },
                 { name: "Uptime",           value: `${client.uptime/1000/60/60/24} days`    }
             ])
 
         interaction.reply({ embeds: [statusEmbed], ephemeral: true }).catch(datedErr);
-        console.log(date(),`Server Count: ${client.guilds.cache.array().length}\nUser Count: ${client.users.cache.array().length}\nUptime: ${client.uptime}`);
+        console.log(date(),`Server Count: ${client.guilds.cache.size}\nUser Count: ${client.users.cache.size}\nUptime: ${client.uptime}`);
     }
 }

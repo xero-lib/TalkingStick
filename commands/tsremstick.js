@@ -2,8 +2,8 @@ import { EmbedBuilder, ChatInputCommandInteraction } from "discord.js";
 import { developer } from "../exports/configExports.js";
 import { hasRoles, findRole, someRole, datedErr } from "../exports/functionExports.js";
 
-import "../prototypes/tempSend.js";
-import "../prototypes/tempReply.js";
+// import "../prototypes/tempSend.js";
+// import "../prototypes/tempReply.js";
 
 /**
  * @param {ChatInputCommandInteraction} interaction 
@@ -19,15 +19,15 @@ export default async function (interaction) {
         ) {
             let member = interaction.options.getMember("stick-holder");
             const tsremstickEmbed = new EmbedBuilder()
-                .setAuthor({ name: interaction.author.username, iconURL: interaction.member.avatarURL() })
+                .setAuthor({ name: interaction.user.username, iconURL: interaction.member.displayAvatarURL() })
                 .setColor("Red");
             if (interaction.member.voice.channelId && interaction.member.voice.channelId !== member.voice.channelId)
-                tsremstickEmbed.addFields({ name: "TSRemStick", value: `${member.tag} is not in the voice channel.` });
+                tsremstickEmbed.addFields([{ name: "TSRemStick", value: `${member.user.tag} is not in the voice channel.` }]);
             else if (!interaction.member.voice.channelId && !member.voice.channelId) {
                 if (someRole(member, "Stick Holder"))
                     member.roles.remove(findRole(member, "Stick Holder")).catch(datedErr);
                 else {
-                    tsremstickEmbed.addFields({ name: "TSRemStick", value: `${member.tag} is not a Stick Holder` });
+                    tsremstickEmbed.addFields([{ name: "TSRemStick", value: `${member.user.tag} is not a Stick Holder` }]);
                     interaction.reply({ embeds: [tsremstickEmbed] }).catch(datedErr);
                 }
             }
@@ -38,7 +38,7 @@ export default async function (interaction) {
                 member.roles.remove(findRole(member, "Stick Holder")).catch(() =>
                     interaction.reply({ content: "In order for Talking Stick to work properly, you must drag the \`Talking Stick\` role to the top of the list in server settings.", ephemeral: false }).catch(datedErr)
                 );
-                tsremstickEmbed.addFields({ name: "Took Stick", value: `Took stick from ${member.username}` });
+                tsremstickEmbed.addFields([{ name: "Took Stick", value: `Took stick from ${member.user.username}` }]);
                 interaction.reply({ embeds: [tsremstickEmbed] }).catch(datedErr);
             }
         } else interaction.reply({ content: "You do not have permission to do this.", ephemeral: false }).catch(datedErr);

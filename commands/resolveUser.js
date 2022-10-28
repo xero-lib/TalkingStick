@@ -7,14 +7,13 @@ import "../prototypes/tempSend.js";
 
 /**
  * @param {ChatInputCommandInteraction} interaction 
- * @param {string} args 
  * @returns {void}
  */
 
 export default async function (interaction) {
     if(interaction.member.id == developer.id) {
-        let user = resolveUser(args);
+        let user = resolveUser(interaction.options.get("tag").value);
         if (user) interaction.reply({ content: `\`\`\`json\n${inspect(user)}\n\`\`\``, ephemeral: true }).catch(datedErr);
-        else interaction.reply({content: args + "\tresolveUser returned **`false`**", ephemeral: true }).catch(datedErr);
+        else interaction.reply({content: interaction.options.get("tag").value + "\tresolveUser returned **`false`**", ephemeral: true }).catch(datedErr);
     }
 }

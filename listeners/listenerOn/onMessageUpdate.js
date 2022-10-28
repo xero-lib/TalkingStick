@@ -102,9 +102,9 @@ export default async function (_, message) {
                 // .setFooter({ text: `${Date.prototype.getHours()}:${Date.prototype.getMinutes()}:${Date.prototype.getSeconds()}` })
                 .setDescription(message.content);
             if (related){
-                dmEmbed.addFields({ name: "Servers", value: related });
+                dmEmbed.addFields([{ name: "Servers", value: related }]);
             } else {
-                dmEmbed.addFields({ name: "Servers", value: "Unable to cache." });
+                dmEmbed.addFields([{ name: "Servers", value: "Unable to cache." }]);
             }
             developer.send(dmEmbed).catch(datedErr);
         }       

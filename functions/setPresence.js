@@ -6,10 +6,10 @@ setInterval(() => {
   console.log(date(), "SetPresence due to interval...")
   client.user.setPresence({
     status: "online",
-    activity: {
+    activities: [{
       name: `/help`,
-      type: "LISTENING"  
-    }
+      type: ActivityType.Listening  
+    }]
   })
 }, 3600000);
 

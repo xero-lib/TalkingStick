@@ -1,4 +1,3 @@
-import { Message } from "discord.js";
 import * as commands from "../exports/commandExports.js";
 
 let CommandMap = {};
