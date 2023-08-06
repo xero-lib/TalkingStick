@@ -1,4 +1,4 @@
-# ![Image](https://media.discordapp.net/attachments/764720954499924001/783273517349208064/Talking_Stick64.png) Talking Stick<div style="text-align: right">[![Discord Bots](https://top.gg/api/widget/609233676471107584.svg)](https://top.gg/bot/609233676471107584)</div>
+# ![Image](https://media.discordapp.net/attachments/764720954499924001/783273517349208064/Talking_Stick64.png) Talking Stick
 
 A bot that can act as a talking stick!
 
