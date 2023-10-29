@@ -6,6 +6,6 @@ import { date } from "../../exports/functionExports.js";
  * @returns {void}
  */
 
-export default async function (c) { 
+export default async function (c /*channel*/ ) { 
     if(c.name) await c.fetch().catch((e) => console.error(date(),`Could not fetch ${e?.name} in ${e?.guild.name}:`,e));
 }

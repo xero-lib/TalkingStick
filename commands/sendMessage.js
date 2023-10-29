@@ -1,37 +1,53 @@
-import { Message, MessageEmbed } from "discord.js";
+import { ChatInputCommandInteraction, EmbedBuilder, User } from "discord.js";
 import { datedErr } from "../exports/functionExports.js";
-import { defaultPrefix as prefix, client, developer } from "../exports/configExports.js";
+import { client, developer } from "../exports/configExports.js";
 
 import "../prototypes/tempReply.js";
 
 /**
- * @param {Message} message 
- * @param {string} args 
- * @param {string} command 
+ * @param {ChatInputCommandInteraction} interaction 
  * @returns {void}
  */
 
-export default async function (message, args, command) {
-    let msgSend = message.content.substring(`${prefix+command} ${args}`.length);
-    let sentUser = client.users.cache.get(args);
-    const sendMessageEmbed = new MessageEmbed()
-        .setAuthor(`${message.author.tag}`, message.author.avatarURL())
-        .setDescription(msgSend);
+export default async function (interaction) { //BIG WIP
+    let msgSend = interaction.options.get("message")?.value
+    // let sentUser = client.users.cache.get(interaction.options.get("id")?.value);
+    let sentUser = await client.users.fetch(interaction.options.getString("id")).catch(async () => {
+        await interaction.reply(`User with ID ${sentUser.id} not found.`);
+        return undefined;
+    })
     
-    if (sentUser) {
-        sentUser.send(sendMessageEmbed).then(() => {
-            sendMessageEmbed
-                .setAuthor(`From ${message.author.tag} to ${sentUser.tag} (${sentUser.id})`, developer.avatarURL())
-                .setTitle(`Sent to ${sentUser.tag} (${sentUser.id})`)
-                .setThumbnail(sentUser.avatarURL());
-            message.tempReply(`Successfully sent message to ${sentUser.tag} (${args})`).catch(datedErr);
-            developer.send(sendMessageEmbed).catch(datedErr);
-        }).catch((e) => {
-            datedErr(`There was an error sending the message to ${sentUser.tag} (${args})\n` + e);
-            message.reply(`There was an error sending the message to ${sentUser.tag} (${args})\n \`\`\`\n${e}\n\`\`\``).catch(datedErr);
-        });
-    } else {
-        datedErr(`Could not send message to ${args} as they are most likely not in the cache.`);
-        message.tempReply(`Unable to send message to ${args}`).catch((e) => datedErr(`Unable to alert ${message.author.tag} of sendMessage error: `, e));
-    }
+    if (!sentUser) { return }
+
+    let sender = interaction.user;
+
+    const sendEmbedBuilder = new EmbedBuilder()
+        .setAuthor({
+            name: `${sender.tag} (Bot Owner and Lead Developer)`,
+            iconURL: sender.avatarURL()
+        })
+        .setDescription(msgSend);
+        
+    client.users.send(interaction.options.getString("id"), { embeds: [sendEmbedBuilder] }).then(() => {
+        sendEmbedBuilder
+            .setAuthor({
+                name: `From ${sender.tag} to ${sentUser.tag} (${sentUser.id})`,
+                iconURL: developer.avatarURL()
+            })
+            .setTitle(`Sent to ${sentUser.tag} (${sentUser.id})`)
+            .setThumbnail(sentUser.avatarURL());
+        interaction.reply({
+            content: `Successfully sent message to ${sentUser.tag} (${sentUser.id})`,
+            ephemeral: true
+        }).catch(datedErr);
+        developer.send({
+            embeds: [sendEmbedBuilder]
+        }).catch(datedErr);
+    }).catch((e) => {
+        datedErr(`There was an error sending the message to ${sentUser.tag} (${sentUser.id})\n` + e);
+        interaction.reply({
+            content: `There was an error sending the message to ${sentUser.tag} (${sentUser.id}). Most likely not in a mutual server.`,
+            ephemeral: true
+        }).catch(datedErr);
+    });
 }

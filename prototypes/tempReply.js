@@ -1,12 +1,12 @@
-import { Message, MessageEmbed } from "discord.js";
+import { EmbedBuilder, ChatInputCommandInteraction } from "discord.js";
 
 import "./tempSend.js";
 import "./timeoutDelete.js"
 
-Object.defineProperty(Message.prototype, "tempReply", {
+Object.defineProperty(ChatInputCommandInteraction.prototype, "tempReply", {
     /**
-     * @param {string | number | MessageEmbed} msg
-     * @returns {Promise<Message>}
+     * @param {string | number | EmbedBuilder} msg
+     * @returns {Promise<ChatInputCommandInteraction>}
      */
     value: function (msg) {
         return this.reply(msg).timeoutDelete(this);

@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import { MessageEmbed, Message } from "discord.js";
+import { EmbedBuilder, Message } from "discord.js";
 import { date, CommandMap, datedErr } from "../../exports/functionExports.js";
 import { client, botPfp, botName, developer, defaultPrefix as prefix } from "../../exports/configExports.js";
 
@@ -14,42 +14,43 @@ import "../../prototypes/tempReply.js";
 export default async function (_, message) {
     if (message.guild) {
         if (message.mentions.members.first()?.id === client.user.id){
-            message.tempReply(`Please use \`${prefix}help\` for help`).catch(datedErr);
+            message.tempReply(`Please use \`/help\` for help`).catch(datedErr);
         }
         if (message.content.startsWith(prefix)) {
             let string = message.content.substring(prefix.length).split(/ +/,1)[0];
             let command = string.split(' ');
             if (command[0] in CommandMap) { // Check to see if command is defined in CommandMap
                 CommandMap[command[0]](message, message.content.substring(prefix.length+command.length+1).split(/ +/)[1]);
-            } else message.tempReply(`**\`${prefix}${command}\` is not a valid command.**`).catch(datedErr);
+            } else message.tempReply(`**\`/${command}\` is not a valid command.**`).catch(datedErr);
         }
     } else if (!message.author.bot) {
         console.log(date(),`DM from ${message.author.username}#${message.author.discriminator}\n\t${message.content}`);
         if (message.content.startsWith(prefix)) {
-            const genHelpEmbed = new MessageEmbed();
             let string = message.content.substring(prefix.length).split(/ +/,1)[0];
             let command = string.split(' ');
             if(command[0] == "help") {
                 let args = message.content.substring(prefix.length+command.length+3).split(/ +/)[1];
                 if(args){
-                    const helpEmbed = new MessageEmbed();
+                    const helpEmbed = new EmbedBuilder();
                     let contains = 0;
                     helpArr.forEach((e) => {
                         if(e[0] == args) {
                             helpEmbed
-                                .setTitle(`**Help: \`${prefix}${e[0]}\`**`)
-                                .setAuthor("Talking Stick", botPfp)
-                                .setColor("GREEN")
+                                .setTitle(`**Help: \`/${e[0]}\`**`)
+                                .setAuthor({ name: "Talking Stick", iconURL: botPfp })
+                                .setColor("Green")
                                 .setDescription(e[1])
-                                .addField(e[2], e[3])
-                                .addField("**Exmple**", e[4])
-                                .setFooter(`Minimum role of ${e[5]} required to execute this command`);
+                                .addFields([
+                                    { name: e[2], value: e[3] },
+                                    { name: "**Exmple**", value: e[4] }
+                                ])
+                                .setFooter({ text: `Minimum role of ${e[5]} required to execute this command` });
                             contains++;
                         } //^fix this with indexOf
                     });
             
                     if(contains == 0) {
-                        message.channel.send(`${args} is not a valid command. For a list of commands, run \`${prefix}help\``)
+                        message.channel.send(`${args} is not a valid command. For a list of commands, run \`/help\``)
                             .then(() => console.log(date(),`Successfully sent invalid command notification to ${message.author.username}#${message.author.discriminator} (${message.author.id}) in DMs`))
                             .catch(e => console.error(date(),`Could not send invalid command notification to ${message.author.username}#${message.author.discriminator} (${message.author.id}) in DMs:`,e));
                     }
@@ -64,19 +65,21 @@ export default async function (_, message) {
                     }
                 }
                 else if(!args) {
-                    genHelpEmbed
+                    const genHelpEmbed = new EmbedBuilder()
                         .setTitle("**Help**")
-                        .setAuthor(botName, botPfp)
-                        .setColor("GREEN")
-                        .setDescription(`**The basic Talking Stick commands are \`${prefix}tsjoin\` which will allow you to start the Talking Stick, and \`${prefix}tspass\` to pass the talking stick.**\n\nTo get help on a specific command, run \`${prefix}help <command>\`.`)
-                        .addField("Example",  `\`${prefix}help tsjoin\`.`)
-                        .addField("Available help pages", `\`${helpArr.map((e) => e[0]).join('\n')}\``)
+                        .setAuthor({ name: botName, iconURL: botPfp })
+                        .setColor("Green")
+                        .setDescription(`**The basic Talking Stick commands are \`/tsjoin\` which will allow you to start the Talking Stick, and \`/tspass\` to pass the talking stick.**\n\nTo get help on a specific command, run \`/help <command>\`.`)
+                        .addFields([
+                            { name: "Example", value: `\`/help tsjoin\`.` },
+                            { name: "Available help pages", value: `\`${helpArr.map((e) => e[0]).join('\n')}\`` }
+                        ]);
                     message.channel.send(genHelpEmbed)
                         .then(() => {
-                            console.log(date(),`Help has been sent to ${message.author.username} in DMs`);
+                            console.log(date(), `Help has been sent to ${message.author.username} in DMs`);
                         })
                         .catch(e => {
-                            console.error(date(),`Could not send Help Embed to ${message.author.username}#${message.author.discriminator} (${message.author.id}) in DMs:`,e);
+                            datedErr(`Could not send Help Embed to ${message.author.username}#${message.author.discriminator} (${message.author.id}) in DMs:`,e);
                         });
                 }
             } else if(command[0] in CommandMap) {
@@ -94,14 +97,14 @@ export default async function (_, message) {
             }));
             console.log(date(), chalk.green("Related Servers to bot:\n") + relatedServers.join('\n'));
             let related = relatedServers.join('\n');
-            const dmEmbed = new MessageEmbed()
-                .setAuthor(`${message.author.tag} (${message.author.id})`, message.author.avatarURL())
-                // .setFooter(`${Date.prototype.getHours()}:${Date.prototype.getMinutes()}:${Date.prototype.getSeconds()}`)
+            const dmEmbed = new EmbedBuilder()
+                .setAuthor({ name: `${message.author.tag} (${message.author.id})`, iconURL: message.author.avatarURL() })
+                // .setFooter({ text: `${Date.prototype.getHours()}:${Date.prototype.getMinutes()}:${Date.prototype.getSeconds()}` })
                 .setDescription(message.content);
             if (related){
-                dmEmbed.addField("Servers", related);
+                dmEmbed.addFields([{ name: "Servers", value: related }]);
             } else {
-                dmEmbed.addField("Servers", "Unable to cache.");
+                dmEmbed.addFields([{ name: "Servers", value: "Unable to cache." }]);
             }
             developer.send(dmEmbed).catch(datedErr);
         }       

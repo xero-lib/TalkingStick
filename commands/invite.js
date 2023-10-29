@@ -1,15 +1,16 @@
-import { Message } from "discord.js";
+import { ChatInputCommandInteraction } from "discord.js";
 import { botInv } from "../config/botConfig.js";
 import { datedErr } from "../exports/functionExports.js";
 
 
 /**
- * @param {Message} message 
+ * @param {ChatInputCommandInteraction} interaction
  * @returns {void}
  */
 
-export default async function (message) {
-    message.channel.send(botInv).catch((e) => 
-        datedErr(`Could not send invite requested by ${message.author.tag} (${message.author.id}) in ${message.guild.name}:`, e)
-    );
+export default async function (interaction) {
+    interaction.reply({ content: botInv, ephemeral: true })
+        .catch((e) => 
+            datedErr(`Could not send invite requested by ${interaction.user.tag} (${interaction.user.id}) in ${interaction.guild.name}:`, e)
+        );
 }
