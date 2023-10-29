@@ -28,6 +28,7 @@ export default async function (interaction) {
             .setColor("Red")
             .setFooter({ text: "Done." });
         interaction.reply({ embeds: [tsdestroyEmbed], ephemeral: false }).catch(datedErr);
+
      
         
     } else interaction.reply({ content: "You do not have permission to do this.", ephemeral: true }).catch(datedErr);
