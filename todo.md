@@ -12,3 +12,4 @@
 - [ ] &ensp;Implement response from developer to go to last recieved `message.id` in bot DMs
 - [ ] &ensp;Implement different roles for tstext and tsvoice
 - [ ] &ensp;Finish `README`
+- [ ] &ensp;Switch to if guarding

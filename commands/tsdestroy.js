@@ -12,8 +12,8 @@ import "../prototypes/tempReply.js";
 
 export default async function (interaction) {
     if (interaction.member.permissions.has(PermissionsBitField.Flags.Administrator) || interaction.member.id == developer.id) { //if message author has admin perms
-        const tsdestroyEmbed = new EmbedBuilder();
-        const str = "";
+        let tsdestroyEmbed = new EmbedBuilder();
+        let str = "";
         if (findRole(interaction.guild, "TSLeft")) findRole(interaction.guild, "TSLeft").members.map((member) => member.user.username).forEach((member) => str += member + '\n');
         
         for (let roleIdx in roles) {

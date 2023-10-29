@@ -173,8 +173,6 @@ export let devCommands = [
                 .setName("tag")
                 .setDescription("Tag (Name#1234) for user to search")
                 .setRequired(true)
-                .setMinLength(17)
-                .setMaxLength(19)
         ),
     // recache_hard
     new SlashCommandBuilder()

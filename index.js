@@ -3,9 +3,9 @@ import { token } from "./config/botConfig.js";
 import {
     onMessage,
     onVoiceStateUpdate,
-    onChannelCreate,
-    onChannelDelete,
-    onMessageUpdate,
+    // onChannelCreate,
+    // onChannelDelete,
+    // onMessageUpdate,
     onInteractionCreate,
     onceReady,
     onceShardReconnecting,
@@ -18,7 +18,7 @@ export const client = new Client({
     intents: [
         IntentsBitField.Flags.Guilds,
         IntentsBitField.Flags.DirectMessages,
-        IntentsBitField.Flags.GuildMembers,
+        // IntentsBitField.Flags.GuildMembers,
     ],
     partials: [
         Partials.Channel
@@ -27,8 +27,6 @@ export const client = new Client({
 console.warn(client.options);
 
 // Login //
-// async function login() {
-//     await wait(100);
 let application;
 /** @type {User} */ let developer;
 
@@ -36,21 +34,6 @@ client.login(token).then(async () => {
     application = await client.application.fetch();
     /** @type {User} */ developer = application.owner;
 });
-// }
-
-// await login();
-
-// function getPromise() {
-//     return new Promise((resolve) => {
-//         client.once('ready', async () => {
-//             resolve()
-//         });
-//     })
-// }
-// async function waitForClientLogin() {
-//     await getPromise()
-// }
-// waitForClientLogin()
 
 client
     .on("debug", (d) => {
@@ -62,6 +45,7 @@ client
             )
         ) console.log(date(), 'Debug:', d)
     })
+    .on("error", console.error)
     .on("warn", (w) => console.warn(date(), 'Warn:', w))
     .on("shardError", (e) => console.error(date(), 'Shard Error:', e))
     .on("shardResume", (r) => console.log(date(), 'Shard Resume:', r))
