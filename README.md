@@ -33,6 +33,7 @@ You can even have multiple talking sticks so that several people can talk at the
 The basic Talking Stick commands are `/tsjoin` which will allow you to start the Talking Stick, and `/tspass` to pass the talking stick.
 
 To get help on a specific command, run `/help <command>` without the `<` and `>`.
+<br>
 **Example:**
 `/help`
 `/help tsjoin`
