@@ -40,7 +40,8 @@ To get help on a specific command, run `/help <command>` without the `<` and `>`
 ---
 
 ## `tsinit`
-Creates all necessary roles for Talking Stick. (In the future, this will also run a tutorial)
+Creates all necessary roles for Talking Stick. (In the future, this will also run a tutorial
+<br>
 **Example**:
 `/tsinit`
 
@@ -48,6 +49,7 @@ Creates all necessary roles for Talking Stick. (In the future, this will also ru
 
 ## `tsjoin`
 Activates Talking Stick in either a voice or a text channel depending on the passed argument. This will mute everyone except the member who sent the command, and assign the special Talking Stick roles.
+<br>
 **Example**:
 `/tsjoin text`
 
@@ -55,6 +57,7 @@ Activates Talking Stick in either a voice or a text channel depending on the pas
 
 ## `tsleave`
 Deactivates Talking Stick in either a voice or a text channel depending on the passed argument. This will allow everyone to talk again, and return them to their original roles.
+<br>
 **Example**:
 `/tsleave text`
 
@@ -62,6 +65,7 @@ Deactivates Talking Stick in either a voice or a text channel depending on the p
 
 ## `tspass`
 If you have the talking stick, you can pass it to someone else by pinging them with this command.
+<br>
 **Example**:
 `/tspass text @Thoth`
 
@@ -69,6 +73,7 @@ If you have the talking stick, you can pass it to someone else by pinging them w
 
 ## `tsdestroy`
 Deletes all roles created by the bot. **Warning**: any users still muted due to Talking Stick will remain muted until unmuted by a moderator.
+<br>
 **Example**:
 `/tsdestroy`
 
@@ -76,6 +81,7 @@ Deletes all roles created by the bot. **Warning**: any users still muted due to 
 
 ## `tsgivecon`
 Allows you to give another user the `Stick Controller` role by pinging them with this command.
+<br>
 **Example**:
 `/tsgivecon @Thoth`
 
@@ -83,6 +89,7 @@ Allows you to give another user the `Stick Controller` role by pinging them with
 
 ## `tsremcon`
 Allows you to remove another user from the `Stick Controller` role by pinging them with this command.
+<br>
 **Example**:
 `/tsremcon @Thoth`
 
@@ -90,6 +97,7 @@ Allows you to remove another user from the `Stick Controller` role by pinging th
 
 ## `tsaddstick`
 Allows you to give another user in the voice channel a talking stick, while keeping your own by pinging them with this command.
+<br>
 **Example**:
 `/tsaddstick @Thoth`
 
@@ -97,5 +105,6 @@ Allows you to give another user in the voice channel a talking stick, while keep
 
 ## `tsremstick`
 Allows you to take a stick from a mentioned user by pinging them with this command.
+<br>
 **Example**:
 `/tsremstick @Thoth`
