@@ -12,76 +12,90 @@ However, if you have the talking stick (or the special stick controller role) yo
 
 You can even have multiple talking sticks so that several people can talk at the same time, but everyone else is muted in that channel (This feature is in beta)
 
-## Commands  
-    Prefix: //
+# Commands
+<em>\* - optional argument</em>
+| name | argument(s) |
+| --- | --- | 
+| [`help`](/#help) | command* |
+| [`tsinit`](/#tsinit) | |
+| [`tsjoin`](/#tsjoin) | <voice\|text> |
+| [`tsleave`](/#tsleave) | <voice\|text> |
+| [`tspass`](/#tspass) | @User |
+| [`tsdestroy`](/#tsdestroy) | |
+| [`tsgivecon`](/#tsgivecon) | @User |
+| [`tsremcon`](/#tsremcon) | @User |
+| [`tsaddstick`](/#tsaddstick) | @User |
+| [`tsremstick`](/#tsremstick) | @User |
+| `dnw` | bug-report-message* |
 
----
+
 ## `help`
-The basic Talking Stick commands are `//tsjoin` which will allow you to start the Talking Stick, and `//tspass` to pass the talking stick.
+The basic Talking Stick commands are `/tsjoin` which will allow you to start the Talking Stick, and `/tspass` to pass the talking stick.
 
-To get help on a specific command, run `//help <command>` without the `<` and `>`.
+To get help on a specific command, run `/help <command>` without the `<` and `>`.
 **Example:**
-`//help tsjoin`
+`/help`
+`/help tsjoin`
 
 ---
 
 ## `tsinit`
 Creates all necessary roles for Talking Stick. (In the future, this will also run a tutorial)
 **Example**:
-`//tsinit`
+`/tsinit`
 
 ---
 
 ## `tsjoin`
 Activates Talking Stick in either a voice or a text channel depending on the passed argument. This will mute everyone except the member who sent the command, and assign the special Talking Stick roles.
 **Example**:
-`//tsjoin text`
+`/tsjoin text`
 
 ---
 
 ## `tsleave`
 Deactivates Talking Stick in either a voice or a text channel depending on the passed argument. This will allow everyone to talk again, and return them to their original roles.
 **Example**:
-`//tsleave text`
+`/tsleave text`
 
 ---
 
 ## `tspass`
 If you have the talking stick, you can pass it to someone else by pinging them with this command.
 **Example**:
-`//tspass text @Thoth`
+`/tspass text @Thoth`
 
 ---
 
 ## `tsdestroy`
 Deletes all roles created by the bot. **Warning**: any users still muted due to Talking Stick will remain muted until unmuted by a moderator.
 **Example**:
-`//tsdestroy`
+`/tsdestroy`
 
 ---
 
 ## `tsgivecon`
 Allows you to give another user the `Stick Controller` role by pinging them with this command.
 **Example**:
-`//tsgivecon @Thoth`
+`/tsgivecon @Thoth`
 
 ---
 
 ## `tsremcon`
 Allows you to remove another user from the `Stick Controller` role by pinging them with this command.
 **Example**:
-`//tsremcon @Thoth`
+`/tsremcon @Thoth`
 
 ---
 
 ## `tsaddstick`
 Allows you to give another user in the voice channel a talking stick, while keeping your own by pinging them with this command.
 **Example**:
-`//tsaddstick @Thoth`
+`/tsaddstick @Thoth`
 
 ---
 
 ## `tsremstick`
 Allows you to take a stick from a mentioned user by pinging them with this command.
 **Example**:
-`//tsremstick @Thoth`
+`/tsremstick @Thoth`
