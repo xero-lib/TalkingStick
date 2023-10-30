@@ -16,16 +16,16 @@ You can even have multiple talking sticks so that several people can talk at the
 <em>\* - optional argument</em>
 | name | argument(s) |
 | --- | --- | 
-| [`help`](/#help) | command* |
-| [`tsinit`](/#tsinit) | |
-| [`tsjoin`](/#tsjoin) | <voice\|text> |
-| [`tsleave`](/#tsleave) | <voice\|text> |
-| [`tspass`](/#tspass) | @User |
-| [`tsdestroy`](/#tsdestroy) | |
-| [`tsgivecon`](/#tsgivecon) | @User |
-| [`tsremcon`](/#tsremcon) | @User |
-| [`tsaddstick`](/#tsaddstick) | @User |
-| [`tsremstick`](/#tsremstick) | @User |
+| [`help`](#help) | command* |
+| [`tsinit`](#tsinit) | |
+| [`tsjoin`](#tsjoin) | <voice\|text> |
+| [`tsleave`](#tsleave) | <voice\|text> |
+| [`tspass`](#tspass) | @User |
+| [`tsdestroy`](#tsdestroy) | |
+| [`tsgivecon`](#tsgivecon) | @User |
+| [`tsremcon`](#tsremcon) | @User |
+| [`tsaddstick`](#tsaddstick) | @User |
+| [`tsremstick`](#tsremstick) | @User |
 | `dnw` | bug-report-message* |
 
 
