@@ -14,9 +14,9 @@ export default async function (interaction) {
     let type = interaction.options.get("channel-type").value;
     if ((someRole(interaction.member, "Stick Controller") || interaction.member.permissions.has(8))) {
         if (someRole(interaction.guild, "Stick Holder")) {
-            if (interaction.member.voice.channelId && type === "voice") {
+            if (interaction.member.voice.channel && type === "voice") {
                 for (const [_, member] of interaction.guild.members.cache) 
-                    if (member.voice.channelId && member.voice.channelId === interaction.member.voice.channelId) {
+                    if (member.voice.channel && member.voice.channel === interaction.member.voice.channel) {
                         member.voice.setMute(false).catch(datedErr);
                         member.roles.remove(findRole(interaction.guild, "Stick Holder")).catch(datedErr);
                         member.roles.remove(findRole(interaction.guild, "Stick Listener")).catch(datedErr);
@@ -26,7 +26,7 @@ export default async function (interaction) {
                     .setAuthor({ name: interaction.user.tag, iconURL: interaction.user.avatarURL() })
                     .setColor("Green")
                     .setTitle("Talking Stick:")
-                    .addFields([{ name: `${interaction.user.tag} removed the Talking Stick.\n\tYou may now talk freely.`, value: `Removed from ${interaction.member.voice.channelId}` }]);
+                    .addFields([{ name: `${interaction.user.tag} removed the Talking Stick.\n\tYou may now talk freely.`, value: `Removed from ${interaction.member.voice.channel}` }]);
 
                 interaction.member.voice.channel.permissionOverwrites.edit(findRole(interaction.guild, "Stick Holder"), { Speak: null }).catch(datedErr);
                 interaction.member.voice.channel.permissionOverwrites.edit(interaction.guild.roles.everyone, { Speak: null }).catch(datedErr);
@@ -42,7 +42,7 @@ export default async function (interaction) {
                 interaction.channel.permissionOverwrites.edit(findRole(interaction.guild, "Stick Holder"), { SendMessages: null }).catch(datedErr);
                 interaction.channel.permissionOverwrites.edit(interaction.guild.roles.everyone, { SendMessages: null }).catch(datedErr);
                 for (const [_, member] of interaction.guild.members.cache) {
-                    if(!member.voice.channelId && someRole(member, "Stick Holder")) {
+                    if(!member.voice.channel && someRole(member, "Stick Holder")) {
                         member.roles.remove(findRole(interaction.guild, "Stick Holder")).catch(console.err);
                     }
                 }

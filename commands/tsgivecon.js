@@ -1,4 +1,4 @@
-import { EmbedBuilder, ChatInputCommandInteraction } from "discord.js"
+import { EmbedBuilder, ChatInputCommandInteraction, PermissionsBitField } from "discord.js"
 import { findRole, datedErr } from "../exports/functionExports.js";
 import { developer } from "../exports/configExports.js";
 
@@ -11,7 +11,7 @@ import { developer } from "../exports/configExports.js";
  */
 
 export default async function tsgivecon(interaction) {
-    if(interaction.member.permissions.has(8) || interaction.member.id === developer.id) {
+    if(interaction.member.permissions.has(PermissionsBitField.Flags.Administrator) || interaction.member.id === developer.id) {
         const tsgiveconEmbed = new EmbedBuilder();
         
         if (findRole(interaction.guild, "Stick Controller")) {

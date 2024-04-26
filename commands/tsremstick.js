@@ -21,9 +21,9 @@ export default async function (interaction) {
             const tsremstickEmbed = new EmbedBuilder()
                 .setAuthor({ name: interaction.user.username, iconURL: interaction.member.displayAvatarURL() })
                 .setColor("Red");
-            if (interaction.member.voice.channelId && interaction.member.voice.channelId !== member.voice.channelId)
+            if (interaction.member.voice.channel && interaction.member.voice.channel !== member.voice.channel)
                 tsremstickEmbed.addFields([{ name: "TSRemStick", value: `${member.user.tag} is not in the voice channel.` }]);
-            else if (!interaction.member.voice.channelId && !member.voice.channelId) {
+            else if (!interaction.member.voice.channel && !member.voice.channel) {
                 if (someRole(member, "Stick Holder"))
                     member.roles.remove(findRole(member, "Stick Holder")).catch(datedErr);
                 else {
@@ -31,7 +31,7 @@ export default async function (interaction) {
                     interaction.reply({ embeds: [tsremstickEmbed] }).catch(datedErr);
                 }
             }
-            if (member.voice.channelId === interaction.member.voice.channelId) {
+            if (member.voice.channel === interaction.member.voice.channel) {
                 member.roles.remove(findRole(interaction.guild, "Stick Holder")).catch(datedErr);
                 member.voice.setMute(true).catch(datedErr);
             } else if (someRole(member, "Stick Holder")) {

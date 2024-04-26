@@ -25,7 +25,7 @@ export default async function (interaction) {
             const tspassEmbed = new EmbedBuilder()
                 .setAuthor({ name: interaction.user.username, iconURL: interaction.user.avatarURL() });
             if (type == "voice") { //ignore the pyramid of death, I'll be implementing SCE in the next commit
-                if (member.voice.channelId && member.voice.channelId === interaction.member.voice.channelId) {
+                if (member.voice.channel && member.voice.channel === interaction.member.voice.channel) {
                     member.voice.setMute(false).catch(datedErr);
                     if(interaction.member.id != member.id) {
                         interaction.member.voice.setMute(true).catch((e) => 
@@ -45,7 +45,7 @@ export default async function (interaction) {
                         .addFields([{ name: "TSPass", value: `Passed stick to ${member.user.username} in ${member.voice.channel.name}` }])
                         .setColor("Green");
                     interaction.reply({ embeds: [tspassEmbed] }).catch(datedErr);
-                } else if(!member.voice.channelId && !interaction.member.voice.channelId) {
+                } else if(!member.voice.channel && !interaction.member.voice.channel) {
                     // member.roles.add(findRole(interaction.guild, "Stick Holder"))
                     //     .then(() => tspassEmbed.addFields([{ name: "TSPass", value: `Passed stick to ${member.user.tag} in ${interaction.channel.name}` }]))
                     //     .catch((e) => datedErr("Error in tspass:", e));
@@ -54,7 +54,7 @@ export default async function (interaction) {
                         .addFields([{ name: "Failed to pass stick", value: "Both users must be in the same voice channel."}])
                         .setColor("Red");
                     interaction.reply({ embeds: [tspassEmbed] }).catch(datedErr);
-                } else if(member.voice.channelId && member.voice.channelId != interaction.member.voice.channelId)
+                } else if(member.voice.channel && member.voice.channel != interaction.member.voice.channel)
                     tspassEmbed.addFields([{ name: "TSPass", value: `**${member.user.username} is not in ${interaction.member.voice.channel.name}.**` }]);
             } else if(type == "text") {
                 interaction.member.roles.remove(findRole(interaction.guild, "Stick Holder")).catch((err) => {

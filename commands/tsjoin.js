@@ -22,7 +22,7 @@ export default async function (interaction) {
             interaction.member.permissions.has(8) ||
             interaction.member.id === developer.id
         ) {
-            if (interaction.member.voice.channelId && type == "voice") {//if  the user is in a voice channel and also passed the "voice" argument
+            if (interaction.member.voice.channel && type == "voice") {//if  the user is in a voice channel and also passed the "voice" argument
                 interaction.member.roles.add(findRole(interaction.guild, "Stick Holder")).catch(() =>
                     datedErr("Could not add Stick holder to", `${interaction.user.username} (${interaction.user.id}) in ${interaction.guild.name}`)
                 ); //Add interaction author to Stick Holder
@@ -82,7 +82,6 @@ export default async function (interaction) {
                     datedErr(e, `\nStill could not send tsEmbed in ${interaction.channel.name} in ${interaction.guild.name}, requested by ${interaction.user.tag} (${interaction.user.id}), even after attempting to override.`)
                 );
             }
-            
             else if(!interaction.member.voice.channel && type == "voice") interaction.reply({ content: "You need to join a voice channel first!", ephemeral: true });
         } else interaction.reply({ content: "You do not have permission to do this.", ephemeral: false }); 
     } else interaction.reply({ content: `Please run \`/tsinit\` to create the required roles`, ephemeral: false });
