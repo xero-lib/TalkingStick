@@ -10,23 +10,29 @@ import { hasRoles, findRole, someRole, datedErr } from "../exports/functionExpor
  */
 
 export default async function (interaction) {
-    if (hasRoles(interaction.guild) && hasRoles(interaction.member)) {
+    if (hasRoles(interaction.guild) && hasRoles(interaction.member))
+    {
         if (
             someRole(interaction.guild, "Stick Holder" ||
             interaction.member.permissions.has(8) ||
             someRole(interaction.member, "Stick Controller") ||
             interaction.member.id === developer.id)
-        ) {
+        )
+        {
             let member = interaction.options.getMember("stick-holder");
             const tsremstickEmbed = new EmbedBuilder()
                 .setAuthor({ name: interaction.user.username, iconURL: interaction.member.displayAvatarURL() })
                 .setColor("Red");
             if (interaction.member.voice.channel && interaction.member.voice.channel !== member.voice.channel)
+            {
                 tsremstickEmbed.addFields([{ name: "TSRemStick", value: `${member.user.tag} is not in the voice channel.` }]);
-            else if (!interaction.member.voice.channel && !member.voice.channel) {
+            } else if (!interaction.member.voice.channel && !member.voice.channel)
+            {
                 if (someRole(member, "Stick Holder"))
+                {
                     member.roles.remove(findRole(member, "Stick Holder")).catch(datedErr);
-                else {
+                } else
+                {
                     tsremstickEmbed.addFields([{ name: "TSRemStick", value: `${member.user.tag} is not a Stick Holder` }]);
                     interaction.reply({ embeds: [tsremstickEmbed] }).catch(datedErr);
                 }

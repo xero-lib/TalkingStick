@@ -5,8 +5,10 @@ services:
       - "5000:5000"
     volumes:
       - .:/code
+    restart: always
     container_name: Talking-Stick-Service
   redis:
     image: redis:alpine
     container_name: Redis-Service
+    restart: always
     
