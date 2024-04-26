@@ -51,7 +51,7 @@ client
 
 // Listener.once //
 client
-    .once("ready", (c) => onceReady(c))
+    .once("ready", (c) => { onceReady(c); datedErr("Bot Started") } )
     .once("shardReconnecting", onceShardReconnecting);
 
 // Listener.on //
