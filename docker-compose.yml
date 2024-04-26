@@ -5,5 +5,8 @@ services:
       - "5000:5000"
     volumes:
       - .:/code
+    container_name: Talking-Stick-Service
   redis:
-    image: redis
+    image: redis:alpine
+    container_name: Redis-Service
+    
