@@ -10,7 +10,7 @@ import {
     onceReady,
     onceShardReconnecting,
 } from "./exports/listenerExports.js";
-import { date } from "./exports/functionExports.js";
+import { date, datedErr } from "./exports/functionExports.js";
 import { Client, User, IntentsBitField, Partials } from "discord.js";
 // import { setTimeout as wait } from 'node:timers/promises';
 
@@ -45,12 +45,9 @@ client
             )
         ) console.log(date(), 'Debug:', d)
     })
-    .on("error", console.error)
+    .on("error", datedErr)
     .on("warn", (w) => console.warn(date(), 'Warn:', w))
-    .on("shardError", (e) => console.error(date(), 'Shard Error:', e))
-    .on("shardResume", (r) => console.log(date(), 'Shard Resume:', r))
-    .on("webhookUpdate", console.log);
-    
+    .on("shardError", (e) => datedErr('Shard Error:', e))
 
 // Listener.once //
 client
