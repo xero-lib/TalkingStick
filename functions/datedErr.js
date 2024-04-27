@@ -7,8 +7,8 @@ import { appendFile } from "node:fs/promises"
  * @returns {void}
  */
 
-export default (...args) => {
+export default async (...args) => {
     let data = `${date()} ${args.join(' ')}`
     console.error(data);
-    appendFile("./logs.txt", data);
+    await appendFile("./logs.txt", data);
 }
