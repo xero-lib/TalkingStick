@@ -1,4 +1,4 @@
-import { EmbedBuilder, ChatInputCommandInteraction } from "discord.js";
+import { EmbedBuilder, ChatInputCommandInteraction, PermissionsBitField } from "discord.js";
 import { someRole, findRole, datedErr, hasRoles } from "../exports/functionExports.js";
 import { developer } from "../exports/configExports.js";
 
@@ -19,7 +19,7 @@ export default async function (interaction) {
     ) {
         if (//if interaction author is in Stick Controller group, an admin, or the developer for prod debugging reasons
             someRole(interaction.member, "Stick Controller") ||
-            interaction.member.permissions.has(8) ||
+            interaction.member.permissions.has(PermissionsBitField.Flags.Administrator) ||
             interaction.member.id === developer.id
         ) {
             if (interaction.member.voice.channel && type == "voice") {//if  the user is in a voice channel and also passed the "voice" argument

@@ -1,4 +1,4 @@
-import { EmbedBuilder, ChatInputCommandInteraction } from "discord.js";
+import { EmbedBuilder, ChatInputCommandInteraction, PermissionsBitField } from "discord.js";
 import { createRole, someRole, datedErr } from "../exports/functionExports.js";
 import { roles, developer, defaultPrefix as prefix } from "../exports/configExports.js";
 
@@ -11,7 +11,7 @@ import "../prototypes/tempReply.js";
  */
 
 export default async function (interaction) {
-    if (interaction.member.permissions.has(8) || interaction.member.id == developer.id) {
+    if (interaction.member.permissions.has(PermissionsBitField.Flags.Administrator) || interaction.member.id == developer.id) {
         const tsinitEmbed = new EmbedBuilder()
         
         for(let role of roles){

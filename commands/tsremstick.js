@@ -1,4 +1,4 @@
-import { EmbedBuilder, ChatInputCommandInteraction } from "discord.js";
+import { EmbedBuilder, ChatInputCommandInteraction, PermissionsBitField } from "discord.js";
 import { developer } from "../exports/configExports.js";
 import { hasRoles, findRole, someRole, datedErr } from "../exports/functionExports.js";
 
@@ -14,7 +14,7 @@ export default async function (interaction) {
     {
         if (
             someRole(interaction.guild, "Stick Holder" ||
-            interaction.member.permissions.has(8) ||
+            interaction.member.permissions.has(PermissionsBitField.Flags.Administrator) ||
             someRole(interaction.member, "Stick Controller") ||
             interaction.member.id === developer.id)
         )
