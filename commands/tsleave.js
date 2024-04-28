@@ -31,7 +31,7 @@ export default async function (interaction) {
                 interaction.member.voice.channel.permissionOverwrites.edit(findRole(interaction.guild, "Stick Holder"), { Speak: null }).catch(datedErr);
                 interaction.member.voice.channel.permissionOverwrites.edit(interaction.guild.roles.everyone, { Speak: null }).catch(datedErr);
                 interaction.reply({ embeds: [tsLeaveEmbed] }).catch(datedErr);
-            } else if (type === "text") {
+            } else { // Type must equal 'text' due to the interaction limitation
                 interaction.guild.roles.cache.forEach((r) => {
                     if(r.name?.toLowerCase() !== "muted")
                         interaction.channel.permissionOverwrites.edit(r, { SendMessages: null }).catch((e) => 
