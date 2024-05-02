@@ -1,4 +1,5 @@
 # Todo
+- [ ] Properly set hoist levels for created roles, and ensure that talking stick role is above all roles that should be affected
 - [x] Finish refractoring
 - [x] Make `tempX` prototypes return the promise instead of attempting to resolve them in the methods themselves
 - [ ] Implement the option for a queue and timer so that the stick is automatically passed to the next person after a specified amount of time

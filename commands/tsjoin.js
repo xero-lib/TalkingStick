@@ -77,7 +77,7 @@ export default async function (interaction) {
                     .setAuthor({ name: interaction.user.username, iconURL: interaction.user.avatarURL() })
                     .setColor("Green")
                     .setTitle("Talking Stick:")
-                    .addFields([{ name: `${interaction.user.tag} has the Talking Stick!`, value: `Currently in ${interaction.channel.name}` }])
+                    .addFields([{ name: `${interaction.user.username} has the Talking Stick!`, value: `Currently in ${interaction.channel}` }])
                     .setFooter({ text: `To pass the Talking Stick, use /tspass <ping a user>` });
 
                 interaction.reply({ embeds: [tsEmbed] , ephemeral: false }).catch((e) =>

@@ -90,7 +90,7 @@ export default async function (message) {
         developer.send({ embeds: [dmEmbed] })
             .then(() => message.react("✅"))
             .catch((e) => {
-                console.error(date(),`Error sending message from ${message.author.username}#${message.author.discriminator} (${message.author.id}):`,e)
+                console.error(date(),`Error sending message from ${message.author.username} (${message.author.id}):`,e)
                 message.channel.send("There was an error sending the message, try again in a little while, add Thoth#6134, or join the support server: https://discord.gg/Jxe7mK2dHT");
             });  
         

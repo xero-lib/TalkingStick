@@ -27,9 +27,9 @@ export default async function (interaction) {
         interaction.member.permissions.has(PermissionsBitField.Flags.Administrator) ||
         interaction.member.id == developer.id
     )) {
-        if (interaction.member.voice.channel && type === "voice") {
+        if (interaction.member.voice.channelId && type === "voice") {
             for (const [_, member] of interaction.guild.members.cache) 
-                if (member.voice.channel && member.voice.channel === interaction.member.voice.channel) {
+                if (member.voice.channelId && member.voice.channelId === interaction.member.voice.channelId) {
                     member.voice.setMute(false).catch(datedErr);
                     member.roles.remove(holder_role).catch(datedErr);
                     member.roles.remove(listener_role).catch(datedErr);
@@ -39,7 +39,7 @@ export default async function (interaction) {
                 .setAuthor({ name: interaction.user.username, iconURL: interaction.user.avatarURL() })
                 .setColor("Green")
                 .setTitle("Talking Stick:")
-                .addFields([{ name: `${interaction.user.username} removed the Talking Stick.\n\tYou may now talk freely.`, value: `Removed from ${interaction.member.voice.channel}` }]);
+                .addFields([{ name: `${interaction.user.displayName} removed the Talking Stick.\n\n**You may now talk freely.**`, value: `Removed from ${interaction.member.voice.channel}` }]);
 
             interaction.member.voice.channel.permissionOverwrites.edit(holder_role, { Speak: null }).catch(datedErr);
             interaction.member.voice.channel.permissionOverwrites.edit(interaction.guild.roles.everyone, { Speak: null }).catch((e) => {
@@ -64,10 +64,10 @@ export default async function (interaction) {
             }
             
             tsLeaveEmbed
-                .setAuthor({ name: interaction.user.username, iconURL: interaction.user.avatarURL() })
+                .setAuthor({ name: interaction.user.displayName, iconURL: interaction.user.avatarURL() })
                 .setColor("Green")
                 .setTitle("Talking Stick")
-                .addFields([{ name: `${interaction.user.username} removed the Talking Stick.\nYou may now type freely.`, value: `Removed from ${interaction.channel.name}` }]);
+                .addFields([{ name: `${interaction.user.displayName} removed the Talking Stick.\nYou may now type freely.`, value: `Removed from ${interaction.channel.name}` }]);
 
             interaction.reply({ embeds: [tsLeaveEmbed], ephemeral: false }).catch(datedErr);
         }
