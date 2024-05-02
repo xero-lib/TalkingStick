@@ -1,5 +1,6 @@
 import { EmbedBuilder, ChatInputCommandInteraction, PermissionsBitField } from "discord.js";
 import { someRole, findRole, datedErr, hasRoles } from "../exports/functionExports.js";
+import { developer } from "../index.js";
 
 // import "../prototypes/tempSend.js";
 // import "../prototypes/tempReply.js";
@@ -21,7 +22,11 @@ export default async function (interaction) {
     let tsLeaveEmbed = new EmbedBuilder();
 
     let type = interaction.options.get("channel-type").value;
-    if ((someRole(interaction.member, "Stick Controller") || interaction.member.permissions.has(PermissionsBitField.Flags.Administrator))) {
+    if ((
+        someRole(interaction.member, "Stick Controller") ||
+        interaction.member.permissions.has(PermissionsBitField.Flags.Administrator) ||
+        interaction.member.id == developer.id
+    )) {
         if (interaction.member.voice.channel && type === "voice") {
             for (const [_, member] of interaction.guild.members.cache) 
                 if (member.voice.channel && member.voice.channel === interaction.member.voice.channel) {
