@@ -27,7 +27,7 @@ export default async function (interaction) {
 
                 interaction.member.voice.channel.permissionOverwrites.edit(findRole(interaction.guild, "Stick Holder"), { Speak: true }).catch((err) => {
                     datedErr(`Error in permissionOverwrites.edit for role Stick Holder in ${interaction.guild.name}:`,err);
-                    interaction.reply("The bot has encountered a problem. Please contact the developer by joining the development server: https://discord.gg/cJ77STQ").catch(datedErr);
+                    interaction.reply("The bot has encountered a problem. Please contact the developer by joining the [support server](https://discord.gg/cJ77STQ)").catch(datedErr);
                 }); //Add Stick Holder permissions to the channel
                 
                 interaction.member.voice.channel.permissionOverwrites.edit(interaction.guild.roles.everyone, { Speak: false }).catch((e) => {
@@ -39,18 +39,18 @@ export default async function (interaction) {
                     .setAuthor({ name: interaction.user.username, iconURL: interaction.user.avatarURL() })
                     .setColor("Green")
                     .setTitle("Talking Stick:")
-                    .addFields([{ name: `${interaction.user.username} has the Talking Stick!`, value: `Currently in ${interaction.member.voice.channel.name}` }])
-                    .setFooter({ text: `To pass the Talking Stick, use /tspass <ping a user in the same channel as you>` });
+                    .addFields([{ name: `${interaction.user.username} has the Talking Stick!`, value: `Currently in ${interaction.member.voice.channel}` }])
+                    .setFooter({ text: "To pass the Talking Stick, use /tspass" });
 
                 for (const [_, member] of interaction.member.voice.channel.members) { //mute everyone in the channel except for the member who called ts
                     if (member != interaction.member) {
                         member.voice.setMute(true).catch((e) => {
                             datedErr(`Unable to mute voice in ${interaction.guild.name}:`,e);
-                            interaction.reply(`**Unable to mute members in ${interaction.member.voice.channel.name}. Please report this incident in the support server (https://discord.gg/cJ77STQ).**`).catch(datedErr);
+                            interaction.reply(`**Unable to mute members in ${interaction.member.voice.channel.name}. Please report this incident in the [support server](https://discord.gg/cJ77STQ).**`).catch(datedErr);
                         });
                         member.roles.add(findRole(member.guild, "Stick Listener")).catch((e) => {
-                            datedErr(`Unable to update role for ${member.user.tag} (${member.id}):`,e)
-                            interaction.reply(`**Unable to update role for ${member.user.tag}. Please report this incident in the support server (https://discord.gg/cJ77STQ). A possible solution is to move the Talking Stick role above all others under Server Settings > Roles and by ensuring that the Talking Stick role has the Manage Roles permission.**`).catch(datedErr);
+                            datedErr(`Unable to update role for ${member.user.username} (${member.id}):`,e)
+                            interaction.reply(`**Unable to update role for ${member.user.displayName}. Please report this incident in the [support server](https://discord.gg/cJ77STQ). A possible solution is to move the Talking Stick role above all others under Server Settings > Roles and by ensuring that the Talking Stick role has the Manage Roles permission.**`).catch(datedErr);
                         });
                     }
                 }
@@ -74,14 +74,14 @@ export default async function (interaction) {
                 });
                     
                 tsEmbed
-                    .setAuthor({ name: interaction.user.username, iconURL: interaction.user.avatarURL() })
+                    .setAuthor({ name: interaction.user.displayName, iconURL: interaction.user.avatarURL() })
                     .setColor("Green")
                     .setTitle("Talking Stick:")
-                    .addFields([{ name: `${interaction.user.username} has the Talking Stick!`, value: `Currently in ${interaction.channel}` }])
+                    .addFields([{ name: `${interaction.user.displayName} has the Talking Stick!`, value: `Currently in ${interaction.channel}` }])
                     .setFooter({ text: `To pass the Talking Stick, use /tspass <ping a user>` });
 
                 interaction.reply({ embeds: [tsEmbed] , ephemeral: false }).catch((e) =>
-                    datedErr(e, `\nStill could not send tsEmbed in ${interaction.channel.name} in ${interaction.guild.name}, requested by ${interaction.user.tag} (${interaction.user.id}), even after attempting to override.`)
+                    datedErr(e, `\nStill could not send tsEmbed in ${interaction.channel.name} in ${interaction.guild.name}, requested by ${interaction.user.username} (${interaction.user.id}), even after attempting to override.`)
                 );
             }
             else if(!interaction.member.voice.channelId && type == "voice")  {
