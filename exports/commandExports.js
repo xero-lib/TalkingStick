@@ -1,7 +1,6 @@
 export { default as dnw             } from "../commands/dnw.js"            ;
 export { default as help            } from "../commands/help.js"           ;
 export { default as invite          } from "../commands/invite.js"         ;
-export { default as review          } from "../commands/review.js"         ; 
 export { default as status          } from "../commands/status.js"         ; 
 export { default as tsinit          } from "../commands/tsinit.js"         ; 
 export { default as tsjoin          } from "../commands/tsjoin.js"         ; 
