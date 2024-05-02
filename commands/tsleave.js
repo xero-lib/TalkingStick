@@ -67,7 +67,7 @@ export default async function (interaction) {
                 .setAuthor({ name: interaction.user.displayName, iconURL: interaction.user.avatarURL() })
                 .setColor("Green")
                 .setTitle("Talking Stick")
-                .addFields([{ name: `${interaction.user.displayName} removed the Talking Stick.\nYou may now type freely.`, value: `Removed from ${interaction.channel.name}` }]);
+                .addFields([{ name: `${interaction.user.displayName} removed the Talking Stick.\nYou may now type freely.`, value: `Removed from ${interaction.channel}` }]);
 
             interaction.reply({ embeds: [tsLeaveEmbed], ephemeral: false }).catch(datedErr);
         }

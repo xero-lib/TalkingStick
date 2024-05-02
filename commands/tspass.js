@@ -35,7 +35,7 @@ export default async function (interaction) {
             }
 
             if (type == "voice") { //ignore the pyramid of death, I'll be implementing SCE in the next commit
-                if (member.voice.channel && member.voice.channel === interaction.member.voice.channel) {
+                if (member.voice.channel && member.voice.channelId === interaction.member.voice.channelId) {
                     if(interaction.member.id != member.id) {
 
                         member.voice.setMute(false).catch(datedErr);

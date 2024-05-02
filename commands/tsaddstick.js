@@ -22,7 +22,7 @@ export default async function (interaction) {
         if (interaction.member.voice.channel && !member.voice.channel) {
             /*if the executor is in a voice channel but the mentioned member is not */
             interaction.reply({ content: `${member.displayName} is not in your voice channel.`, ephemeral: true }).catch(datedErr);
-        } else if (interaction.member.voice.channel && member.voice.channel == interaction.member.voice.channel) {
+        } else if (interaction.member.voice.channel && member.voice.channelId === interaction.member.voice.channelId) {
             member.roles.add(findRole(interaction.guild, "Stick Holder")).catch(datedErr);
             member.voice.setMute(false).catch(datedErr);
         } else {

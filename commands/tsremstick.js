@@ -39,7 +39,7 @@ export default async function (interaction) {
             }
         }
 
-        if (member.voice.channel === interaction.member.voice.channel) {
+        if (member.voice.channelId === interaction.member.voice.channelId) {
             member.roles.remove(holder_role).catch(datedErr);
             member.voice.setMute(true).catch(datedErr);
         } else if (someRole(member, "Stick Holder")) {
