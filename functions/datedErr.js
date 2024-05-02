@@ -1,4 +1,3 @@
-import { appendFileSync } from "node:fs";
 import date from "./date.js";
 import { appendFile } from "node:fs/promises"
 
@@ -8,7 +7,7 @@ import { appendFile } from "node:fs/promises"
  */
 
 export default async (...args) => {
-    let data = `${date()} ${args.join(' ')}`
+    let data = `${date()} ${args.join(' ')}\n${Error().stack}\n`
     console.error(data);
     await appendFile("./logs.txt", data);
 }

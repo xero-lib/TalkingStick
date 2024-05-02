@@ -1,4 +1,3 @@
-import chalk from "chalk";
 import { Message, EmbedBuilder} from "discord.js"
 import { date } from "../../exports/functionExports.js";
 import { CommandMap, datedErr } from "../../exports/functionExports.js";

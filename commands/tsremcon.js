@@ -11,7 +11,7 @@ export default async function (interaction) {
         let member = interaction.options.getMember("stick-controller");
         if (someRole(interaction.guild, "Stick Controller")) {
             if (someRole(member, "Stick Controller")) {
-                member.roles.remove(findRole(interaction.guild, "Stick Controller")).then(() => {
+                member.roles.remove(findRole(interaction.guild, "Stick Controller")).then(() => { // findRole is guarded by the preceeding someRoles
                     interaction.reply({
                         embeds: [new EmbedBuilder()
                             .setAuthor({ name: interaction.user.username, iconURL: interaction.user.avatarURL() })

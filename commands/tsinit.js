@@ -1,9 +1,6 @@
 import { EmbedBuilder, ChatInputCommandInteraction, PermissionsBitField } from "discord.js";
 import { createRole, someRole, datedErr } from "../exports/functionExports.js";
-import { roles, developer, defaultPrefix as prefix } from "../exports/configExports.js";
-
-import "../prototypes/tempSend.js";
-import "../prototypes/tempReply.js";
+import { roles, developer } from "../exports/configExports.js";
 
 /**
  * @param {ChatInputCommandInteraction} interaction 
@@ -25,7 +22,9 @@ export default async function (interaction) {
                         .then(() => tsinitEmbed.addFields([{ name: `__**Creating ${role}**__`, value: `${role} has been created.` }]))
                         .catch(datedErr);
                 }
-            } else tsinitEmbed.addFields([{ name: `__**Creating ${role}**__`, value: `${role} is present.` }]);
+            } else {
+                tsinitEmbed.addFields([{ name: `__**Creating ${role}**__`, value: `${role} is present.` }]);
+            }
         }
 
         tsinitEmbed.setFooter({ text: "Done." })
@@ -34,12 +33,11 @@ export default async function (interaction) {
         
         interaction.reply({ embeds: [tsinitEmbed], ephemeral: false }).catch(datedErr);
 
-        interaction.guild.fetch()
-            .catch(async (e) => {
-                datedErr(`Unable to cache ${interaction.guild.name} (ID: ${interaction.guild.id}) (owner: ${(await interaction.guild.fetchOwner()).tag} (${interaction.guild.ownerID}`, e);
-                interaction.channel.send({ content: `Unable to cache all users! The bot might not work properly. To try again, rerun \`/tsinit\``, ephemeral: true }).catch(datedErr);
-            })          
-        
-
-    } else interaction.reply({ content: "You do not have permission to do this.", ephemeral: true }).catch(datedErr);        
+        interaction.guild.fetch() .catch(async (e) => {
+            datedErr(`Unable to cache ${interaction.guild.name} (ID: ${interaction.guild.id}) (owner: ${(await interaction.guild.fetchOwner()).tag} (${interaction.guild.ownerID}`, e);
+            interaction.channel.send({ content: `Unable to cache all users! The bot might not work properly. To try again, rerun \`/tsinit\``, ephemeral: true }).catch(datedErr);
+        });
+    } else {
+        interaction.reply({ content: "You do not have permission to do this.", ephemeral: true }).catch(datedErr);
+    }
 }

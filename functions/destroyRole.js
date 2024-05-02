@@ -9,5 +9,5 @@ import { date, datedErr } from "../exports/functionExports.js";
  */
 
 export default async function (roleName, interaction) {
-    findRole(interaction.guild, roleName).delete(`TSDestroyed by ${interaction.user.tag} (${interaction.user.id})`).catch(() => interaction.tempReply(`The bot most likely doesn't have sufficient permissions to complete this action. In server settings under roles, drag the \`Talking Stick\` role to the top. For more instruction on how to do this, scroll to the bottom of \`/help\``).catch(datedErr)).catch(datedErr);
+    findRole(interaction.guild, roleName)?.delete(`TSDestroyed by ${interaction.user.tag} (${interaction.user.id})`).catch(() => interaction.tempReply(`The bot most likely doesn't have sufficient permissions to complete this action. In server settings under roles, drag the \`Talking Stick\` role to the top. For more instruction on how to do this, scroll to the bottom of \`/help\``).catch(datedErr)).catch(datedErr);
 }

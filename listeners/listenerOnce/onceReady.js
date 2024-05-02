@@ -1,5 +1,4 @@
 import { date, datedErr, setPresence } from "../../exports/functionExports.js";
-import chalk from "chalk";
 import { Client } from "discord.js";
 
 /**
@@ -9,7 +8,6 @@ import { Client } from "discord.js";
 
 export default async function (client) {
     await client.guilds.fetch();
-    console.log(date(),`Currently in ${chalk.yellow(client.guilds.cache.size)} servers`);
-    datedErr("Bot Started") 
+    console.log(date(),`Currently in ${client.guilds.cache.size} servers`);
     setPresence();
 }

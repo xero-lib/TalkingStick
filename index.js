@@ -1,18 +1,17 @@
 // Imports //
 import { token } from "./config/botConfig.js";
+import { date, datedErr } from "./exports/functionExports.js";
+import { Client, User, IntentsBitField, Partials } from "discord.js";
+
 import {
     onMessage,
     onVoiceStateUpdate,
     // onChannelCreate,
     // onChannelDelete,
-    // onMessageUpdate,
     onInteractionCreate,
     onceReady,
     onceShardReconnecting,
 } from "./exports/listenerExports.js";
-import { date, datedErr } from "./exports/functionExports.js";
-import { Client, User, IntentsBitField, Partials } from "discord.js";
-// import { setTimeout as wait } from 'node:timers/promises';
 
 export const client = new Client({
     intents: [
@@ -65,7 +64,7 @@ client
     .on("messageCreate", onMessage)
     // .on("channelCreate", onChannelCreate)
     // .on("channelDelete", onChannelDelete)
-    // .on("messageUpdate", onMessageUpdate)
     .on("voiceStateUpdate", onVoiceStateUpdate);
+    // .on("userUpdate", // might be useful for keeping track of user roles);
 
 export { developer, application };

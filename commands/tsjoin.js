@@ -14,9 +14,7 @@ import "../prototypes/tempReply.js";
 export default async function (interaction) {
     const tsEmbed = new EmbedBuilder();
     let type = interaction.options.get("channel-type").value;
-    if (//if the guild has the Stick Controller, Stick Holder, and Stick Listener roles
-        hasRoles(interaction.guild)
-    ) {
+    if (hasRoles(interaction.guild)) {
         if (//if interaction author is in Stick Controller group, an admin, or the developer for prod debugging reasons
             someRole(interaction.member, "Stick Controller") ||
             interaction.member.permissions.has(PermissionsBitField.Flags.Administrator) ||
@@ -32,9 +30,10 @@ export default async function (interaction) {
                     interaction.reply("The bot has encountered a problem. Please contact the developer by joining the development server: https://discord.gg/cJ77STQ").catch(datedErr);
                 }); //Add Stick Holder permissions to the channel
                 
-                interaction.member.voice.channel.permissionOverwrites.edit(interaction.guild.roles.everyone, { Speak: false }).catch((e) =>
-                    datedErr("Error in tsjoin: voice: permissionOverwrites.edit @everyone:", e)
-                ); //Disable @everyones' ability to speak. This prevents users joining from being able to speak for a moment before the bot mutes them
+                interaction.member.voice.channel.permissionOverwrites.edit(interaction.guild.roles.everyone, { Speak: false }).catch((e) => {
+                    interaction.reply({content: "Unable to update permissions for the everyone role. Please ensure the Talking Stick role is placed at the top of the role list in the server settings.", ephemeral: false });
+                    datedErr("Error in tsjoin: voice: permissionOverwrites.edit @everyone:", e);
+                }); //Disable @everyones' ability to speak. This prevents users joining from being able to speak for a moment before the bot mutes them
                 
                 tsEmbed //create the tsEmbed
                     .setAuthor({ name: interaction.user.username, iconURL: interaction.user.avatarURL() })
@@ -69,7 +68,10 @@ export default async function (interaction) {
                 interaction.channel.permissionOverwrites.edit(findRole(interaction.guild, "Talking Stick"), { SendMessages: true }).catch(datedErr);
                 interaction.member.roles.add(findRole(interaction.guild, "Stick Holder")).catch(datedErr);
                 interaction.channel.permissionOverwrites.edit(findRole(interaction.guild, "Stick Holder"), { SendMessages: true }).catch(datedErr);
-                interaction.channel.permissionOverwrites.edit(interaction.guild.roles.everyone, { SendMessages: false }).catch(datedErr);
+                interaction.channel.permissionOverwrites.edit(interaction.guild.roles.everyone, { SendMessages: false }).catch((e) => {
+                    interaction.reply({content: "Unable to update permissions for the everyone role. Please ensure the Talking Stick role is placed at the top of the role list in the server settings.", ephemeral: false });
+                    datedErr(e);
+                });
                     
                 tsEmbed
                     .setAuthor({ name: interaction.user.username, iconURL: interaction.user.avatarURL() })
@@ -82,7 +84,10 @@ export default async function (interaction) {
                     datedErr(e, `\nStill could not send tsEmbed in ${interaction.channel.name} in ${interaction.guild.name}, requested by ${interaction.user.tag} (${interaction.user.id}), even after attempting to override.`)
                 );
             }
-            else if(!interaction.member.voice.channel && type == "voice") interaction.reply({ content: "You need to join a voice channel first!", ephemeral: true });
+            else if(!interaction.member.voice.channelId && type == "voice")  {
+                interaction.reply({ content: "You need to join a voice channel first!", ephemeral: true });
+                console.log(JSON.stringify(interaction.member)); // debugging
+            }
         } else interaction.reply({ content: "You do not have permission to do this.", ephemeral: false }); 
     } else interaction.reply({ content: `Please run \`/tsinit\` to create the required roles`, ephemeral: false });
 }

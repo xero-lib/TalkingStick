@@ -137,7 +137,7 @@ const genHelpEmbed = new EmbedBuilder()
         { name: "Example", value: `\`/help tsjoin\`.` },
         { name: "Available help pages", value: `\`\`\`\n${[...helpMap.keys()].join('\n')}\`\`\`` }
     ])
-    .setFooter({text: "Join the support server: https://discord.gg/cJ77STQ" });
+    .setFooter({text: "Join the [support server](https://discord.gg/cJ77STQ)." });
 
 /**
  * @param {ChatInputCommandInteraction} interaction

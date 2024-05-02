@@ -1,4 +1,3 @@
-import chalk from "chalk"; //have to import like this due to chalk being done entirely in module.exports
 import { EmbedBuilder, ChatInputCommandInteraction } from "discord.js";
 import { client, developer } from "../exports/configExports.js";
 import { datedErr } from "../exports/functionExports.js";
@@ -38,7 +37,7 @@ export default async function (interaction) {
         .setColor("Red")        
         ;
 
-    developer.send({ embeds: [dnwEmbed] }).catch((e) => datedErr('\n' + interaction.user.tag + '\n' + chalk.bold(interaction.commandName) + '\n' + e));
+    developer.send({ embeds: [dnwEmbed] }).catch((e) => datedErr('\n' + interaction.user.tag + '\n' + interaction.commandName + '\n' + e));
 
     // message.delete().catch(() => datedErr("Message already deleted."));
     interaction.reply({ content: "Report sent, you will receive a friend request from Thoth#6134 as soon as he is available, or, join the support server: https://discord.gg/cJ77STQ", ephemeral: true}).catch(datedErr);

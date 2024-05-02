@@ -4,7 +4,6 @@
   "dependencies": {
     "@discordjs/builders": "^1.2.0",
     "@discordjs/rest": "^1.1.0",
-    "chalk": "^4.1.0",
     "deep-entries": "^4.0.2",
     "discord.js": "^14.6.0",
     "moment": "^2.29.1"

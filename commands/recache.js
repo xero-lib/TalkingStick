@@ -1,4 +1,3 @@
-import chalk from "chalk";//have to import like this due to chalk being done entirely in module.exports
 import { ChatInputCommandInteraction } from "discord.js";
 import { datedErr } from "../exports/functionExports.js";
 import { developer, client } from "../exports/configExports.js"; //see if a server has the ts roles
@@ -16,7 +15,7 @@ export default async function (interaction) {
         for (const g of client.guilds?.cache?.values()) {
             g.members.fetch().catch((e) => {
                 errGuilds.push(g.name);
-                datedErr(chalk.redBright(`Error recaching "${g.name}"\n`) + chalk.redBright(e))
+                datedErr(`Error recaching "${g.nme}"\n${e}`);
             });
         }
         if (errGuilds.length === 0) {
@@ -25,7 +24,7 @@ export default async function (interaction) {
             interaction.reply({ content: `Recaching failed in ${errGuilds.length} servers:\n\`\`\`\n${errGuilds.join("\n")}\n\`\`\``})
         }
     } else {
-        datedErr(chalk.redBright(`${interaction.user.tag} (${interaction.user.id}) attempted to execute RECACHE without permission.`));
+        datedErr(`${interaction.user.tag} (${interaction.user.id}) attempted to execute RECACHE without permission.`);
         developer.send(`${interaction.user.tag} has tried to run restricted command recache in ${interaction.guild.name}`);
         interaction.reply({
             content: "You do not have permission to execute this command. This incident has been reported.",
