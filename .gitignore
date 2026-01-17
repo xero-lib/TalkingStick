@@ -1,5 +1,5 @@
-config/botConfig.js
+config/botConfig.*
 logs/
 node_modules/
 package-lock.json
-logs.txt
+logs.*

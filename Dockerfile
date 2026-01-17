@@ -1,15 +1,22 @@
-FROM oven/bun:latest
+FROM denoland/deno:latest
 
 # Create app dir
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+WORKDIR /app
+
+COPY deno.json* package.json* ./
 
 # Install deps
-COPY package.json /usr/src/app/
-RUN bun install
+RUN deno install
 
-# Bundle remaining src
-COPY . /usr/src/app/
+# Copy source
+COPY . .
 
-EXPOSE 3000
-CMD ["bun", "start"]
+# cache entrypoint
+RUN deno cache --sloppy-imports index.ts
+
+# Expose ports
+EXPOSE 3000 433
+
+# Run Talking Stick
+ENTRYPOINT ["deno"]
+CMD ["run", "--allow-net", "--allow-env", "--sloppy-imports", "--unstable-node-globals", "--allow-read", "--allow-sys", "index.ts"]
