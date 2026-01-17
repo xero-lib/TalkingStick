@@ -34,19 +34,18 @@ const stream = pretty({
     customPrettifiers: {
         time: () => `[${new Date().toISOString()}]`
     },
-    ignore: "pid,hostname", // Clean up the output
-    sync: true,              // Ensure immediate output to Docker logs
-    destination: 1           // Explicitly target stdout
+    ignore: "pid,hostname", // filter output
+    sync: true
 });
 
 const baseLogger = Logger(
     {
         timestamp: pino.stdTimeFunctions.isoTime,
         level: isDev ? "trace" : "info",
-        // No 'transport' block here!
     },
     stream
 );
+
 // initialize logger instance
 // const baseLogger = Logger({
 //     level: isDev ? "trace" : "info",
