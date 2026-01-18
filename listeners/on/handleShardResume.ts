@@ -1,4 +1,4 @@
-import { logger } from "../../index";
+import { logger } from "../../main.ts";
 
 /**
  * Handles ShardResume events, logging the incident.

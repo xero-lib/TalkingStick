@@ -1,12 +1,9 @@
 import { Colors, EmbedBuilder, GuildMember, PermissionFlagsBits } from "discord.js";
 
-import { logger } from "../index";
-import hasRole from "../functions/hasRole";
-import { Roles } from "../data/Roles";
-import getRole from "../functions/getRole";
-import { ValidInteraction } from "../data/ValidInteraction";
-import replySafe from "../functions/safeReply";
-import replyEphemeral from "../functions/replyEphemeral";
+import { logger } from "../main.ts";
+
+import { Roles, ValidInteraction } from "../exports/dataExports.ts";
+import { hasRole, getRole, replyEphemeral, replySafe } from "../exports/functionExports.ts";
 
 /**
  * Removes the Stick Controller role from a target member.

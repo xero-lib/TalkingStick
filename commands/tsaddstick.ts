@@ -1,10 +1,10 @@
-import { GuildMember, OverwriteData, PermissionFlagsBits } from "discord.js";
+import { GuildMember, PermissionFlagsBits, PermissionOverwriteOptions } from "discord.js";
 
-import { logger } from "../index";
-import hasRole from "../functions/hasRole";
-import { Roles, ValidInteraction } from "../exports/dataExports";
-import replyEphemeral from "../functions/replyEphemeral";
-import { StickFlags } from "../exports/dataExports";
+import { logger } from "../main.ts";
+
+import { StickFlags } from "../exports/dataExports.ts";
+import { Roles, ValidInteraction } from "../exports/dataExports.ts";
+import { hasRole, replyEphemeral } from "../exports/functionExports.ts";
 
 // const CAN_UNMUTE = (PermissionFlagsBits.ManageChannels | PermissionFlagsBits.ManageRoles | PermissionFlagsBits.MuteMembers);
 
@@ -62,7 +62,6 @@ export default async function tsaddstick(interaction: ValidInteraction) {
             }
     ;
 
-
     // if the initiator is in a voice channel but the mentioned member is not
     if (!channel) {
         await replyEphemeral(interaction, `${target.displayName} is not in a voice channel.`);
@@ -82,7 +81,7 @@ export default async function tsaddstick(interaction: ValidInteraction) {
             deny:  BOT_MAGIC
                     |   (targetDeny  & ~CommunicatePermission)
                     | (((targetDeny  &  CommunicatePermission) && !(targetDeny & BOT_MAGIC)) ? REVERT_MAGIC : 0n)
-        } as OverwriteData as any
+        } as PermissionOverwriteOptions
     );
 
     // unnecessary, as if they're able to addstick, they have the ability to unmute the target

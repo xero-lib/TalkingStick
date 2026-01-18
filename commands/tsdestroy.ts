@@ -1,10 +1,9 @@
 import { EmbedBuilder, PermissionFlagsBits, Colors } from "discord.js";
 
-import { logger } from "../index";
-import { Roles, ValidInteraction } from "../exports/dataExports";
-import { destroyRoles, getRole, hasRole } from "../exports/functionExports";
-import replySafe from "../functions/safeReply";
-import replyEphemeral from "../functions/replyEphemeral";
+import { logger } from "../main.ts";
+
+import { Roles, ValidInteraction } from "../exports/dataExports.ts";
+import { destroyRoles, hasRole, replyEphemeral } from "../exports/functionExports.ts";
 
 /**
  * Deletes all Talking Stick roles in a given guild.
@@ -12,8 +11,8 @@ import replyEphemeral from "../functions/replyEphemeral";
  * @throws If an interaction reply fails.
  */
 export default async function tsdestroy(interaction: ValidInteraction) {
-    const guild = await interaction.guild.fetch().catch((e) => {
-        logger.error(`Unable to fetch guild state of ${interaction.guild.name}`);
+    const guild = await interaction.guild.fetch().catch((err) => {
+        logger.error(`Unable to fetch guild state of ${interaction.guild.name}:\n${err}`);
         return null;
     });
 
@@ -41,8 +40,8 @@ export default async function tsdestroy(interaction: ValidInteraction) {
 
     try {
         await destroyRoles(interaction);
-    } catch (e) {
-        logger.debug(`destroyRoles failed: ${e}`);
+    } catch (err) {
+        logger.debug(`destroyRoles failed: ${err}`);
         // probably just make this its own reply
         tsdestroyEmbed.addFields({ name: `Error`, value: "A problem occured during role deletion. If any roles are still present, you may have to manually delete them." });
     }

@@ -1,12 +1,9 @@
-import { Colors, EmbedBuilder, GuildMember, OverwriteData, PermissionFlagsBits } from "discord.js";
+import { Colors, EmbedBuilder, GuildMember, PermissionFlagsBits, PermissionOverwriteOptions } from "discord.js";
 
-import { logger } from "../index";
-import { Roles } from "../data/Roles";
-import { ValidInteraction } from "../data/ValidInteraction";
-import { getRole, hasRole } from "../exports/functionExports";
-import replyEphemeral from "../functions/replyEphemeral";
-import replySafe from "../functions/safeReply";
-import { StickFlags } from "../data/StickFlags";
+import { logger } from "../main.ts";
+
+import { Roles, StickFlags, ValidInteraction } from "../exports/dataExports.ts";
+import { getRole, hasRole, replyEphemeral, replySafe } from "../exports/functionExports.ts";
 
 /**
  * Removes the Stick Holder role from a given user, if they have permission to do so.
@@ -55,21 +52,18 @@ export default async function remstick(interaction: ValidInteraction) {
     const {
         channel,
         BOT_MAGIC,
-        REVERT_MAGIC,
         CommunicatePermission,
      } = channelType === "voice"
         ?
             {
                 channel: target.voice.channel,
                 BOT_MAGIC: StickFlags.VOICE_MAGIC,
-                REVERT_MAGIC: StickFlags.VOICE_REVERT,
                 CommunicatePermission: PermissionFlagsBits.Speak
             }
         :
             {
                 channel: interaction.channel,
                 BOT_MAGIC: StickFlags.TEXT_MAGIC,
-                REVERT_MAGIC: StickFlags.TEXT_REVERT,
                 CommunicatePermission: PermissionFlagsBits.SendMessages
             }
     ;
@@ -115,8 +109,8 @@ export default async function remstick(interaction: ValidInteraction) {
             target,
             {
                 allow: targetOverwrites.allow.bitfield & ~BOT_MAGIC & ~CommunicatePermission,
-                deny : targetOverwrites.deny.bitfield | BOT_MAGIC | CommunicatePermission,
-            } as OverwriteData as any
+                deny : targetOverwrites.deny .bitfield |  BOT_MAGIC |  CommunicatePermission,
+            } as PermissionOverwriteOptions
         );
 
     } catch (err) {

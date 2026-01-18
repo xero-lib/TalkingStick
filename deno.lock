@@ -1,10 +1,15 @@
 {
   "version": "5",
   "specifiers": {
-    "npm:deep-entries@^4.0.2": "4.0.2",
+    "jsr:@std/dotenv@~0.225.6": "0.225.6",
     "npm:discord.js@^14.25.1": "14.25.1",
     "npm:pino-pretty@^13.1.3": "13.1.3",
-    "npm:pino@^10.1.0": "10.1.1"
+    "npm:pino@^10.2.0": "10.2.0"
+  },
+  "jsr": {
+    "@std/dotenv@0.225.6": {
+      "integrity": "1d6f9db72f565bd26790fa034c26e45ecb260b5245417be76c2279e5734c421b"
+    }
   },
   "npm": {
     "@discordjs/builders@1.13.1": {
@@ -105,9 +110,6 @@
     "dateformat@4.6.3": {
       "integrity": "sha512-2P0p0pFGzHS5EMnhdxQi7aJN+iMheud0UhG4dlE1DLAlvL8JHjJJTX/CSm4JXwV0Ka5nGk3zC5mcb5bUQUxxMA=="
     },
-    "deep-entries@4.0.2": {
-      "integrity": "sha512-aPzCHyBRiWjs9J7hzdZ343ZHkSuqVdANqALRJlR1x8GAHqojYai33R2h5ePw/fMe/nWjXrIvuPBDnuqp2De5Yg=="
-    },
     "discord-api-types@0.38.37": {
       "integrity": "sha512-Cv47jzY1jkGkh5sv0bfHYqGgKOWO1peOrGMkDFM4UmaGMOTgOW8QSexhvixa9sVOiz8MnVOBryWYyw/CEVhj7w=="
     },
@@ -196,11 +198,11 @@
       ],
       "bin": true
     },
-    "pino-std-serializers@7.0.0": {
-      "integrity": "sha512-e906FRY0+tV27iq4juKzSYPbUj2do2X2JX4EzSca1631EB2QJQUqGbDuERal7LCtOpxl6x3+nvo9NPZcmjkiFA=="
+    "pino-std-serializers@7.1.0": {
+      "integrity": "sha512-BndPH67/JxGExRgiX1dX0w1FvZck5Wa4aal9198SrRhZjH3GxKQUKIBnYJTdj2HDN3UQAS06HlfcSbQj2OHmaw=="
     },
-    "pino@10.1.1": {
-      "integrity": "sha512-3qqVfpJtRQUCAOs4rTOEwLH6mwJJ/CSAlbis8fKOiMzTtXh0HN/VLsn3UWVTJ7U8DsWmxeNon2IpGb+wORXH4g==",
+    "pino@10.2.0": {
+      "integrity": "sha512-NFnZqUliT+OHkRXVSf8vdOr13N1wv31hRryVjqbreVh/SDCNaI6mnRDDq89HVRCbem1SAl7yj04OANeqP0nT6A==",
       "dependencies": [
         "@pinojs/redact",
         "atomic-sleep",
@@ -276,12 +278,14 @@
     }
   },
   "workspace": {
+    "dependencies": [
+      "jsr:@std/dotenv@~0.225.6"
+    ],
     "packageJson": {
       "dependencies": [
-        "npm:deep-entries@^4.0.2",
         "npm:discord.js@^14.25.1",
         "npm:pino-pretty@^13.1.3",
-        "npm:pino@^10.1.0"
+        "npm:pino@^10.2.0"
       ]
     }
   }

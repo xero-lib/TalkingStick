@@ -1,15 +1,10 @@
-import { EmbedBuilder, PermissionFlagsBits, Colors, Collection, OverwriteResolvable } from "discord.js";
+import { EmbedBuilder, PermissionFlagsBits, Colors } from "discord.js";
 
-import { logger } from "../index";
-import { Roles } from "../data/Roles";
-import { ValidInteraction } from "../data/ValidInteraction";
-import { getRole, hasRole } from "../exports/functionExports";
-import replySafe from "../functions/safeReply";
-import replyEphemeral from "../functions/replyEphemeral";
-import { StickFlags } from "../data/StickFlags";
-import cleanupStickSession from "../functions/cleanupStickSession";
+import { logger } from "../main.ts";
 
-// ensure the member calling tsleave is not the one being treated as a Stick Holder by default (find list of Stick Holders)
+import cleanupStickSession from "../functions/cleanupStickSession.ts";
+import { Roles, ValidInteraction, StickFlags } from "../exports/dataExports.ts";
+import { getRole, hasRole, replyEphemeral, replySafe } from "../exports/functionExports.ts";
 
 /**
  * Ends the Stick-Session in a given voice or text channel.
@@ -46,7 +41,7 @@ export default async function tsleave(interaction: ValidInteraction) {
     const controllerRole = await getRole(interaction.guild, Roles.StickController).catch(() => undefined);
 
     // if any of the roles weren't found, which should be impossible given we check in handleInteractionCreate
-    if (!(activeRole && controllerRole)) {
+    if (!(activeRole && !controllerRole)) {
         // then log the event and reply to the user that roles weren't found, and return.
         logger.error("Reached theoretically impossible state in tsjoin: nonexistent roles after confirmation of initialization.")
         await replyEphemeral(interaction, "Unable to find critical roles. Please run the `tsinit` command."); 

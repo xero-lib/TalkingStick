@@ -1,8 +1,7 @@
 import { ColorResolvable } from "discord.js";
 
-import { Roles } from "../data/Roles";
-import hasRole from "./hasRole";
-import { ValidInteraction } from "../data/ValidInteraction";
+import { hasRole } from "../exports/functionExports.ts";
+import { Roles, ValidInteraction } from "../exports/dataExports.ts";
 
 /**
  * Create all Talking Stick roles in a guild.

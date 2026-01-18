@@ -1,5 +1,10 @@
+import { load as loadEnv } from "@std/dotenv";
+
+const env = await loadEnv();
 // Environment //
-const isDev = process.env.NODE_ENV !== "production";
+const isDev = Deno.env.get("DENO_ENV") !== "production";
+
+const TOKEN = env.TOKEN;
 
 // Package Imports //
 import {
@@ -14,9 +19,6 @@ import {
 import pino, { pino as Logger } from "pino";
 import pretty from "pino-pretty";
 
-// Local Imports //
-import { token } from "./config/botConfig";
-
 import {
     handleReady,
     handleShardResume,
@@ -24,9 +26,9 @@ import {
     handleVoiceStateUpdate,
     handleInteractionCreate,
     handleShardReconnecting,
-} from "./exports/listenerExports";
+} from "./exports/listenerExports.ts";
 
-import { Roles } from "./exports/dataExports";
+import { Roles } from "./exports/dataExports.ts";
 
 const stream = pretty({
     colorize: true,
@@ -111,7 +113,7 @@ client
     // .on("userUpdate", // might be useful for keeping track of user roles);
 
 // Login // 
-await client.login(token); // crash if login is unsuccessful
+await client.login(TOKEN); // crash if login is unsuccessful
 
 export type RoleMap = Map<string, Map<Roles, string>>;
 
@@ -120,14 +122,14 @@ const rolesMap: RoleMap = new Map();
 const application: ClientApplication = await client.application!.fetch();
 
 if (!application.owner) {
-    logger.fatal("Unable to resolve owner.");
-    process.exit("Unable to proceed without owner");
+    logger.fatal("Failed to resolve bot owner. Unable to proceed.");
+    Deno.exit(1);
 }
 
 const developer = application.owner instanceof User ? application.owner : application.owner.members.first()!.user;
 
 
 // Process.on //
-process.on("unhandledRejection", logger.fatal); // this better not ever fire
+onunhandledrejection = (event) => logger.error(`Unhandled rejection: ${event.reason}`); // this better not ever fire
 
-export { client, developer, application, rolesMap };
+export { developer, application, rolesMap };

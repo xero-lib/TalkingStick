@@ -1,11 +1,11 @@
 import { Colors, EmbedBuilder, PermissionOverwriteOptions, VoiceState } from "discord.js";
 
-import { logger } from "../../index";
-import { Roles } from "../../data/Roles";
-import { getRole } from "../../exports/functionExports";
-import { StickFlags } from "../../data/StickFlags";
-import createListenerOverwrites from "../../functions/createListenerOverwrites";
-import cleanupStickSession from "../../functions/cleanupStickSession";
+import { logger } from "../../main.ts";
+
+import { Roles, StickFlags } from "../../exports/dataExports.ts";
+import { getRole } from "../../exports/functionExports.ts";
+import createListenerOverwrites from "../../functions/createListenerOverwrites.ts";
+import cleanupStickSession from "../../functions/cleanupStickSession.ts";
 
 // dont remove mute overwrite to avoid join/leave spam abuse, only clear on Stick-Session end
 
@@ -18,7 +18,7 @@ export default async function handleVoiceStateUpdate(oldState: VoiceState, newSt
     const member = newState.member;
 
     if (!member) {
-        logger.error(`Missing member in newState (handleVoiceStateUpdate):\n${JSON.stringify(newState)}`);
+        logger.error(`Missing member in newState (handleVoiceStateUpdate):\n${JSON.stringify(newState, null, 4)}`);
         return;
     }
 

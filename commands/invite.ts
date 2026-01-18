@@ -1,8 +1,8 @@
 import { OAuth2Scopes, PermissionFlagsBits } from "discord.js";
 
-import { logger } from "../index";
-import { ValidInteraction } from "../data/ValidInteraction";
-import replyEphemeral from "../functions/replyEphemeral";
+import { logger } from "../main.ts";
+import { ValidInteraction } from "../exports/dataExports.ts";
+import { replyEphemeral } from "../exports/functionExports.ts";
 
 /**
  * Allows a user to invite Talking Stick to a different server.

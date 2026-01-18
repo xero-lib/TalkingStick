@@ -1,14 +1,13 @@
-import { ChatInputCommandInteraction, Guild, MessageFlags } from "discord.js";
+import { MessageFlags } from "discord.js";
 
-import { logger } from "../index";
-import { Roles } from "../data/Roles";
-import { getRole } from "../exports/functionExports";
-import { ValidInteraction } from "../data/ValidInteraction";
-import replySafe from "./safeReply";
+import { logger } from "../main.ts";
+
+import { getRole, replySafe } from "../exports/functionExports.ts";
+import { Roles, ValidInteraction } from "../exports/dataExports.ts";
 
 /**
- * Removes Talking Stick roles from a {@link Guild}.
- * @param interaction the {@link ChatInputCommandInteraction} whose guild to remove roles from.
+ * Removes Talking Stick roles from a {@link https://discord.js.org/docs/packages/discord.js/main/Guild:Class|Guild}.
+ * @param interaction The {@link https://discord.js.org/docs/packages/discord.js/main/ChatInputCommandInteraction:Class|ChatInputCommandInteraction} whose guild to remove roles from.
  * @throws If either the role could not be deleted, or an interaction reply failed.
  */
 export default async function destroyRoles(interaction: ValidInteraction) {
@@ -17,18 +16,18 @@ export default async function destroyRoles(interaction: ValidInteraction) {
     // defer
     try {
         await interaction.deferReply({ flags: MessageFlags.Ephemeral });
-    } catch (err) {
+    } catch {
         logger.debug("Failed to defer reply. Attempting to continue without...");
     }
 
-    for (const role_entry of Object.values(Roles)) {
-        const role = await getRole(interaction.guild, role_entry);
+    for (const roleEntry of Object.values(Roles)) {
+        const role = await getRole(interaction.guild, roleEntry);
         if (!role) continue;
         try {
             await role.delete(`TSDestroyed by ${interaction.user.tag} (${interaction.user.id})`)
-        } catch (e) {
-            logger.error(`Encountered error during destroyRoles: ${e}`);
-            await replySafe(interaction, `The bot likely lacks sufficient permissions to complete this action. Ensure Talking Stuck as Manage Roles permissions. Encountered: ${typeof e}.`);
+        } catch (err) {
+            logger.error(`Encountered error during destroyRoles:\n${err}`);
+            await replySafe(interaction, `The bot likely lacks sufficient permissions to complete this action. Ensure Talking Stuck as Manage Roles permissions. Encountered: ${typeof err}.`);
 
             return;
         }

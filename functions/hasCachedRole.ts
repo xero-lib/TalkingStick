@@ -1,7 +1,7 @@
 import { Guild, GuildMember } from "discord.js";
 
-import { rolesMap } from "../index";
-import { Roles } from "../data/Roles";
+import { rolesMap } from "../main.ts";
+import { Roles } from "../exports/dataExports.ts";
 
 /**
  * Determines whether or not a {@link Role} exists in a {@link Guild} or {@link GuildMember} cache.

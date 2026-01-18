@@ -1,7 +1,6 @@
 import { InteractionResponse, Message } from "discord.js";
 
-import { ValidInteraction } from "../data/ValidInteraction";
-import { ContentUnion } from "../data/ContentUnion";
+import { ContentUnion, ValidInteraction } from "../exports/dataExports.ts";
 
 /**
  * If interaction is already replied or deferred, `editReply`, otherwise `reply`.

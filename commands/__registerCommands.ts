@@ -1,8 +1,12 @@
 import { REST, Routes } from "discord.js";
-import { commands, devCommands } from "./commandData"
-import { clientId, token, devGuildId } from "../config/botConfig";
+import { commands, devCommands } from "./commandData.ts"
+import { clientId, devGuildId } from "../config/botConfig.ts";
 
-const rest = new REST({ version: '10' }).setToken(token);
+import { load as loadEnv} from "@std/dotenv";
+
+const env = await loadEnv();
+
+const rest = new REST({ version: '10' }).setToken(env.TOKEN);
 
 await rest.put(Routes.applicationCommands(clientId), { body: [] })
 	.then(() => console.log('Successfully deleted all application commands.'))
@@ -20,8 +24,4 @@ await rest.put(Routes.applicationGuildCommands(clientId, devGuildId), { body: de
 	.then(() => console.log("Successfully registered application guild commands."))
 	.catch(console.error);
 
-// const client = new Client({intents: IntentsBitField.Flags.Guilds});
-// client.login(token);
-
-// export { token };
-process.exit(0);
+Deno.exit(0);

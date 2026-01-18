@@ -1,8 +1,8 @@
-import { logger } from "../index";
-import { developer } from "../exports/configExports";
-import { ValidInteraction } from "../exports/dataExports";
-import replySafe from "../functions/safeReply";
-import replyEphemeral from "../functions/replyEphemeral";
+import { logger } from "../main.ts";
+
+import { developer } from "../exports/configExports.ts";
+import { ValidInteraction } from "../exports/dataExports.ts";
+import { replySafe, replyEphemeral } from "../exports/functionExports.ts";
 
 /**
  * Allows the bot to resolve a user ID to a stringified user object.
@@ -18,8 +18,9 @@ export default async function resolveUserId(interaction: ValidInteraction) {
         return;
     }
     
-    const user = await interaction.guild.members.fetch({ user: id }).catch((e) => {
-        logger.debug(`Unable to fetch user with ID ${id}: ${e}`);
+    
+    const user = await interaction.guild.members.fetch({ user: id }).catch((err) => {
+        logger.debug(`Unable to fetch user with ID ${id}: ${err}`);
         return null;
     });
 

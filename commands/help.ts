@@ -1,8 +1,8 @@
-import { Colors, EmbedBuilder, MessageFlags } from "discord.js";
+import { Colors, EmbedBuilder } from "discord.js";
 
-import { botPfp } from "../config/botConfig";
-import { ValidInteraction } from "../data/ValidInteraction";
-import replyEphemeral from "../functions/replyEphemeral";
+import { botPfp } from "../config/botConfig.ts";
+import { ValidInteraction } from "../exports/dataExports.ts";
+import { replyEphemeral } from "../exports/functionExports.ts";
 
 interface HelpInfo {
     args?: string[],

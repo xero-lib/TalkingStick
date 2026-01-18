@@ -1,7 +1,8 @@
 import { Message, EmbedBuilder, Attachment, DMChannel } from "discord.js"
 
-import { client, developer } from "../../exports/configExports";
-import { logger } from "../../index";
+import { logger } from "../../main.ts";
+
+import { developer } from "../../exports/configExports.ts";
 
 /**
  * Handler for MessageCreate event.
@@ -13,7 +14,7 @@ export default async function handleMessageCreate(message: Message) {
     if (!(channel instanceof DMChannel) || message.author.bot) return;
 
     const user = message.author;
-    const relatedGuilds = client.guilds.cache.filter((g) => g.members.cache.has(user.id)).map((g) => g.name).join('\n');
+    const relatedGuilds = message.client.guilds.cache.filter((g) => g.members.cache.has(user.id)).map((g) => g.name).join('\n');
 
     try {
         await developer.send({

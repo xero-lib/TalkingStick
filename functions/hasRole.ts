@@ -1,7 +1,7 @@
 import { GuildMember, Guild } from "discord.js";
 
-import { rolesMap, logger } from "../index";
-import { Roles } from "../data/Roles";
+import { rolesMap, logger } from "../main.ts";
+import { Roles } from "../exports/dataExports.ts";
 
 /**
  * Checks if a {@link Guild} or {@link GuildMember} has a particular variant of {@link Roles}.

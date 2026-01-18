@@ -1,11 +1,9 @@
 import { EmbedBuilder } from "discord.js";
 
-import { logger } from "../index";
-import { ValidInteraction } from "../data/ValidInteraction";
-import { botPfp, client, developer } from "../exports/configExports";
-import replySafe from "../functions/safeReply";
-import replyEphemeral from "../functions/replyEphemeral";
-
+import { logger } from "../main.ts";
+import { ValidInteraction } from "../exports/dataExports.ts";
+import { botPfp, developer } from "../exports/configExports.ts";
+import { replyEphemeral, replySafe } from "../exports/functionExports.ts";
 
 /**
  * Allows the bot to send a message to a given user if they have DMd the bot
@@ -13,6 +11,7 @@ import replyEphemeral from "../functions/replyEphemeral";
  * @throws If an interaction reply or `developer.send` fails.
  */
 export default async function sendMessage(interaction: ValidInteraction) {
+    const client = interaction.client;
     const message = interaction.options.get("message")?.value
     if (!(typeof message === "string")) {
         await replySafe(interaction, "No message provided.");

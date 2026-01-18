@@ -1,8 +1,8 @@
-import { Colors, EmbedBuilder, MessageFlags } from "discord.js";
+import { Colors, EmbedBuilder } from "discord.js";
 
-import { developer } from "../exports/configExports";
-import { ValidInteraction } from "../data/ValidInteraction";
-import replyEphemeral from "../functions/replyEphemeral";
+import { developer } from "../exports/configExports.ts";
+import { ValidInteraction } from "../exports/dataExports.ts";
+import { replyEphemeral } from "../exports/functionExports.ts";
 
 const errmsg = (msg: string) => `Unable to find guild owner to attach to message. Please try again momentarily.\nMessage:\n${msg}`
 

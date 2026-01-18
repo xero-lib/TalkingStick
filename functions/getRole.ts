@@ -1,10 +1,10 @@
 import { Guild, GuildMember, Role } from "discord.js";
 
-import { rolesMap, logger } from "../index";
-import { Roles } from "../data/Roles";
+import { rolesMap, logger } from "../main.ts";
+import { Roles } from "../exports/dataExports.ts";
 
 /**
- * Gets a {@link Role} from a specific {@link Guild} or {@link GuildMember}.
+ * Gets a {@link https://discord.js.org/docs/packages/discord.js/main/Role:Class|Role} from a specific {@link https://discord.js.org/docs/packages/discord.js/main/Guild:Class|Guild} or {@link https://discord.js.org/docs/packages/discord.js/main/GuildMember:Class|GuildMember}.
  * @param source The {@link Guild} or {@link GuildMember} to search.
  * @param role The {@link Roles} variant to retrieve.
  * @returns Returns the {@link Role} if found, and `undefined` if not.

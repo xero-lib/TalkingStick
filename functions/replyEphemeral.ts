@@ -7,7 +7,7 @@ import {
     MessageFlagsResolvable,
 } from "discord.js";
 
-import { ValidInteraction } from "../data/ValidInteraction";
+import { ValidInteraction } from "../exports/dataExports.ts";
 
 /**
  * Replies to an interaction ephemerally if not already replied or deferred, otherwise uses followUp.

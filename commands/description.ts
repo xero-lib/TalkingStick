@@ -1,8 +1,8 @@
 import { Colors, EmbedBuilder } from "discord.js";
 
-import { botPfp } from "../exports/configExports";
-import { ValidInteraction } from "../data/ValidInteraction";
-import replyEphemeral from "../functions/replyEphemeral";
+import { botPfp } from "../exports/configExports.ts";
+import { ValidInteraction } from "../exports/dataExports.ts";
+import { replyEphemeral } from "../exports/functionExports.ts";
 
 // static embed
 const descriptionEmbed = new EmbedBuilder()
@@ -17,6 +17,6 @@ const descriptionEmbed = new EmbedBuilder()
  * @param interaction The interaction to operate on.
  * @throws If an interaction reply fails.
  */
-export default async function (interaction: ValidInteraction) {
+export default async function description(interaction: ValidInteraction) {
 	await replyEphemeral(interaction, { embeds: [descriptionEmbed] });
 }

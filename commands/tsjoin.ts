@@ -1,12 +1,9 @@
 import { EmbedBuilder, PermissionFlagsBits, Colors, Collection, OverwriteResolvable, OverwriteType } from "discord.js";
 
-import { logger } from "../index";
-import { Roles } from "../data/Roles";
-import { ValidInteraction } from "../data/ValidInteraction";
-import { getRole, hasRole } from "../exports/functionExports";
-import replySafe from "../functions/safeReply";
-import replyEphemeral from "../functions/replyEphemeral";
-import { StickFlags } from "../exports/dataExports";
+import { logger } from "../main.ts";
+
+import { Roles, StickFlags, ValidInteraction } from "../exports/dataExports.ts";
+import { getRole, hasRole, replySafe, replyEphemeral } from "../exports/functionExports.ts";
 
 // implement pass to muted individuals and pre-mute restoration, but only allow admins to pass to them (careful!)
 

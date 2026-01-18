@@ -1,12 +1,9 @@
-import { EmbedBuilder, GuildMember, Colors, PermissionFlagsBits, OverwriteData, OverwriteType } from "discord.js";
+import { EmbedBuilder, GuildMember, Colors, PermissionFlagsBits, OverwriteType, PermissionOverwriteOptions } from "discord.js";
 
-import { logger } from "../index";
-import getRole from "../functions/getRole";
-import { Roles } from "../data/Roles";
-import { ValidInteraction } from "../data/ValidInteraction";
-import replyEphemeral from "../functions/replyEphemeral";
-import replySafe from "../functions/safeReply";
-import { StickFlags } from "../data/StickFlags";
+import { logger } from "../main.ts";
+
+import { Roles, StickFlags, ValidInteraction } from "../exports/dataExports.ts";
+import { getRole, replyEphemeral, replySafe } from "../exports/functionExports.ts";
 
 // if the target already has a talking stick, tell the initiator and do nothing
 
@@ -37,21 +34,18 @@ export default async function tspass(interaction: ValidInteraction) {
     const {
         channel,
         BOT_MAGIC,
-        REVERT_MAGIC,
         CommunicatePermission,
      } = channelType === "voice"
         ?
             {
                 channel: member.voice.channel,
                 BOT_MAGIC: StickFlags.VOICE_MAGIC,
-                REVERT_MAGIC: StickFlags.VOICE_REVERT,
                 CommunicatePermission: PermissionFlagsBits.Speak
             }
         :
             {
                 channel: interaction.channel,
                 BOT_MAGIC: StickFlags.TEXT_MAGIC,
-                REVERT_MAGIC: StickFlags.TEXT_REVERT,
                 CommunicatePermission: PermissionFlagsBits.SendMessages
             }
     ;
@@ -110,7 +104,7 @@ export default async function tspass(interaction: ValidInteraction) {
                 type: OverwriteType.Member,
                 allow: targetAllow | CommunicatePermission,
                 deny:  targetDeny & ~CommunicatePermission
-            } as OverwriteData as any
+            } as PermissionOverwriteOptions
         )
 
         await channel.permissionOverwrites.create(
@@ -120,10 +114,10 @@ export default async function tspass(interaction: ValidInteraction) {
                 type: OverwriteType.Member,
                 allow: memberAllow & ~CommunicatePermission,
                 deny: memberDeny | CommunicatePermission
-            } as OverwriteData as any
+            } as PermissionOverwriteOptions
         )
-    } catch (e) {
-        logger.error(`Unable to update mute state: ${e}`);
+    } catch (err) {
+        logger.error(`Unable to update mute state:\n${err}`);
         await replySafe(interaction, `Unable modify mutes. Talking stick requires Administrator privileges in order to work properly.`);
 
         return;

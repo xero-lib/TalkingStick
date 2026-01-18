@@ -1,7 +1,7 @@
 import { SlashCommandBuilder, InteractionContextType, PermissionFlagsBits } from "discord.js";
 
 // import CommandMap from "../functions/commandMap.js";
-import { helpMap } from "./help.js";
+import { helpMap } from "./help.ts";
 
 const helpChoices = [...helpMap.keys()].map((cmd) => ({ name: cmd, value: cmd }));
 

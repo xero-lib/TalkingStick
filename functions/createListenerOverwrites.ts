@@ -1,5 +1,6 @@
-import { Collection, GuildMember, NonThreadGuildBasedChannel, OverwriteData,  OverwriteType, PermissionFlagsBits, PermissionOverwriteManager } from "discord.js";
-import { StickFlags } from "../data/StickFlags";
+import { Collection, GuildMember, NonThreadGuildBasedChannel, OverwriteData,  OverwriteType, PermissionFlagsBits } from "discord.js";
+
+import { StickFlags } from "../exports/dataExports.ts";
 
 export default function createListenerOverwrites(
     channel: NonThreadGuildBasedChannel,

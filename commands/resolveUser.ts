@@ -1,8 +1,8 @@
-import { logger } from "../index";
-import { developer } from "../exports/configExports";
-import { ValidInteraction } from "../data/ValidInteraction";
-import replySafe from "../functions/safeReply";
-import replyEphemeral from "../functions/replyEphemeral";
+import { logger } from "../main.ts";
+
+import { developer } from "../exports/configExports.ts";
+import { ValidInteraction } from "../exports/dataExports.ts";
+import { replyEphemeral, replySafe } from "../exports/functionExports.ts";
 
 /**
  * Allows the bot to resolve a username to a stringified user object.

@@ -6,7 +6,7 @@ import { ActivityType, Client } from "discord.js";
  * Handles the setPresence functionality for interval and manual presence updates.
  * @param client The {@link Client} object to set presence of.
  */
-export default async function setPresence(client: Client<true>) {
+export default function setPresence(client: Client<true>) {
   client.user.setPresence({
     status: "online",
     activities: [{

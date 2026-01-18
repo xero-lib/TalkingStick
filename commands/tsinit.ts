@@ -1,11 +1,9 @@
 import { EmbedBuilder, PermissionsBitField, Colors, ColorResolvable, MessageFlags } from "discord.js";
 
-import { logger } from "../index";
-import { Roles } from "../data/Roles";
-import { createRoles } from "../exports/functionExports";
-import { ValidInteraction } from "../data/ValidInteraction";
-import replyEphemeral from "../functions/replyEphemeral";
-import replySafe from "../functions/safeReply";
+import { logger } from "../main.ts";
+
+import { Roles, ValidInteraction } from "../exports/dataExports.ts";
+import { createRoles, replyEphemeral, replySafe } from "../exports/functionExports.ts";
 
 /**
  * Initializes all roles required for Talking Stick.

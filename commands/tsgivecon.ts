@@ -1,11 +1,10 @@
-import { EmbedBuilder, PermissionsBitField, GuildMember, Colors, PermissionFlagsBits } from "discord.js"
+import { EmbedBuilder, GuildMember, Colors, PermissionFlagsBits } from "discord.js"
 
-import { logger } from "../index";
-import { Roles } from "../data/Roles";
-import { getRole, hasRole } from "../exports/functionExports";
-import { ValidInteraction } from "../data/ValidInteraction";
-import replyEphemeral from "../functions/replyEphemeral";
-import replySafe from "../functions/safeReply";
+import { logger } from "../main.ts";
+
+import { Roles } from "../exports/dataExports.ts";
+import { getRole, hasRole, replyEphemeral, replySafe } from "../exports/functionExports.ts";
+import { ValidInteraction } from "../exports/dataExports.ts";
 
 /**
  * Gives a particular user the Stick Controller role.

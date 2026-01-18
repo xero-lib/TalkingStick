@@ -1,8 +1,9 @@
 import { Collection, NonThreadGuildBasedChannel, OverwriteResolvable, PermissionFlagsBits } from "discord.js";
-import { StickFlags } from "../data/StickFlags";
-import getRole from "./getRole";
-import { Roles } from "../data/Roles";
-import { logger } from "..";
+
+import { logger } from "../main.ts";
+
+import { getRole } from "../exports/functionExports.ts";
+import { Roles, StickFlags } from "../exports/dataExports.ts";
 
 export default async function cleanupStickSession(channel: NonThreadGuildBasedChannel) {
     const {

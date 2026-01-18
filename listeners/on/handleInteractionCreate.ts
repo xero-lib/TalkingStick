@@ -1,12 +1,10 @@
-import { ButtonBuilder, ActionRowBuilder, ButtonStyle, GuildMember, Interaction, MessageFlags, PermissionFlagsBits, Message, InteractionResponse, ChatInputCommandInteraction } from "discord.js"
+import { ButtonBuilder, ActionRowBuilder, ButtonStyle, GuildMember, Interaction, MessageFlags, PermissionFlagsBits, ChatInputCommandInteraction } from "discord.js"
 
-import { CommandMap, CommandNames, getRole } from "../../exports/functionExports";
-import { logger } from "../../index";
-import { Roles } from "../../data/Roles";
-import tsinit from "../../commands/tsinit";
-import { ValidInteraction } from "../../data/ValidInteraction";
-import replyEphemeral from "../../functions/replyEphemeral";
-import replySafe from "../../functions/safeReply";
+import { logger } from "../../main.ts";
+
+import { tsinit } from "../../exports/commandExports.ts";
+import { Roles, ValidInteraction } from "../../exports/dataExports.ts";
+import { CommandMap, CommandNames, getRole, replyEphemeral, replySafe } from "../../exports/functionExports.ts";
 
 function isValidInteraction(interaction: ChatInputCommandInteraction): interaction is ValidInteraction {
     return interaction.inCachedGuild() && interaction.channel !== null; 
@@ -68,7 +66,7 @@ export default async function handleInteractionCreate(interaction: Interaction) 
             // defer
             try {
                 await interaction.deferReply({ flags: MessageFlags.Ephemeral });
-            } catch (err) {
+            } catch {
                 logger.debug("Failed to defer reply. Attempting to continue without...");
             }
 
