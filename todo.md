@@ -11,7 +11,6 @@
 - [ ] Manually server-mute any admins on tsjoin and user join, since they will not be affected by the @everyone role update?
 - [ ] Add proper jsdoc.
 - [ ] If user tries to `tsleave` in the wrong channel, list channels with the overwrite for `Stick Holder` and if they themselves have the `Stick Holder` role
-- [ ] Align log-level text
 - [ ] Consolidate comment terminology
 ---
 # In Progress
@@ -21,6 +20,7 @@
 - [ ] Implement a queue/timer with an ordering system so that people leaving and joining go after the person who went before they joined. (optional manual pass order)
 - [ ] Automatically remove voice-channel-type on client-side modal if not in vc?
 - [ ] TSThrow: throw the stick to a random user in the channel
+- [ ] Align log-level text
 
 ---
 # Done
