@@ -12,7 +12,7 @@ export default async function handleReady(client: Client<true>) {
     try {
         await client.guilds.fetch();
     } catch (err) {
-        logger.error(`Failed to handle ready event: ${err}`);
+        logger.error(`Failed to handle ready event:\n${err}`);
     }
 
     setPresence(client);

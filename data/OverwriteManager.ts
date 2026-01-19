@@ -1,4 +1,4 @@
-import { OverwriteData, OverwriteType, PermissionFlagsBits, PermissionOverwrites } from "discord.js";
+import { OverwriteData, OverwriteType, PermissionFlagsBits, PermissionOverwrites, PermissionResolvable } from "discord.js";
 
 import { StickFlags } from "../exports/dataExports.ts";
 
@@ -74,7 +74,7 @@ export class StickFlagManager<S extends FlagState> {
         return this.flags.has(this.BOT_MAGIC); 
     }
 
-    canCommunicate(this: StickFlagManager<"allow">): boolean {
+    canTalk(this: StickFlagManager<"allow">): boolean {
         return this.flags.has(this.CommunicatePermission);
     }
 
@@ -102,12 +102,12 @@ export class StickFlagManager<S extends FlagState> {
         this.flags.remove(this.CommunicatePermission | this.BOT_MAGIC);
     }
 
-    shouldRevert(): boolean {
+    needsRevert(): boolean {
         return this.flags.has(this.REVERT_MAGIC);
     }
 
     revert() {
-        if (this.shouldRevert()) {
+        if (this.needsRevert()) {
             this.flags.add(this.CommunicatePermission);
         } else {
             this.flags.remove(this.CommunicatePermission);
@@ -119,31 +119,63 @@ export class StickFlagManager<S extends FlagState> {
     getBitfield(): bigint {
         return this.flags.getBitfield();
     }
+
+    initListener(this: StickFlagManager<"allow">) {
+        const wasAllowed = this.fromBot()
+            ? this.flags.has(this.REVERT_MAGIC)
+            : this.flags.has(this.CommunicatePermission)
+        ;
+
+        this.flags.remove(this.BOT_MAGIC);
+        this.flags.remove(this.CommunicatePermission);
+        
+        if (wasAllowed) this.flags.add(this.REVERT_MAGIC)
+    }
+
+    isManaged(): boolean {
+        return this.flags.has(this.BOT_MAGIC);
+    }
+
+    isActiveSession(): boolean {
+        return this.flags.has(StickFlags.ACTIVE_MAGIC);
+    }
 }
 
 export default class OverwriteManager {
     private allow: StickFlagManager<"allow">;
     private deny: StickFlagManager<"deny">;
-    private id: string | null = null;
-    private type: OverwriteType | null = null;
+    private id: string;
+    private type: OverwriteType | undefined = undefined;
 
-    constructor(isVoice: boolean);
-    constructor(isVoice: boolean, overwrites: PermissionOverwrites);
+    static fromMember(id: string, isVoice: boolean) {
+        return new OverwriteManager(
+            isVoice,
+            {
+                id,
+                type: OverwriteType.Member,
+                allow: 0n,
+                deny: 0n
+            }
+        )
+    } 
 
-    constructor(isVoice:boolean, overwrites?: PermissionOverwrites) {
-        if (!overwrites) {
-            this.allow = new StickFlagManager<"allow">(isVoice);
-            this.deny  = new StickFlagManager<"deny">(isVoice);
-            return this;
+    constructor(isVoice:boolean, data: (OverwriteData | PermissionOverwrites) & { id: string, type: OverwriteType }) {
+        const resolveBits = (perm: PermissionResolvable | undefined): bigint => {
+            if (!perm) return 0n;
+            if (typeof perm === "bigint") return perm;
+            if (typeof perm === "object" && "bitfield" in perm) return BigInt(perm.bitfield);
+            return BigInt(perm as string | number);
         }
-        
-        this.allow = new StickFlagManager(isVoice, overwrites.allow.bitfield);
-        this.deny  = new StickFlagManager(isVoice, overwrites.deny .bitfield);
-        this.id = overwrites.id;
+
+        this.id    = data.id as string;
+        this.type  = data.type;
+        this.deny  = new StickFlagManager<"deny">(isVoice, resolveBits(data.deny));
+        this.allow = new StickFlagManager<"allow">(isVoice, resolveBits(data.allow));
     }
 
     hasStick() {
-        return this.allow.canCommunicate() && this.allow.fromBot();
+        // don't include canCommunicate since they might have been muted
+        return this.allow.fromBot();
     }
 
     giveStick(): boolean {
@@ -165,15 +197,33 @@ export default class OverwriteManager {
         this.deny.revert();
     }
 
-    toOverwriteData(id?: string): OverwriteData {
-        const finalId = id || this.id;
-        if (!finalId) throw new Error("OverwriteManager: Missing ID");
-
+    toOverwriteData(): OverwriteData {
         return {
-            id: finalId,
+            id: this.id,
             type: this.type ?? OverwriteType.Member,
             allow: this.allow.getBitfield(),
             deny: this.deny.getBitfield()
         }
+    }
+
+    initListener() {
+        this.allow.initListener();
+        this.deny.addMute();
+    }
+
+    needsRevert(): boolean {
+        return this.allow.needsRevert() || this.deny.needsRevert();
+    }
+
+    isEmpty(): boolean {
+        return (this.allow.getBitfield() | this.deny.getBitfield()) === 0n;
+    }
+
+    isManaged(): boolean {
+        return (this.allow.isManaged() || this.deny.isManaged());
+    }
+
+    isActiveSession(): boolean {
+        return this.allow.isActiveSession();
     }
 }

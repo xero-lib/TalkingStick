@@ -24,8 +24,8 @@ export default async function sendMessage(interaction: ValidInteraction) {
         return;
     }
 
-    const target = await client.users.fetch(id).catch((e) => {
-        logger.error(`Failed to fetch user ID ${id}: ${e}`);
+    const target = await client.users.fetch(id).catch((err) => {
+        logger.error(`Failed to fetch user ID ${id}:\n${err}`);
         return null;
     });
 
@@ -55,8 +55,8 @@ export default async function sendMessage(interaction: ValidInteraction) {
         await developer.send({ embeds: [sendEmbedBuilder] });
 
         await replyEphemeral(interaction, `Successfully sent message to ${target.username} (${target.id}). A copy of this message has been sent via the bot to your DMs.`);
-    } catch (e) {
-        logger.debug(`There was an error sending the message to ${target.username} (${target.id}): ${e}`);
+    } catch (err) {
+        logger.debug(`There was an error sending the message to ${target.username} (${target.id}):\n${err}`);
         await replyEphemeral(interaction, `There was an error sending the message to ${target.username} (${target.id}). Most likely not in a mutual server.`);
     }
 }

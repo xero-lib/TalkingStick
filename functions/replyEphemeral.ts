@@ -21,7 +21,7 @@ import { ValidInteraction } from "../exports/dataExports.ts";
  * 
  * @example
  * const message = await replyEphemeral(interaction as ValidInteraction, { content: "Hello, world!", embeds: [exampleEmbeds] }).catch((err) => {
- *     console.error(`Failed to send reply: ${err}`);
+ *     console.error(`Failed to send reply:\n${err}`);
  *     return null;
  * });
  * 
@@ -48,8 +48,8 @@ export default async function replyEphemeral(
     options.withResponse = true;
 
     // if interaction is already replied or deferred, followUp, otherwise, reply
-    return interaction.replied || interaction.deferred
+    return (interaction.replied || interaction.deferred )
         ? await interaction.followUp(options)
-        : await interaction.reply(options)
+        : await interaction.reply(options) // error occurs here
     ;
 }

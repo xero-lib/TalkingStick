@@ -11,7 +11,7 @@ import { createRoles, replyEphemeral, replySafe } from "../exports/functionExpor
  * @throws If an interaction reply or deferReply fails.
  */
 export default async function tsinit(interaction: ValidInteraction) {
-    await interaction.deferReply({ flags: MessageFlags.Ephemeral })
+    if (!interaction.deferred) await interaction.deferReply({ flags: MessageFlags.Ephemeral });
     // if the user does not have ManageRoles permissions, reject. Failsafe, as levels above this should prevent this from being possible.
     if (!interaction.member.permissions.has(PermissionsBitField.Flags.ManageRoles)) {
         // then log the event and reply to the user that roles weren't found, and return.
@@ -24,7 +24,7 @@ export default async function tsinit(interaction: ValidInteraction) {
     const tsinitEmbed = new EmbedBuilder()
         .setFooter({ text: "Please ensure Talking Stick has Administrator permissions, it is required for proper functioning." })
         .setColor(Colors.Green)
-        .setAuthor({ name: `${interaction.user.tag} executed TSInit`, iconURL: interaction.member.displayAvatarURL() })
+        .setAuthor({ name: `${interaction.member.displayName} executed TSInit`, iconURL: interaction.member.displayAvatarURL() })
     ;
 
     const roleMap: Map<Roles, ColorResolvable> = new Map();
@@ -33,8 +33,8 @@ export default async function tsinit(interaction: ValidInteraction) {
     let results = undefined;
     try {
         results = await createRoles(interaction, roleMap);
-    } catch (e) {
-        logger.error(`Encountered error while creating roles with createRoles in ${interaction.guild.name}: ${e}`);
+    } catch (err) {
+        logger.error(`Encountered error while creating roles with createRoles in ${interaction.guild.name}:\n${err}`);
         await replySafe(interaction, "Talking Stick encountered an error");
 
         return;

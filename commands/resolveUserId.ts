@@ -20,7 +20,7 @@ export default async function resolveUserId(interaction: ValidInteraction) {
     
     
     const user = await interaction.guild.members.fetch({ user: id }).catch((err) => {
-        logger.debug(`Unable to fetch user with ID ${id}: ${err}`);
+        logger.debug(`Unable to fetch user with ID ${id}:\n${err}`);
         return null;
     });
 

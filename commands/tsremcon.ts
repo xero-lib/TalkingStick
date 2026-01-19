@@ -24,8 +24,8 @@ export default async function remcon(interaction: ValidInteraction) {
         const user = interaction.options.getUser("stick-controller", true);
         try {
             member = await interaction.guild.members.fetch(user.id);
-        } catch (e) {
-            logger.error(`Encountered an error attempting to fetch ${user.username} (${user.id}) in guild ${interaction.guild.name}: ${e}`);
+        } catch (err) {
+            logger.error(`Encountered an error attempting to fetch ${user.username} (${user.id}) in guild ${interaction.guild.name}:\n${err}`);
             await replyEphemeral(interaction, "Unable to fetch member. If this issue persists, please contact the bot developer.");
 
             return;

@@ -1,12 +1,10 @@
-import { GuildMember, PermissionFlagsBits, PermissionOverwriteOptions } from "discord.js";
+import { GuildMember, OverwriteType, PermissionFlagsBits, PermissionOverwriteOptions } from "discord.js";
 
 import { logger } from "../main.ts";
 
-import { StickFlags } from "../exports/dataExports.ts";
+import { OverwriteManager } from "../exports/dataExports.ts";
 import { Roles, ValidInteraction } from "../exports/dataExports.ts";
 import { hasRole, replyEphemeral } from "../exports/functionExports.ts";
-
-// const CAN_UNMUTE = (PermissionFlagsBits.ManageChannels | PermissionFlagsBits.ManageRoles | PermissionFlagsBits.MuteMembers);
 
 /**
  * @param interaction The interaction to operate on.
@@ -17,7 +15,7 @@ export default async function tsaddstick(interaction: ValidInteraction) {
     // if the initiator does not have ManageRoles or ManageChannels, nor Stick Controller
     if (
         !(
-            member.permissions.bitfield & (PermissionFlagsBits.ManageRoles | PermissionFlagsBits.ManageChannels) ||
+            member.permissions.any([PermissionFlagsBits.ManageRoles, PermissionFlagsBits.ManageChannels]) ||
             await hasRole(interaction.member, Roles.StickController)
         )
     ) { // then tell them they don't have permission, and return
@@ -40,76 +38,22 @@ export default async function tsaddstick(interaction: ValidInteraction) {
     // should be impossible for the API to omit a channel-type value, or allow a non- "voice" | "text" value
     if (!["voice", "text"].includes(channelType?.toString() ?? "")) return; 
 
-    const {
-        channel,
-        BOT_MAGIC,
-        REVERT_MAGIC,
-        CommunicatePermission,
-     } = channelType === "voice"
-        ?
-            {
-                channel: target.voice.channel,
-                BOT_MAGIC: StickFlags.VOICE_MAGIC,
-                REVERT_MAGIC: StickFlags.VOICE_REVERT,
-                CommunicatePermission: PermissionFlagsBits.Speak
-            }
-        :
-            {
-                channel: interaction.channel,
-                BOT_MAGIC: StickFlags.TEXT_MAGIC,
-                REVERT_MAGIC: StickFlags.TEXT_REVERT,
-                CommunicatePermission: PermissionFlagsBits.SendMessages
-            }
+    const channel = channelType === "voice"
+        ? target.voice.channel
+        : interaction.channel
     ;
 
     // if the initiator is in a voice channel but the mentioned member is not
     if (!channel) {
-        await replyEphemeral(interaction, `${target.displayName} is not in a voice channel.`);
+        await replyEphemeral(interaction, `<@${target.id}> is not in a voice channel.`);
         return;
     }
 
-    const targetPerms = channel?.permissionOverwrites.cache.get(target.id);
-    const targetAllow = (targetPerms?.allow?.bitfield ?? 0n) as bigint;
-    const targetDeny  = (targetPerms?.deny?.bitfield  ?? 0n) as bigint;
+    const targetOverwrites = new OverwriteManager(channel.isVoiceBased(), channel?.permissionOverwrites.cache.get(target.id) ?? { id: target.id, type: OverwriteType.Member });
+    targetOverwrites.giveStick();
 
     await channel.permissionOverwrites.create(
         target,
-        {
-            allow: targetAllow
-                    | CommunicatePermission
-                    | (((targetAllow &  CommunicatePermission) && !(targetDeny & BOT_MAGIC)) ? REVERT_MAGIC : 0n),
-            deny:  BOT_MAGIC
-                    |   (targetDeny  & ~CommunicatePermission)
-                    | (((targetDeny  &  CommunicatePermission) && !(targetDeny & BOT_MAGIC)) ? REVERT_MAGIC : 0n)
-        } as PermissionOverwriteOptions
+        targetOverwrites.toOverwriteData() as PermissionOverwriteOptions
     );
-
-    // unnecessary, as if they're able to addstick, they have the ability to unmute the target
-    // check if 
-    //     - the target user is explicitly muted but not by the bot and
-    //     - the target does not have ManageChannel or ManageRoles or MuteMembers (can't unmute themselves) and
-    //     - the initiator does not have ManageChannel or ManageRoles or MuteMembers (can't unmute the target)
-
-    // if (
-    //     (targetDeny & CommunicatePermission) && !(targetDeny & BOT_MAGIC) && 
-    //     !(target.permissions.bitfield & CAN_UNMUTE) &&
-    //     !(initiatorPerms & CAN_UNMUTE)
-    // ) {
-
-    // }
-    
-    // // unacceptable. rewrite to allow both voice and text
-    // if (interaction.member.voice.channel && !target.voice.channel) {
-    // }
-
-    // if (interaction.member.voice.channel && target.voice.channelId === interaction.member.voice.channelId) {
-    // try {
-    //     await target.roles.add(holderRole);
-    //     await target.voice.setMute(false);
-    // } catch (e) {
-    //     logger.error(`Failed to add holderRole to ${target.user.username} (${target.id}) in ${interaction.guild.name}`);
-    //     await replySafe(interaction, `Failed to give ${target.displayName} a Talking Stick. Please ensure Talking Stick has Administrator permissons, and try again.`);
-
-    //     return;
-    // }
 }

@@ -41,7 +41,7 @@ export default async function tsdestroy(interaction: ValidInteraction) {
     try {
         await destroyRoles(interaction);
     } catch (err) {
-        logger.debug(`destroyRoles failed: ${err}`);
+        logger.debug(`destroyRoles failed:\n${err}`);
         // probably just make this its own reply
         tsdestroyEmbed.addFields({ name: `Error`, value: "A problem occured during role deletion. If any roles are still present, you may have to manually delete them." });
     }

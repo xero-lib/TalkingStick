@@ -21,10 +21,10 @@
 # In Progress
 ---
 # Non-critical Features
-- [ ] Consolidate `e` vs `err`
 - [ ] Implement response from developer to go to replied `message.id` in bot DMs
 - [ ] Implement a queue/timer with an ordering system so that people leaving and joining go after the person who went before they joined. (optional manual pass order)
 - [ ] Automatically remove voice-channel-type on client-side modal if not in vc?
+- [ ] TSThrow: throw the stick to a random user in the channel
 
 ---
 # Done
@@ -45,3 +45,4 @@
     - [?] Fix `tsremstick` and `tsaddstick` to work in text channels, and provide better feedback if unable to add/rem sticks
 - [x] Use channel overwrites for `VoiceStateUpdate` instead of checking to see if someone in the channel is a stick holder
 - [x] Only let `tsjoin` be added to a given channel once
+- [x] Consolidate `e` vs `err`

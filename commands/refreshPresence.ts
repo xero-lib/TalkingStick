@@ -1,4 +1,5 @@
 import { logger } from "../main.ts";
+
 import { developer } from "../exports/configExports.ts";
 import { ValidInteraction } from "../exports/dataExports.ts";
 import { replyEphemeral, replySafe, setPresence } from "../exports/functionExports.ts";
@@ -13,7 +14,7 @@ export default async function refreshPresence(interaction: ValidInteraction) {
     if (interaction.member.id !== developer.id ) return;
 
     try {
-        await setPresence(interaction.client);
+        setPresence(interaction.client);
         logger.trace(`Presence set successfully by ${interaction.user.username}.`);
     } catch (err) {
         logger.error(`Failed to manually refresh presence:\n${err}`);

@@ -37,14 +37,15 @@ export default async function tsgivecon(interaction: ValidInteraction) {
     }
 
     if (await hasRole(target, Roles.StickController)) {
-        await replyEphemeral(interaction, `<@${target.id}> is already a Stick Controller.`)
+        await replyEphemeral(interaction, `<@${target.id}> is already a Stick Controller.`);
+        return;
     }
     
     try {
         await target.roles.add(controllerRole);
-    } catch (e) {
-        logger.error(`Encountered error in tsgivecon while adding Stick Controller to ${target.user.username} (${target.id}): ${e}`);
-        await replySafe(interaction, "Talking Stick was unable to give you the Stick Holder role. Please ensure Talking Stick as Administrator permissions.");
+    } catch (err) {
+        logger.error(`Encountered error in tsgivecon while adding Stick Controller to ${target.user.username} (${target.id}):\n${err}`);
+        await replySafe(interaction, `Talking Stick was unable to give <@${target.id}> the Stick Holder role. Please ensure Talking Stick as Administrator permissions.`);
 
         return;
     }
@@ -57,7 +58,7 @@ export default async function tsgivecon(interaction: ValidInteraction) {
                     .setAuthor({ name: interaction.member.displayName, iconURL: interaction.member.displayAvatarURL() })
                     .setColor(Colors.Green)
                     .setTitle("Stick Controller Given")
-                    .addFields([{ name: `${interaction.member.displayName} gave Stick Controller`, value: `to ${target.displayName}` }])
+                    .setDescription(`<@${interaction.user.id}> gave Stick Controller to <@${target.id}>`)
             ]
         }
     );

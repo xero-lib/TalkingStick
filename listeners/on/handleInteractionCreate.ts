@@ -32,14 +32,14 @@ export default async function handleInteractionCreate(interaction: Interaction) 
     }
 
     const guild = interaction.guild;
-    let member = interaction.member;
 
+    let member = interaction.member;
     if (!(member instanceof GuildMember)) {
         try {
             member = await guild.members.fetch(interaction.user.id);
             if (!member) throw "Failed to find user, even after fetch.";
-        } catch(e) {
-            logger.error(`Failed to fetch user ${interaction.user.username} (${interaction.user.id}) from ${guild.name}: ${e}`);
+        } catch(err) {
+            logger.error(`Failed to fetch user ${interaction.user.username} (${interaction.user.id}) from ${guild.name}:\n${err}`);
             await replyEphemeral(interaction, "Sorry, we were unable to fetch your information. Please try again in a moment.").catch(logger.error);
 
             return;
@@ -66,10 +66,9 @@ export default async function handleInteractionCreate(interaction: Interaction) 
             // defer
             try {
                 await interaction.deferReply({ flags: MessageFlags.Ephemeral });
-            } catch {
-                logger.debug("Failed to defer reply. Attempting to continue without...");
+            } catch (err) {
+                logger.debug(`Failed to defer reply. Attempting to continue without...\n${err}`);
             }
-
             const confirm = new ButtonBuilder()
                 .setCustomId("confirm")
                 .setLabel("Create Roles")
@@ -100,8 +99,8 @@ export default async function handleInteractionCreate(interaction: Interaction) 
                 if (confirmation.customId === "confirm") {
                     try {
                         await tsinit(interaction);
-                    } catch (e) {
-                        logger.error(`Failed to execute JIT tsinit in ${interaction.guild?.name} by ${interaction.user.username}: ${e}`);
+                    } catch (err) {
+                        logger.error(`Failed to execute JIT tsinit in ${interaction.guild?.name} by ${interaction.user.username}:\n${err}`);
                         await replySafe(interaction, "An error was encountered while creating roles. Please directly run the `tsinit` command.").catch(logger.error);
                         
                         return;
@@ -123,8 +122,8 @@ export default async function handleInteractionCreate(interaction: Interaction) 
     
     try {
         await command(interaction);
-    } catch (e) {
-        logger.error(`Encountered error when attempting to execute ${interaction.commandName}: ${e}`);
+    } catch (err) {
+        logger.error(`Encountered error when attempting to execute ${interaction.commandName}:\n${err}`);
         replyEphemeral(interaction, "Talking Stick encountered an issue. Please try again.").catch(logger.error);
     }
 }

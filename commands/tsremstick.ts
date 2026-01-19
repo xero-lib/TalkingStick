@@ -1,8 +1,8 @@
-import { Colors, EmbedBuilder, GuildMember, PermissionFlagsBits, PermissionOverwriteOptions } from "discord.js";
+import { Colors, EmbedBuilder, GuildMember, OverwriteType, PermissionFlagsBits, PermissionOverwriteOptions } from "discord.js";
 
 import { logger } from "../main.ts";
 
-import { Roles, StickFlags, ValidInteraction } from "../exports/dataExports.ts";
+import { OverwriteManager, Roles, StickFlags, ValidInteraction } from "../exports/dataExports.ts";
 import { getRole, hasRole, replyEphemeral, replySafe } from "../exports/functionExports.ts";
 
 /**
@@ -41,32 +41,16 @@ export default async function remstick(interaction: ValidInteraction) {
         const user = interaction.options.getUser("stick-holder", true);
         try {
             target = await interaction.guild.members.fetch(user.id);
-        } catch (e) {
-            logger.error(`Encountered an error attempting to fetch ${user.username} (${user.id}) in guild ${interaction.guild.name}: ${e}`);
+        } catch (err) {
+            logger.error(`Encountered an error attempting to fetch ${user.username} (${user.id}) in guild ${interaction.guild.name}:\n${err}`);
             await replyEphemeral(interaction, "Unable to fetch member. If this issue persists, please contact the bot developer.");
 
             return;
         }
     }
 
-    const {
-        channel,
-        BOT_MAGIC,
-        CommunicatePermission,
-     } = channelType === "voice"
-        ?
-            {
-                channel: target.voice.channel,
-                BOT_MAGIC: StickFlags.VOICE_MAGIC,
-                CommunicatePermission: PermissionFlagsBits.Speak
-            }
-        :
-            {
-                channel: interaction.channel,
-                BOT_MAGIC: StickFlags.TEXT_MAGIC,
-                CommunicatePermission: PermissionFlagsBits.SendMessages
-            }
-    ;
+    const isVoice = channelType === "voice";
+    const channel = isVoice ? target.voice.channel : interaction.channel;
 
     if (!channel) {
         await replyEphemeral(interaction, `<@${target.id}> is not in a voice channel.`);
@@ -78,18 +62,18 @@ export default async function remstick(interaction: ValidInteraction) {
         return;
     }
 
-    const targetOverwrites = channel.permissionOverwrites.cache.get(target.id);
+    const targetOverwrites = new OverwriteManager(isVoice, channel.permissionOverwrites.cache.get(target.id) ?? { id: target.id, type: OverwriteType.Member});
 
 
-    if (!targetOverwrites || !targetOverwrites.allow.has(BOT_MAGIC)) {
+    if (!targetOverwrites.hasStick()) {
         await replyEphemeral(interaction, `<@${target.id}> is not a Stick Holder.`);
         return;
     }
 
     // if the target member is an admin but the bot is not, the bot cannot update or modify roles or server-mute
     if (
-        target.permissions.has(PermissionFlagsBits.Administrator)
-        && !interaction.guild.members.cache.get(interaction.client.user.id)?.permissions.has(PermissionFlagsBits.Administrator)
+        target.permissions.has(PermissionFlagsBits.Administrator) &&
+        !interaction.guild.members.cache.get(interaction.client.user.id)?.permissions.has(PermissionFlagsBits.Administrator)
     ) {
         await replyEphemeral(interaction, `<@${target.id}> is an Administrator of ${interaction.guild.name}. For Talking Stick to work properly with admins, it must be given administrative privileges.`);
         return;
@@ -99,22 +83,20 @@ export default async function remstick(interaction: ValidInteraction) {
     try {
         await interaction.deferReply();
     } catch (err) {
-        logger.error(`tsremstick deferReply received error: ${err}`);
+        logger.error(`tsremstick deferReply received error:\n${err}`);
     }
 
+    targetOverwrites.takeStick();
 
     try {
         // await target.roles.remove(holderRole);
         await channel.permissionOverwrites.create(
             target,
-            {
-                allow: targetOverwrites.allow.bitfield & ~BOT_MAGIC & ~CommunicatePermission,
-                deny : targetOverwrites.deny .bitfield |  BOT_MAGIC |  CommunicatePermission,
-            } as PermissionOverwriteOptions
+            targetOverwrites.toOverwriteData() as PermissionOverwriteOptions
         );
 
     } catch (err) {
-        logger.error(`Failed to remove Stick Holder role from ${target.user.username} (${target.id}): ${err}`);
+        logger.error(`Failed to remove Stick Holder role from ${target.user.username} (${target.id}):\n${err}`);
         await replySafe(interaction, `Failed to take the stick from the <@${target.id}>.`);
 
         return;

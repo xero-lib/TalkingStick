@@ -11,7 +11,7 @@ import { ContentUnion, ValidInteraction } from "../exports/dataExports.ts";
  * 
  * @example
  * const response = await safeReply(interaction as ValidInteraction, "Hello, world!").catch((err) => {
- *     console.error(`Failed to send reply: ${err}`);
+ *     console.error(`Failed to send reply:\n${err}`);
  *     return null;
  * });
  * 
@@ -19,9 +19,14 @@ import { ContentUnion, ValidInteraction } from "../exports/dataExports.ts";
  * 
  * await response.edit("Hello, World!");
  */
-export default async function replySafe(interaction: ValidInteraction, content: ContentUnion): Promise<Message | InteractionResponse> {
-    return interaction.replied || interaction.deferred
-        ? await interaction.editReply(content)
-        : await interaction.reply(content)
-    ;
+export default function replySafe(interaction: ValidInteraction, content: ContentUnion): Promise<Message | InteractionResponse> {
+    if (interaction.replied || interaction.deferred) {
+        if (interaction.ephemeral) {
+            return interaction.followUp(content); // we don't want a replySafe to be ephemeral
+        }
+
+        return interaction.editReply(content);
+    }
+
+    return interaction.reply(content)
 }

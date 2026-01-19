@@ -1,11 +1,9 @@
-import { EmbedBuilder, GuildMember, Colors, PermissionFlagsBits, OverwriteType, PermissionOverwriteOptions } from "discord.js";
+import { EmbedBuilder, GuildMember, Colors, PermissionOverwriteOptions, OverwriteType } from "discord.js";
 
 import { logger } from "../main.ts";
 
-import { Roles, StickFlags, ValidInteraction } from "../exports/dataExports.ts";
+import { OverwriteManager, Roles, StickFlags, ValidInteraction } from "../exports/dataExports.ts";
 import { getRole, replyEphemeral, replySafe } from "../exports/functionExports.ts";
-
-// if the target already has a talking stick, tell the initiator and do nothing
 
 /**
  * Passes the Talking Stick from the interaction initiator to a target member.
@@ -31,28 +29,15 @@ export default async function tspass(interaction: ValidInteraction) {
     // should be impossible for the API to omit a channel-type value, or allow a non- "voice" | "text" value
     if (!["voice", "text"].includes(channelType?.toString() ?? "")) return;
 
-    const {
-        channel,
-        BOT_MAGIC,
-        CommunicatePermission,
-     } = channelType === "voice"
-        ?
-            {
-                channel: member.voice.channel,
-                BOT_MAGIC: StickFlags.VOICE_MAGIC,
-                CommunicatePermission: PermissionFlagsBits.Speak
-            }
-        :
-            {
-                channel: interaction.channel,
-                BOT_MAGIC: StickFlags.TEXT_MAGIC,
-                CommunicatePermission: PermissionFlagsBits.SendMessages
-            }
+    const isVoice = channelType === "voice";
+
+    const channel = isVoice
+        ? member.voice.channel
+        : interaction.channel
     ;
 
-
     if (!channel) {
-        await replyEphemeral(interaction, "You are not in a voice channel.");
+        await replyEphemeral(interaction, "You must be in a voice channel to use `/tspass Voice Channel`.");
         return;
     }
 
@@ -73,52 +58,49 @@ export default async function tspass(interaction: ValidInteraction) {
         return;
     }
     
-    const memberOverwrites = channel.permissionOverwrites.cache.get(member.id);
-    const memberAllow = (memberOverwrites?.allow ?? 0n) as bigint;
-    const memberDeny  = (memberOverwrites?.deny  ?? 0n) as bigint;
+    const memberOverwrites = new OverwriteManager(
+        isVoice,
+        channel.permissionOverwrites.cache.get(member.id) ?? { id: member.id, type: OverwriteType.Member }
+    );
 
-    /* 
-    * if the initiator has explicit deny: CommunicationPermission and doesn't have BOT_MAGIC on allow (i.e. if they're not manually muted)
-    * if the initiator DOES have BOT_MAGIC, they were manually muted while holding the stick, so allow them to pass it. 
-    */
-    if (!(memberAllow & BOT_MAGIC)) {
+    if (!memberOverwrites.hasStick()) {
         await replyEphemeral(interaction, "You don't appear to have the Talking Stick. To use `tspass`, you must first be a Stick Holder.");
         return;
     }
 
     // if the target member is either not in a voice channel or not in the initiator's voice channel
-    if (channelType === "voice" && target.voice.channelId !== channel.id) {
-        await replyEphemeral(interaction, `${target.displayName} doesn't seem to be in your voice channel`);
+    if (isVoice && target.voice.channelId !== channel.id) {
+        await replyEphemeral(interaction, `<@${target.id}> doesn't seem to be in your voice channel`);
         return;
     }
     
-    const targetOverwrites = channel.permissionOverwrites.cache.get(target.id);
-    const targetAllow = (targetOverwrites?.allow ?? 0n) as bigint;
-    const targetDeny  = (targetOverwrites?.deny  ?? 0n) as bigint;
+    const targetOverwrites = new OverwriteManager(
+        isVoice,
+        channel.permissionOverwrites.cache.get(target.id) ?? { id: target.id, type: OverwriteType.Member }
+    );
+
+    if (targetOverwrites.hasStick()) {
+        await replySafe(interaction, `<@${target.id}> already has a updateTalking Stick in <#${channel.id}>`);
+        return;
+    }
+
+    // pass
+    memberOverwrites.takeStick();
+    targetOverwrites.giveStick();
 
     try {
         await channel.permissionOverwrites.create(
             target.id,
-            {
-                id: target.id,
-                type: OverwriteType.Member,
-                allow: targetAllow | CommunicatePermission,
-                deny:  targetDeny & ~CommunicatePermission
-            } as PermissionOverwriteOptions
+            targetOverwrites.toOverwriteData() as PermissionOverwriteOptions
         )
 
         await channel.permissionOverwrites.create(
             member.id,
-            {
-                id: member.id,
-                type: OverwriteType.Member,
-                allow: memberAllow & ~CommunicatePermission,
-                deny: memberDeny | CommunicatePermission
-            } as PermissionOverwriteOptions
+            memberOverwrites.toOverwriteData() as PermissionOverwriteOptions
         )
     } catch (err) {
-        logger.error(`Unable to update mute state:\n${err}`);
-        await replySafe(interaction, `Unable modify mutes. Talking stick requires Administrator privileges in order to work properly.`);
+        logger.error(`Unable to set new session state:\n${err}`);
+        await replySafe(interaction, "Unable modify mutes. Talking Stick requires Administrator privileges in order to work properly.");
 
         return;
     }
@@ -127,15 +109,12 @@ export default async function tspass(interaction: ValidInteraction) {
         embeds: [
             new EmbedBuilder()
                 .setAuthor({
-                        name: interaction.user.username,
-                        iconURL: interaction.member.displayAvatarURL()
-                })
-                .setTitle("Talking Stick Passed")
-                .addFields({
-                    name: `${interaction.member.displayName} passed the Talking Stick`,
-                    value: `to ${target.user.username} in ${channelType === "voice" ? target.voice.channel!.name : interaction.channel.name}`
+                        name: member.displayName,
+                        iconURL: member.displayAvatarURL()
                 })
                 .setColor(Colors.Green)
+                .setTitle("Talking Stick Passed")
+                .setDescription(`<@${member.id}> passed the Talking Stick to <@${target.id}> in <#${channel.id}>!`)
         ]
     });
 }

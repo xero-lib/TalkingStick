@@ -25,7 +25,7 @@ export default async function dnw(interaction: ValidInteraction) {
         embeds: [
             new EmbedBuilder()
                 .setTitle("__DNW Report__")
-                .setAuthor({ name: interaction.user.tag, iconURL: interaction.user.avatarURL() ?? interaction.member.displayAvatarURL() })
+                .setAuthor({ name: interaction.user.username, iconURL: interaction.user.avatarURL() ?? interaction.member.displayAvatarURL() })
                 .setDescription(interaction.options.getString("message"))
                 .addFields(
                     {

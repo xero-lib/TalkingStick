@@ -24,7 +24,7 @@ export default async function destroyRoles(interaction: ValidInteraction) {
         const role = await getRole(interaction.guild, roleEntry);
         if (!role) continue;
         try {
-            await role.delete(`TSDestroyed by ${interaction.user.tag} (${interaction.user.id})`)
+            await role.delete(`TSDestroyed by ${interaction.user.username} (${interaction.user.id})`)
         } catch (err) {
             logger.error(`Encountered error during destroyRoles:\n${err}`);
             await replySafe(interaction, `The bot likely lacks sufficient permissions to complete this action. Ensure Talking Stuck as Manage Roles permissions. Encountered: ${typeof err}.`);

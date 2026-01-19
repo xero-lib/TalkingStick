@@ -28,8 +28,8 @@ export default async function handleMessageCreate(message: Message) {
         });
 
         await message.react('✅');
-    } catch (e) {
-        logger.error(`Error sending message from ${message.author.username} (${message.author.id}): ${e}`);
+    } catch (err) {
+        logger.error(`Error sending message from ${message.author.username} (${message.author.id}):\n${err}`);
         await channel.send("There was an error sending the message. Try again in a little while, add `_thoth` on Discord, or join the [support server](https://discord.gg/Jxe7mK2dHT).");
     }
 }

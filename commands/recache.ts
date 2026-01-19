@@ -23,8 +23,8 @@ export default async function recacheHard(interaction: ValidInteraction) {
         try {
             await guild.fetch();
             logger.info(`"${guild.name}" has been hard-recached`);
-        } catch (e) {
-            logger.error(`Error hard-recaching "${guild.name}": ${e}`);
+        } catch (err) {
+            logger.error(`Error hard-recaching "${guild.name}":\n${err}`);
         }
     }
 }
