@@ -6,6 +6,11 @@ const isDev = Deno.env.get("DENO_ENV") !== "production";
 
 const TOKEN = env.TOKEN;
 
+if (!TOKEN) {
+    console.error("No bot token provided. Exiting...");
+    Deno.exit(1);
+}
+
 // Package Imports //
 import {
     Client,

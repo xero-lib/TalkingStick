@@ -100,7 +100,7 @@ export default async function handleInteractionCreate(interaction: Interaction) 
                     try {
                         await tsinit(interaction);
                     } catch (err) {
-                        logger.error(`Failed to execute JIT tsinit in ${interaction.guild?.name} by ${interaction.user.username}:\n${err}`);
+                        logger.error(`Failed to execute JIT tsinit in ${guild.name} by ${interaction.user.username}:\n${err}`);
                         await replySafe(interaction, "An error was encountered while creating roles. Please directly run the `tsinit` command.").catch(logger.error);
                         
                         return;

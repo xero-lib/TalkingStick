@@ -54,7 +54,7 @@ export default async function remcon(interaction: ValidInteraction) {
                     .setColor(Colors.Red)
                     .setTitle("**Stick Controller Removed**")
                     .addFields([{ name: "Controller removed from:", value: `<@${member.id}>` }])
-                    .setDescription(`Stick Controller permissions have been removed from ${member.displayName} by ${interaction.member.displayName}`)
+                    .setDescription(`Stick Controller permissions have been removed from <@${member.id}> by <@${interaction.user.id}>`)
             ]
         }
     );

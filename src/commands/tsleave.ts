@@ -47,7 +47,7 @@ export default async function tsleave(interaction: ValidInteraction) {
     }
 
     if (!channel.permissionOverwrites.cache.get(activeRole.id)?.allow.has(StickFlags.ACTIVE_MAGIC)) {
-        await replyEphemeral(interaction, `There does not appear to be an active Stick-Session in ${channel.name}.`);
+        await replyEphemeral(interaction, `There does not appear to be an active Stick-Session in <#${channel.id}>.`);
         return;
     }
 
@@ -55,7 +55,7 @@ export default async function tsleave(interaction: ValidInteraction) {
         await cleanupStickSession(channel);
     } catch (err) {
         logger.error(`Failed to set overwrites for Stick-Session cleanup of ${channel.name} in ${channel.guild.name}:\n${err}`);
-        await replySafe(interaction, "Unable to reset channel permissions. Please ensure Talking Stick has Administrator permissions.");
+        await replySafe(interaction, `Unable to reset channel permissions of <#${channel.id}>. Please ensure Talking Stick has Administrator permissions.`);
 
         return;
     }
@@ -66,7 +66,7 @@ export default async function tsleave(interaction: ValidInteraction) {
                 .setAuthor({ name: member.displayName, iconURL: member.displayAvatarURL() })
                 .setColor(Colors.Green)
                 .setTitle("Stick-Session Ended")
-                .setDescription(`<@${member.id}> ended the Stick-Session in ${channel.name}. You may now talk freely.`)
+                .setDescription(`<@${member.id}> ended the Stick-Session in <#${channel.id}>. You may now talk freely.`)
             ]
     });
 }

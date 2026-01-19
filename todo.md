@@ -1,8 +1,4 @@
 # Todo
-- [ ] Devise a solution to the flag silliness
-    - [ ] Class vs helper functions
-- [ ] Finish/remake/polish `README`
-- [ ] Replace user and channel names with <@/#{id}> in most places
 - [ ] Update `replyEphemeral` to ensure previous message stops spinning.
 - [ ] Integrate guild channel overwrites deletion on tsdestroy
 - [?] Properly implement deferReply
@@ -46,3 +42,6 @@
 - [x] Use channel overwrites for `VoiceStateUpdate` instead of checking to see if someone in the channel is a stick holder
 - [x] Only let `tsjoin` be added to a given channel once
 - [x] Consolidate `e` vs `err`
+- [x] Devise a solution to the flag silliness
+- [x] Finish/remake/polish `README`
+- [x] Replace user and channel names with <@/#{id}> in most places

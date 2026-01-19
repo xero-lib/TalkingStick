@@ -20,7 +20,7 @@ export default async function handleMessageCreate(message: Message) {
         await developer.send({
             embeds: [
                 new EmbedBuilder()
-                    .setAuthor({ name: `${user.username} (${user.id})`, iconURL: user.displayAvatarURL() })// .setFooter({ text: `${Date.prototype.getHours()}:${Date.prototype.getMinutes()}:${Date.prototype.getSeconds()}` })
+                    .setAuthor({ name: `${user.username} (${user.id})`, iconURL: user.displayAvatarURL() })
                     .setDescription(message.content)
                     .addFields([{ name: "Mutual Servers", value: relatedGuilds ?? "None Found"}])
             ],

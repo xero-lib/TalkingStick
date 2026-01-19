@@ -50,7 +50,7 @@ export default async function tsjoin(interaction: ValidInteraction) {
     }
 
     if (channel.permissionOverwrites.cache.get(activeRole.id)?.allow.has(StickFlags.ACTIVE_MAGIC)) {
-        await replyEphemeral(interaction, `There is already an active Stick-Session in ${channel.name}.`);
+        await replyEphemeral(interaction, `There is already an active Stick-Session in <#${channel.id}>.`);
         return;
     }
 
@@ -123,7 +123,7 @@ export default async function tsjoin(interaction: ValidInteraction) {
         await channel.permissionOverwrites.set(overwrites);
     } catch (err) {
         logger.error(`(${channelType}) Could not update permissions of ${channel.name} in ${interaction.guild.name} requested by ${interaction.user.username} (${member.id}):\n${err}`);
-        await replySafe(interaction, `Talking Stick was unable to update the permissions of ${channel.name}. Please ensure Talking Stick has Administrator permissions.`);
+        await replySafe(interaction, `Talking Stick was unable to update the permissions of <#${channel.id}>. Please ensure Talking Stick has Administrator permissions.`);
 
         return;
     }

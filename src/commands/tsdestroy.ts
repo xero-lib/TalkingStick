@@ -46,8 +46,10 @@ export default async function tsdestroy(interaction: ValidInteraction) {
         tsdestroyEmbed.addFields({ name: `Error`, value: "A problem occured during role deletion. If any roles are still present, you may have to manually delete them." });
     }
     
-    tsdestroyEmbed.setAuthor({ name: `${interaction.member.displayName} (${interaction.user.id}) executed TSDestroy`, iconURL: interaction.member.displayAvatarURL() })
+    tsdestroyEmbed
         .setColor(Colors.Red)
+        .setAuthor({ name: interaction.member.displayName, iconURL: interaction.member.displayAvatarURL() })
+        .setDescription(`<@${interaction.member.id}> executed TSDestroy.`)
         .setFooter({ text: "`tsdestroy` execution concluded." });
 
     await replyEphemeral(interaction, { content: "", embeds: [tsdestroyEmbed] });

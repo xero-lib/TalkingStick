@@ -58,7 +58,7 @@ export default async function remstick(interaction: ValidInteraction) {
     }
     
     if (!channel.permissionOverwrites.cache.get(activeRole.id)?.allow.has(StickFlags.ACTIVE_MAGIC)) {
-        await replyEphemeral(interaction, `There is not a Stick-Session active in <#${channel.name}>`);
+        await replyEphemeral(interaction, `There is not a Stick-Session active in <#${channel.id}>`);
         return;
     }
 
