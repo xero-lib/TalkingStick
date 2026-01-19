@@ -2,7 +2,7 @@ import { EmbedBuilder } from "discord.js";
 
 import { ValidInteraction } from "../exports/dataExports.ts";
 import { replyEphemeral } from "../exports/functionExports.ts";
-import { developer, botPfp } from "../exports/configExports.ts";
+import { developer } from "../exports/configExports.ts";
 
 /**
  * Gives a brief status overview of the bot.
@@ -19,7 +19,7 @@ export default async function status(interaction: ValidInteraction) {
                 embeds:
                     [
                         new EmbedBuilder()
-                            .setAuthor({ name: "Talking Stick", iconURL: botPfp })
+                            .setAuthor({ name: "Talking Stick", iconURL: client.user.displayAvatarURL() })
                             .setTitle("**STATUS**")
                             .addFields([
                                 { name: "Server Count",     value: (await client.guilds.fetch()).size.toString(10)                 },

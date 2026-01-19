@@ -2,7 +2,7 @@ import { EmbedBuilder } from "discord.js";
 
 import { logger } from "../main.ts";
 import { ValidInteraction } from "../exports/dataExports.ts";
-import { botPfp, developer } from "../exports/configExports.ts";
+import { developer } from "../exports/configExports.ts";
 import { replyEphemeral, replySafe } from "../exports/functionExports.ts";
 
 /**
@@ -40,7 +40,7 @@ export default async function sendMessage(interaction: ValidInteraction) {
             iconURL: interaction.user.avatarURL() ?? interaction.member.displayAvatarURL()
         })
         .setDescription(message)
-        .setFooter({ text: "This message is from the bot developer.", iconURL: botPfp })
+        .setFooter({ text: "This message is from the bot developer.", iconURL: client.user.displayAvatarURL() })
     ;
     
     try {

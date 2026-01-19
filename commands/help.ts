@@ -1,6 +1,5 @@
 import { Colors, EmbedBuilder } from "discord.js";
 
-import { botPfp } from "../config/botConfig.ts";
 import { ValidInteraction } from "../exports/dataExports.ts";
 import { replyEphemeral } from "../exports/functionExports.ts";
 
@@ -147,7 +146,7 @@ export default async function help(interaction: ValidInteraction) {
         embeds: [
             new EmbedBuilder()
                 .setColor(Colors.Green)
-                .setThumbnail(botPfp)
+                .setThumbnail(interaction.client.user.displayAvatarURL())
                 .setAuthor({ name: interaction.member.displayName, iconURL: interaction.member.displayAvatarURL() })
                 .setTitle(`**Help: \`/${cmd}\`**`)
                 .setDescription(helpCommand.description)
