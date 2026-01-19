@@ -1,112 +1,58 @@
-<p align="center">
+<div align="center">
   <br>
-  <img width="25%" alt="Talking Stick logo: White microphone on a stick on a Discord-blue background." src="https://github.com/user-attachments/assets/a4430f3b-388e-41ab-a2e7-1c6f87936fa6" />
+  <img width="25%" alt="Talking Stick logo" src="https://github.com/user-attachments/assets/a4430f3b-388e-41ab-a2e7-1c6f87936fa6">
 
-</p>
-<p align="center">
-<em>Discord communication management application, written in JavaScript.</em>
+  # Talking Stick
+  **Discord communication management, written in TypeScript.**
+</div>
 
----
-If one person has the talking stick, no one else can speak/type (depending on if you tell it to join a voice channel or a text channel).
+## Overview
+**Talking Stick** brings order to your server. When a Stick-Session is active, **only the person(s) holding the Talking Stick can speak or type.**
 
-However, if you have the talking stick (or the special stick controller role) you can pass the talking stick to someone else so that they can talk!
+Perfect for meetings, debates, or virtual classrooms.
 
-You can even have multiple talking sticks so that several people can talk at the same time, but everyone else is muted in that channel (This feature is in beta)
-
-# Commands
-<em>\* - optional argument</em>
-| name | argument(s) |
-| --- | --- | 
-| [`help`](#help) | command* |
-| [`tsinit`](#tsinit) | |
-| [`tsjoin`](#tsjoin) | <voice\|text> |
-| [`tsleave`](#tsleave) | <voice\|text> |
-| [`tspass`](#tspass) | @User |
-| [`tsdestroy`](#tsdestroy) | |
-| [`tsgivecon`](#tsgivecon) | @User |
-| [`tsremcon`](#tsremcon) | @User |
-| [`tsaddstick`](#tsaddstick) | @User |
-| [`tsremstick`](#tsremstick) | @User |
-| `dnw` | bug-report-message* |
-
-
-## `help`
-The basic Talking Stick commands are `/tsjoin` which will allow you to start the Talking Stick, and `/tspass` to pass the talking stick.
-
-To get help on a specific command, run `/help <command>` without the `<` and `>`.
-<br>
-**Example:**
-`/help`
-`/help tsjoin`
+### Key Features
+* **Strict Turn-Taking:** Mutes all participants except the stick holder.
+* **Stick Controllers:** Administrators can assign Stick Controllers, who can give and take additional Talking Sticks.
+* **Multi-Stick:** Allow multiple people to speak simultaneously while the rest of the channel listens (or reads). Accessable via a Stick Controller using the `tsaddstick` command.
 
 ---
 
-## `tsinit`
-Creates all necessary roles for Talking Stick. (In the future, this will also run a tutorial
-<br>
-**Example**:
-`/tsinit`
+## Quick Start
+0. Click [here](https://discord.com/oauth2/authorize?client_id=609233676471107584&scope=bot&permissions=8) to add the bot to one of your servers.
+1. **Initialize:** Run the `/tsinit` command to create the necessary bot roles.
+2. **Start:** Enter a voice or text channel and use the `/tsjoin` command to begin a Stick-Session.
+3. **Manage:** Use the `/tspass` command to hand the stick off to someone else.
+4. **End:** Use the `/tsleave` command to end the Stick-Session, reverting everyone to their normal states.
 
 ---
 
-## `tsjoin`
-Activates Talking Stick in either a voice or a text channel depending on the passed argument. This will mute everyone except the member who sent the command, and assign the special Talking Stick roles.
-<br>
-**Example**:
-`/tsjoin text`
+## Command Reference
 
----
+### Session Management
+| Command | Arguments | Description | Minimum Permissions |
+| --- | --- | --- | --- |
+| **`/tsjoin`** | `<voice \| text>` | **Start Session.** Mutes everyone except you and assigns Stick roles. | **Stick Controller**, **Manage Roles**, or **Manage Channels** |
+| **`/tsleave`** | `<voice \| text>` | **End Session.** Unmutes everyone and restores original roles. | **Stick Controller**, **Manage Roles**, or **Manage Channels** |
+| **`/tsdestroy`**| *(None)* | Removes all bot-created permission overwrites and roles. | <u>**Administrator Only**</u> |
+| **`/tsinit`** | *(None)* | **Manage Roles.** Creates the Roles required by Talking Stick to function properly. | <u>**Administrator Only**</u> |
 
-## `tsleave`
-Deactivates Talking Stick in either a voice or a text channel depending on the passed argument. This will allow everyone to talk again, and return them to their original roles.
-<br>
-**Example**:
-`/tsleave text`
+### Stick Control
+| Command | Arguments | Description | Minimum Permissions |
+| --- | --- | --- | --- |
+| **`/tspass`** | `<voice \| text> <user>` | Pass your stick to another user. | **Stick Holder Only** |
+| **`/tsaddstick`**| `<voice \| text> <user>` | Give a user a stick *without* losing yours (Multi-speaker). | **Stick Controller** |
+| **`/tsremstick`**| `<voice \| text> <user>` | Forcefully take a stick away from a user. | **Stick Controller** |
 
----
+### Permissions & Utility
+| Command | Arguments | Description | Minimum Permissions |
+| --- | --- | --- | --- |
+| **`/tsgivecon`** | `<user>` | Promote a user to **Stick Controller**. | <u>**Administrator Only**</u> |
+| **`/tsremcon`** | `<user>` | Demote a Stick Controller. | <u>**Administrator Only**</u> |
+| **`/help`** | `[command]` | Show help for a specific command (e.g., `/help tsjoin`). | **everyone** |
+| **`/dnw`** | `<message>` | **"Did Not Work"** - Submit a bug report to the developer. | **everyone** |
 
-## `tspass`
-If you have the talking stick, you can pass it to someone else by pinging them with this command.
-<br>
-**Example**:
-`/tspass text @Thoth`
-
----
-
-## `tsdestroy`
-Deletes all roles created by the bot. **Warning**: any users still muted due to Talking Stick will remain muted until unmuted by a moderator.
-<br>
-**Example**:
-`/tsdestroy`
-
----
-
-## `tsgivecon`
-Allows you to give another user the `Stick Controller` role by pinging them with this command.
-<br>
-**Example**:
-`/tsgivecon @Thoth`
-
----
-
-## `tsremcon`
-Allows you to remove another user from the `Stick Controller` role by pinging them with this command.
-<br>
-**Example**:
-`/tsremcon @Thoth`
-
----
-
-## `tsaddstick`
-Allows you to give another user in the voice channel a talking stick, while keeping your own by pinging them with this command.
-<br>
-**Example**:
-`/tsaddstick @Thoth`
-
----
-
-## `tsremstick`
-Allows you to take a stick from a mentioned user by pinging them with this command.
-<br>
-**Example**:
-`/tsremstick @Thoth`
+> **Legend:**
+> * `a | b` = Either `a` or `b`
+> * `< >` = Required argument
+> * `[ ]` = Optional argument
