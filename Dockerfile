@@ -12,11 +12,11 @@ RUN deno install
 COPY . .
 
 # cache entrypoint
-RUN deno cache main.ts
+RUN deno cache src/main.ts
 
 # Expose ports
 EXPOSE 3000 433
 
 # Run Talking Stick
 ENTRYPOINT ["deno"]
-CMD ["run", "--allow-net", "--allow-env", "--allow-read", "--allow-sys", "main.ts"]
+CMD ["run", "--allow-net", "--allow-env", "--allow-read", "--allow-sys", "src/main.ts"]
