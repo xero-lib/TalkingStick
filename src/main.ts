@@ -54,23 +54,6 @@ const baseLogger = Logger(
 );
 
 // initialize logger instance
-// const baseLogger = Logger({
-//     level: isDev ? "trace" : "info",
-//     transport: { // not logging too terribly much so pretty should be fine
-//         target: "pino-pretty",
-//         options: {
-//             destination: {
-//                 dest: 1,
-//                 sync: true
-//             },
-//             colorize: true,
-//             colorizeObjects: true,
-//             levelFirst: true,
-//             translateTimestamp: "SYS:yyyy-mm-dd HH:MM:ss.l",
-//             timestamp: "SYS:yyyy-mm-dd HH:MM:ss.l"
-//         }
-//     }
-// });
 
 // bind all logger levels
 export const logger = {
@@ -109,10 +92,13 @@ client
     .on(Events.VoiceStateUpdate , handleVoiceStateUpdate )
     .on(Events.InteractionCreate, handleInteractionCreate)
     .on(Events.ShardReconnecting, handleShardReconnecting)
+    .on(Events.ShardError       , (err) => {
+        if (err.message !== "Unexpected EOF") logger.error(`Shard error:\n${err}`);
+    })
 
     .on(Events.Warn      , logger.warn)
     .on(Events.Debug     , handleDebug)
-    .on(Events.Error     , (err) => { if (err.message !== "Unexpected EOF") logger.error(err); }) // suppress Deno's seemingly harmless ws hickups
+    .on(Events.Error     , (err) => logger.error(`Client error:\n${err}`)) 
     .on(Events.ShardError, logger.error)
 ;
     // .on("userUpdate", // might be useful for keeping track of user roles);
@@ -135,6 +121,9 @@ const developer = application.owner instanceof User ? application.owner : applic
 
 
 // Process.on //
-onunhandledrejection = (event) => logger.error(`Unhandled rejection: ${event.reason}`); // this better not ever fire
+onunhandledrejection = (event) => {
+    logger.error(`Unhandled rejection: ${event.reason}`); // this better not ever fire
+    event.preventDefault(); // but if it does, keep the process from exiting
+}
 
 export { developer, application, rolesMap };
