@@ -1,6 +1,7 @@
 <p align="center">
   <br>
-  <img width="10%" src="https://github.com/xero-lib/TalkingStick/assets/54485853/ff35b853-c785-4b57-af6c-30bd6715a088" alt="Talking Stick logo: White stick clipart with light blue background.">
+  <img width="25%" alt="Talking Stick logo: White microphone on a stick on a Discord-blue background." src="https://github.com/user-attachments/assets/a4430f3b-388e-41ab-a2e7-1c6f87936fa6" />
+
 </p>
 <p align="center">
 <em>Discord communication management application, written in JavaScript.</em>
