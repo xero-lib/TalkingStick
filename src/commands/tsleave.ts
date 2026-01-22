@@ -38,7 +38,7 @@ export default async function tsleave(interaction: ValidInteraction) {
     const controllerRole = await getRole(interaction.guild, Roles.StickController).catch(() => undefined);
 
     // if any of the roles weren't found, which should be impossible given we check in handleInteractionCreate
-    if (!(activeRole && !controllerRole)) {
+    if (!(activeRole && controllerRole)) {
         // then log the event and reply to the user that roles weren't found, and return.
         logger.error("Reached theoretically impossible state in tsjoin: nonexistent roles after confirmation of initialization.")
         await replyEphemeral(interaction, "Unable to find critical roles. Please run the `tsinit` command."); 
