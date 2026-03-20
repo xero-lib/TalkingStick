@@ -49,7 +49,7 @@ export const helpMap = new Map<string, HelpInfo>()
     })
     .set("tspass", {
         args: [ "type", "user" ],
-        argDesc: [ "Whether to pass in `voice` or `text", "Ping user to pass stick to" ],
+        argDesc: [ "Whether to pass in `voice` or `text`", "Ping user to pass stick to" ],
         example: "`/tspass text @Thoth`",
         minPerm: "Stick Holder",
         argCount: "Takes two arguments",
@@ -67,7 +67,7 @@ export const helpMap = new Map<string, HelpInfo>()
         args: [ "user" ],
         argDesc: [ "Which user to give controller role to" ],
         example: "`/tsgivecon @Thoth`",
-        minPerm: "Stick Controller",
+        minPerm: "ManageRoles",
         argCount: "Takes one argument",
         shortDesc: "Allows you to give another user the `Stick Controller`",
         description: "Allows you to give another user the `Stick Controller`.",
@@ -76,7 +76,7 @@ export const helpMap = new Map<string, HelpInfo>()
         args: [ "user" ],
         argDesc: [ "Which user to remove controller role from" ],
         example: "`/tsremcon @Thoth`",
-        minPerm: "Stick Controller",
+        minPerm: "Administrator",
         argCount: "Takes one argument",
         shortDesc: "Allows you to remove another user from the `Stick Controller` role",
         description: "Allows you to remove another user from the `Stick Controller` role."
@@ -151,8 +151,8 @@ export default async function help(interaction: ValidInteraction) {
                 .setTitle(`**Help: \`/${cmd}\`**`)
                 .setDescription(helpCommand.description)
                 .addFields([
-                    { name: helpCommand.argCount || "", value: helpCommand.argDesc?.at(0) ?? "" },
-                    { name: "**Exmple**", value: helpCommand.example }
+                    { name: helpCommand.argCount || "", value: helpCommand.argDesc?.join("\n") ?? "" },
+                    { name: "**Example**", value: helpCommand.example }
                 ])
             .setFooter({ text: `Minimum permission of ${helpCommand.minPerm} required to execute this command` })
         ]

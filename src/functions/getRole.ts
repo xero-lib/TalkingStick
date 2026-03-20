@@ -28,17 +28,16 @@ export default async function getRole(source: Guild | GuildMember, role: Roles):
 
         const variantMap = new Map<Roles, string>();
 
-        // iterate over each variant of the role, caching each
+        // iterate over each variant of the role, caching whatever is found
         for (const name of Object.values(Roles)) {
             logger.trace(`Indexing ${name} role in ${guild.name}`);
 
             // find the role in the fetched roles collection
             const guildRole = retrievedRoles.find((r) => r.name === name);
 
-            // if the guildRole wasn't found, the server is not properly set up, so return undefined
             if (!guildRole) {
                 logger.debug(`Unable to find ${name} role in ${guild.name}`);
-                return undefined;
+                continue; // cache what we can, don't abort entirely
             }
 
             // set each variant in the map

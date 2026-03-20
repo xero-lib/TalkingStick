@@ -12,7 +12,7 @@ import { getRole, replyEphemeral, replySafe } from "../exports/functionExports.t
  */
 export default async function tspass(interaction: ValidInteraction) {
     const member = interaction.member;
-    
+
     const target = interaction.options.getMember("recipient");
     if (!(target instanceof GuildMember)) {
         await replyEphemeral(interaction, "Unable to resolve user. Please wait a moment and try again.");
@@ -34,21 +34,21 @@ export default async function tspass(interaction: ValidInteraction) {
     const channel = isVoice
         ? member.voice.channel
         : interaction.channel
-    ;
+        ;
 
     if (!channel) {
         await replyEphemeral(interaction, "You must be in a voice channel to use `/tspass Voice Channel`.");
         return;
     }
 
-    const activeRole     = await getRole(interaction.guild, Roles.TSActive       ).catch(() => undefined);
+    const activeRole = await getRole(interaction.guild, Roles.TSActive).catch(() => undefined);
     const controllerRole = await getRole(interaction.guild, Roles.StickController).catch(() => undefined);
 
     // if any of the roles weren't found, which should be impossible given we check in handleInteractionCreate
     if (!(activeRole && controllerRole)) {
         // then log the event and reply to the user that roles weren't found, and return.
         logger.error(`Reached theoretically impossible state in tsjoin: nonexistent roles after confirmation of initialization.`)
-        await replyEphemeral(interaction, "Unable to find critical roles. Please run the `tsinit` command."); 
+        await replyEphemeral(interaction, "Unable to find critical roles. Please run the `tsinit` command.");
 
         return;
     }
@@ -57,7 +57,7 @@ export default async function tspass(interaction: ValidInteraction) {
         await replyEphemeral(interaction, `There does not appear to be an active Stick-Session in <#${channel.id}>.`);
         return;
     }
-    
+
     const memberOverwrites = new OverwriteManager(
         isVoice,
         channel.permissionOverwrites.cache.get(member.id) ?? { id: member.id, type: OverwriteType.Member }
@@ -73,14 +73,14 @@ export default async function tspass(interaction: ValidInteraction) {
         await replyEphemeral(interaction, `<@${target.id}> doesn't seem to be in your voice channel`);
         return;
     }
-    
+
     const targetOverwrites = new OverwriteManager(
         isVoice,
         channel.permissionOverwrites.cache.get(target.id) ?? { id: target.id, type: OverwriteType.Member }
     );
 
     if (targetOverwrites.hasStick()) {
-        await replySafe(interaction, `<@${target.id}> already has a updateTalking Stick in <#${channel.id}>`);
+        await replySafe(interaction, `<@${target.id}> already has a talking stick in <#${channel.id}>`);
         return;
     }
 
@@ -88,16 +88,14 @@ export default async function tspass(interaction: ValidInteraction) {
     memberOverwrites.takeStick();
     targetOverwrites.giveStick();
 
-    try {
-        await channel.permissionOverwrites.create(
-            target.id,
-            targetOverwrites.toOverwriteData() as PermissionOverwriteOptions
-        )
+    const newOverwrites = channel.permissionOverwrites.cache.map(overwrite => {
+        if (overwrite.id === target.id) return targetOverwrites.toOverwriteData();
+        if (overwrite.id === member.id) return memberOverwrites.toOverwriteData();
+        return overwrite;
+    });
 
-        await channel.permissionOverwrites.create(
-            member.id,
-            memberOverwrites.toOverwriteData() as PermissionOverwriteOptions
-        )
+    try {
+        await channel.permissionOverwrites.set(newOverwrites);
     } catch (err) {
         logger.error(`Unable to set new session state:\n${err}`);
         await replySafe(interaction, "Unable modify mutes. Talking Stick requires Administrator privileges in order to work properly.");
@@ -109,8 +107,8 @@ export default async function tspass(interaction: ValidInteraction) {
         embeds: [
             new EmbedBuilder()
                 .setAuthor({
-                        name: member.displayName,
-                        iconURL: member.displayAvatarURL()
+                    name: member.displayName,
+                    iconURL: member.displayAvatarURL()
                 })
                 .setColor(Colors.Green)
                 .setTitle("Talking Stick Passed")

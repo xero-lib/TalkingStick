@@ -43,7 +43,14 @@ export default async function remcon(interaction: ValidInteraction) {
         return;
     }
 
-    await member.roles.remove(controllerRole);
+    try {
+        await member.roles.remove(controllerRole);
+    } catch(err) {
+        logger.error(`Unable to remove Stick Controller role from ${member.user.username}:\n${err}`);
+        await replyEphemeral(interaction, "Talking Stick was unable to remove the role. Check permissions.");
+        return;
+    }
+
     await replyEphemeral(
         interaction,
         {

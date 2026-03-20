@@ -3,7 +3,7 @@ import { EmbedBuilder, PermissionFlagsBits, Colors } from "discord.js";
 import { logger } from "../main.ts";
 
 import { Roles, ValidInteraction } from "../exports/dataExports.ts";
-import { destroyRoles, hasRole, replyEphemeral } from "../exports/functionExports.ts";
+import { destroyRoles, hasRole, replyEphemeral, replySafe } from "../exports/functionExports.ts";
 
 /**
  * Deletes all Talking Stick roles in a given guild.
@@ -11,6 +11,12 @@ import { destroyRoles, hasRole, replyEphemeral } from "../exports/functionExport
  * @throws If an interaction reply fails.
  */
 export default async function tsdestroy(interaction: ValidInteraction) {
+    // check permission first
+    if (!interaction.member.permissions.has(PermissionFlagsBits.ManageRoles)) {
+        await replyEphemeral(interaction, "You do not have permission to do this.");
+        return;
+    }
+
     const guild = await interaction.guild.fetch().catch((err) => {
         logger.error(`Unable to fetch guild state of ${interaction.guild.name}:\n${err}`);
         return null;
@@ -21,20 +27,10 @@ export default async function tsdestroy(interaction: ValidInteraction) {
         return;
     };
 
-    await replyEphemeral(interaction, "Destroying roles...");
-
-    // if the user does not have ManageRoles permissions, 
-    if (!interaction.member.permissions.has(PermissionFlagsBits.ManageRoles)) {
-        // then reply to the user that they are missing permissions, and return.
-        await replyEphemeral(interaction, "You do not have permission to do this.");
-        return;
-    }
-
     const tsdestroyEmbed = new EmbedBuilder();
-    
+
     for (const role of Object.values(Roles)) {
-        // if the guild has the given role
-        if (await hasRole(guild, role)) tsdestroyEmbed.addFields([{ name: `Destroying \`${role}\``, value: `${role} destroyed.` }]); 
+        if (await hasRole(guild, role)) tsdestroyEmbed.addFields([{ name: `Destroying \`${role}\``, value: `${role} destroyed.` }]);
         else tsdestroyEmbed.addFields([{ name: `__Skipping ${role}__`, value: `${role} is not present.` }]);
     }
 
@@ -42,15 +38,14 @@ export default async function tsdestroy(interaction: ValidInteraction) {
         await destroyRoles(interaction);
     } catch (err) {
         logger.debug(`destroyRoles failed:\n${err}`);
-        // probably just make this its own reply
         tsdestroyEmbed.addFields({ name: `Error`, value: "A problem occured during role deletion. If any roles are still present, you may have to manually delete them." });
     }
-    
+
     tsdestroyEmbed
         .setColor(Colors.Red)
         .setAuthor({ name: interaction.member.displayName, iconURL: interaction.member.displayAvatarURL() })
         .setDescription(`<@${interaction.member.id}> executed TSDestroy.`)
         .setFooter({ text: "`tsdestroy` execution concluded." });
 
-    await replyEphemeral(interaction, { content: "", embeds: [tsdestroyEmbed] });
+    await replySafe(interaction, { content: "", embeds: [tsdestroyEmbed] });
 }

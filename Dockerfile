@@ -1,22 +1,9 @@
-FROM denoland/deno:latest
-
-# Create app dir
+FROM oven/bun:1.1-slim
 WORKDIR /app
 
-COPY deno.json* package.json* ./
+COPY package.json bun.lock ./
+RUN bun install --frozen-lockfile
 
-# Install deps
-RUN deno install
-
-# Copy source
 COPY . .
 
-# cache entrypoint
-RUN deno cache src/main.ts
-
-# Expose ports
-EXPOSE 3000 433
-
-# Run Talking Stick
-ENTRYPOINT ["deno"]
-CMD ["run", "--allow-net", "--allow-env", "--allow-read", "--allow-sys", "src/main.ts"]
+CMD ["bun", "run", "src/main.ts"]

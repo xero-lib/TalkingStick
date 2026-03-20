@@ -24,7 +24,7 @@ export default async function status(interaction: ValidInteraction) {
                             .addFields([
                                 { name: "Server Count",     value: (await client.guilds.fetch()).size.toString(10)                 },
                                 { name: "User Count",       value: client.users.cache.size.toString(10)                            },
-                                { name: "Uptime",           value: client.uptime ? client.uptime/1000/60/60/24 + "days": "Unknown" }
+                                { name: "Uptime",           value: client.uptime ? (client.uptime/1000/60/60/24).toFixed(2) + " days": "Unknown" }
                             ])
                     ]
             }

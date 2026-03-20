@@ -11,7 +11,10 @@ import { replyEphemeral, replySafe, setPresence } from "../exports/functionExpor
  */
 export default async function refreshPresence(interaction: ValidInteraction) {
     logger.info(`Refresh Presence requested by ${interaction.user.username}`);
-    if (interaction.member.id !== developer.id ) return;
+    if (interaction.member.id !== developer.id) {
+        await replyEphemeral(interaction, "You do not have permission to execute this command.");
+        return;
+    }
 
     try {
         setPresence(interaction.client);

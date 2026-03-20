@@ -8,14 +8,5 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
-    ports:
-      - "3000"
-      - "443"
     environment:
-      - DENO_ENV=production
-      - LOG_LEVEL=debug
-      - DENO_UNBUFFERED=1
-    sysctls:
-      - net.ipv4.tcp_keepalive_time=60    # Check connection every 60s
-      - net.ipv4.tcp_keepalive_intvl=10   # Retry every 10s if no response
-      - net.ipv4.tcp_keepalive_probes=6   # Drop after 6 failed attempts
+      - BUN_ENV=production

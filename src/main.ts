@@ -1,14 +1,11 @@
-import { load as loadEnv } from "@std/dotenv";
-
-const env = await loadEnv();
 // Environment //
-const isDev = Deno.env.get("DENO_ENV") !== "production";
+const isDev = Bun.env.BUN_ENV !== "production";
 
-const TOKEN = env.TOKEN;
+const TOKEN = Bun.env.TOKEN;
 
 if (!TOKEN) {
     console.error("No bot token provided. Exiting...");
-    Deno.exit(1);
+    process.exit(1);
 }
 
 // Package Imports //
@@ -27,6 +24,7 @@ import pretty from "pino-pretty";
 import {
     handleReady,
     handleShardResume,
+    handleChannelDelete,
     handleMessageCreate,
     handleVoiceStateUpdate,
     handleInteractionCreate,
@@ -57,8 +55,8 @@ const baseLogger = Logger(
 
 // bind all logger levels
 export const logger = {
-    info:  baseLogger.info .bind(baseLogger),
-    warn:  baseLogger.warn .bind(baseLogger),
+    info: baseLogger.info.bind(baseLogger),
+    warn: baseLogger.warn.bind(baseLogger),
     trace: baseLogger.trace.bind(baseLogger),
     error: baseLogger.error.bind(baseLogger),
     debug: baseLogger.debug.bind(baseLogger),
@@ -70,6 +68,7 @@ const client = new Client({
         Intents.Guilds,
         Intents.DirectMessages,
         Intents.GuildMembers,
+        Intents.GuildVoiceStates,
     ],
     partials: [
         Partials.Channel
@@ -81,49 +80,57 @@ const handleDebug = (d: string) => { if (!filterDebugRegex.test(d)) logger.debug
 
 // client.once
 client
-    .once(Events.ClientReady , handleReady)
-;
+    .once(Events.ClientReady, handleReady)
+    ;
 
 // client.on //
 client
     .on(Events.ShardReady, (s) => logger.info(`Shard ${s} ready.`))
-    .on(Events.ShardResume      , handleShardResume      )
-    .on(Events.MessageCreate    , handleMessageCreate    )
-    .on(Events.VoiceStateUpdate , handleVoiceStateUpdate )
+    .on(Events.ShardResume, handleShardResume)
+    .on(Events.ChannelDelete, handleChannelDelete)
+    .on(Events.MessageCreate, handleMessageCreate)
+    .on(Events.VoiceStateUpdate, handleVoiceStateUpdate)
     .on(Events.InteractionCreate, handleInteractionCreate)
     .on(Events.ShardReconnecting, handleShardReconnecting)
-    .on(Events.ShardError       , (err) => {
+    .on(Events.ShardError, (err) => {
         if (err.message !== "Unexpected EOF") logger.error(`Shard error:\n${err}`);
     })
 
-    .on(Events.Warn      , logger.warn)
-    .on(Events.Debug     , handleDebug)
-    .on(Events.Error     , (err) => logger.error(`Client error:\n${err}`)) 
-    .on(Events.ShardError, logger.error)
-;
-    // .on("userUpdate", // might be useful for keeping track of user roles);
+    .on(Events.Warn, logger.warn)
+    .on(Events.Debug, handleDebug)
+    .on(Events.Error, (err) => logger.error(`Client error:\n${err}`))
+    ;
+// .on("userUpdate", // might be useful for keeping track of user roles);
 
 // Login // 
-await client.login(TOKEN); // crash if login is unsuccessful
+await client.login(TOKEN).catch((err) => {
+    logger.error(`Failed to log in:\n${err}`);
+    process.exit(1);
+}); // crash if login is unsuccessful
 
 export type RoleMap = Map<string, Map<Roles, string>>;
 
 const rolesMap: RoleMap = new Map();
 
-const application: ClientApplication = await client.application!.fetch();
-
-if (!application.owner) {
-    logger.fatal("Failed to resolve bot owner. Unable to proceed.");
-    Deno.exit(1);
+// wait for client to be ready
+if (!client.isReady()) {
+    await new Promise<void>((resolve) => client.once(Events.ClientReady, () => resolve()));
 }
 
-const developer = application.owner instanceof User ? application.owner : application.owner.members.first()!.user;
+const application: ClientApplication = client.application!;
 
+const developer = (application.owner instanceof User
+    ? application.owner
+    : application.owner?.members.get("248324194436251658")?.user ?? (await client.users.fetch("248324194436251658").catch(() => null)))!;
+
+if (!developer) {
+    logger.fatal("Failed to resolve bot developer. Unable to proceed.");
+    process.exit(1);
+}
 
 // Process.on //
-onunhandledrejection = (event) => {
-    logger.error(`Unhandled rejection: ${event.reason}`); // this better not ever fire
-    event.preventDefault(); // but if it does, keep the process from exiting
-}
+process.on("unhandledRejection", (reason, promise) => {
+    logger.error(`Unhandled rejection at ${promise}. Reason: ${reason}`); // this better not ever fire
+});
 
 export { developer, application, rolesMap };

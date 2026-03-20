@@ -11,6 +11,11 @@ import { replyEphemeral, replySafe } from "../exports/functionExports.ts";
  * @throws If an interaction reply or `developer.send` fails.
  */
 export default async function sendMessage(interaction: ValidInteraction) {
+    if (interaction.user.id !== developer.id) {
+        await replyEphemeral(interaction, "You do not have permission to execute this command.");
+        return;
+    }
+
     const client = interaction.client;
     const message = interaction.options.get("message")?.value
     if (!(typeof message === "string")) {

@@ -30,7 +30,7 @@ export default async function tsgivecon(interaction: ValidInteraction) {
 
     const target = interaction.options.getMember("recipient");
     if (!(target instanceof GuildMember)) {
-        logger.warn(`Unable to resolve user ${(target?.nick ?? "") + target ? " " : ""}in ${interaction.guild.name}.`);
+        logger.warn(`Unable to resolve user ${(target?.nick ?? "") + (target ? " " : "")}in ${interaction.guild.name}.`);
         await replyEphemeral(interaction, "Unable to resolve user. Please wait a moment and try again.");
 
         return;

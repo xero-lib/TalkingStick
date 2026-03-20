@@ -9,11 +9,5 @@ import { setPresence } from "../../exports/functionExports.ts";
  */
 export default async function handleReady(client: Client<true>) {
     logger.info(`Currently in ${client.guilds.cache.size} servers`);
-    try {
-        await client.guilds.fetch();
-    } catch (err) {
-        logger.error(`Failed to handle ready event:\n${err}`);
-    }
-
     setPresence(client);
 }

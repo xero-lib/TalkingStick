@@ -22,14 +22,15 @@ export default async function handleMessageCreate(message: Message) {
                 new EmbedBuilder()
                     .setAuthor({ name: `${user.username} (${user.id})`, iconURL: user.displayAvatarURL() })
                     .setDescription(message.content)
-                    .addFields([{ name: "Mutual Servers", value: relatedGuilds ?? "None Found"}])
+                    .addFields([{ name: "Mutual Servers", value: relatedGuilds ?? "None Found" }])
             ],
             files: message.attachments.map((value: Attachment) => value)
         });
-
-        await message.react('✅');
     } catch (err) {
         logger.error(`Error sending message from ${message.author.username} (${message.author.id}):\n${err}`);
         await channel.send("There was an error sending the message. Try again in a little while, add `_thoth` on Discord, or join the [support server](https://discord.gg/Jxe7mK2dHT).");
+        return;
     }
+
+    await message.react('✅').catch(() => null);
 }

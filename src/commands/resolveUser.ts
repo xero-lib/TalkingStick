@@ -10,7 +10,10 @@ import { replyEphemeral, replySafe } from "../exports/functionExports.ts";
  * @throws If an interaction reply fails.
  */
 export default async function resolveuser(interaction: ValidInteraction) {
-    if(interaction.member.id !== developer.id) return;
+    if(interaction.member.id !== developer.id) {
+        await replyEphemeral(interaction, "You do not have permission to execute this command.");
+        return;
+    }
 
     const username = interaction.options.get("username")?.value;
     if (!(typeof username === "string")) {

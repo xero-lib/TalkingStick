@@ -16,5 +16,5 @@ const descriptionEmbed = new EmbedBuilder()
  * @throws If an interaction reply fails.
  */
 export default async function description(interaction: ValidInteraction) {
-	await replyEphemeral(interaction, { embeds: [descriptionEmbed.setThumbnail(interaction.client.user.displayAvatarURL())] });
+	await replyEphemeral(interaction, { embeds: [EmbedBuilder.from(descriptionEmbed).setThumbnail(interaction.client.user.displayAvatarURL())] });
 }

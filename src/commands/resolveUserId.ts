@@ -10,7 +10,10 @@ import { replySafe, replyEphemeral } from "../exports/functionExports.ts";
  * @throws If an interaction reply failed.
  */
 export default async function resolveUserId(interaction: ValidInteraction) {
-    if(interaction.member.id !== developer.id) return;
+    if(interaction.member.id !== developer.id) {
+        await replyEphemeral(interaction, "You do not have permission to execute this command.");
+        return;
+    }
 
     const id = interaction.options.get("id")?.value;
     if (!(typeof id === "string")) {
@@ -25,7 +28,7 @@ export default async function resolveUserId(interaction: ValidInteraction) {
     });
 
     if (!user) {
-        await replyEphemeral(interaction, `Could not resolve user wit ID: ${id}`);
+        await replyEphemeral(interaction, `Could not resolve user with ID: ${id}`);
         return;
     }
 

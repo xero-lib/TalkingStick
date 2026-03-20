@@ -87,7 +87,8 @@ export class StickFlagManager<S extends FlagState> {
     }
 
     removeStick(this: StickFlagManager<"allow">) {
-        this.flags.remove(this.CommunicatePermission | this.BOT_MAGIC);
+        this.flags.remove(this.CommunicatePermission);
+        this.flags.remove(this.BOT_MAGIC);
     }
 
     addMute(this: StickFlagManager<"deny">) {
@@ -99,7 +100,8 @@ export class StickFlagManager<S extends FlagState> {
     }
 
     removeMute(this: StickFlagManager<"deny">) {
-        this.flags.remove(this.CommunicatePermission | this.BOT_MAGIC);
+        this.flags.remove(this.CommunicatePermission);
+        this.flags.remove(this.BOT_MAGIC);
     }
 
     needsRevert(): boolean {

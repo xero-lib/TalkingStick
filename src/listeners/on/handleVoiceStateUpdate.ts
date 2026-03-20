@@ -58,10 +58,11 @@ export default async function handleVoiceStateUpdate(oldState: VoiceState, newSt
         if (oldChannelMemberOverwrites.hasStick() && remainingHolders.size === 1) {
             try {
                 await cleanupStickSession(oldState.channel);
+                const avatarIcon = oldState.channel.client.user?.displayAvatarURL() ?? undefined;
                 await oldState.channel.send({ embeds: [
                     new EmbedBuilder()
                         .setColor(Colors.Green)
-                        .setAuthor({ name: "Stick Session Ended", iconURL: oldState.channel.client.user.displayAvatarURL() })
+                        .setAuthor({ name: "Stick Session Ended", iconURL: avatarIcon })
                         .setDescription(`<@${newState.member.id}> left <#${oldState.channel.id}>, so the Stick-Session has ended. You may now talk freely.`)
                 ]});
             } catch (err) {

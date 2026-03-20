@@ -1,6 +1,6 @@
 import { MessageFlags } from "discord.js";
 
-import { logger } from "../main.ts";
+import { logger, rolesMap } from "../main.ts";
 
 import { getRole, replySafe } from "../exports/functionExports.ts";
 import { Roles, ValidInteraction } from "../exports/dataExports.ts";
@@ -27,9 +27,12 @@ export default async function destroyRoles(interaction: ValidInteraction) {
             await role.delete(`TSDestroyed by ${interaction.user.username} (${interaction.user.id})`)
         } catch (err) {
             logger.error(`Encountered error during destroyRoles:\n${err}`);
-            await replySafe(interaction, `The bot likely lacks sufficient permissions to complete this action. Ensure Talking Stuck as Manage Roles permissions. Encountered: ${typeof err}.`);
+            await replySafe(interaction, `The bot likely lacks sufficient permissions to complete this action. Ensure Talking Stick has Manage Roles permissions. Encountered: ${typeof err}.`);
 
             return;
         }
     }
+
+    // invalidate cached role data for this guild
+    rolesMap.delete(interaction.guild.id);
 }

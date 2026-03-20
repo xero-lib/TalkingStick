@@ -56,8 +56,11 @@ export default async function handleInteractionCreate(interaction: Interaction) 
     }
 
     // ensure guild has all required roles, asking to initialize them if not
-    if (!["tsdestroy", "tsinit"].includes(interaction.commandName)) for (const role of Object.values(Roles)) {
-        if (!await getRole(guild, role)) {
+    if (!["tsdestroy", "tsinit"].includes(interaction.commandName)) {
+        const roleChecks = await Promise.allSettled(Object.values(Roles).map(role => getRole(guild, role)));
+        const missingRoles = roleChecks.some(result => result.status === "rejected" || result.value === undefined);
+
+        if (missingRoles) {
             if (!member.permissions.has(PermissionFlagsBits.ManageRoles)) {
                 await replySafe(interaction, "The server appears to be lacking roles critical to Talking Stick functionality. Please ask an administrator or a member with Manage Roles permission to run the `tsinit` command.").catch(logger.error);
                 return;
@@ -108,7 +111,7 @@ export default async function handleInteractionCreate(interaction: Interaction) 
 
                     await confirmation.editReply({ content: "Talking Stick roles initialized successfully!", components: [] }).catch(logger.error);
 
-                    break;
+                    return;
                 }
 
                 await confirmation.editReply({ content: "Initialization cancelled.", components: [] }).catch(logger.error);
