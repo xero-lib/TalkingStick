@@ -7,7 +7,7 @@ import { Roles, ValidInteraction } from "../../exports/dataExports.ts";
 import { CommandMap, CommandNames, getRole, replyEphemeral, replySafe } from "../../exports/functionExports.ts";
 
 function isValidInteraction(interaction: ChatInputCommandInteraction): interaction is ValidInteraction {
-    return interaction.inCachedGuild() && interaction.channel !== null; 
+    return interaction.inCachedGuild() && interaction.channel !== null;
 }
 
 /**
@@ -38,7 +38,7 @@ export default async function handleInteractionCreate(interaction: Interaction) 
         try {
             member = await guild.members.fetch(interaction.user.id);
             if (!member) throw "Failed to find user, even after fetch.";
-        } catch(err) {
+        } catch (err) {
             logger.error(`Failed to fetch user ${interaction.user.username} (${interaction.user.id}) from ${guild.name}:\n${err}`);
             await replyEphemeral(interaction, "Sorry, we were unable to fetch your information. Please try again in a moment.").catch(logger.error);
 
@@ -76,13 +76,13 @@ export default async function handleInteractionCreate(interaction: Interaction) 
                 .setCustomId("confirm")
                 .setLabel("Create Roles")
                 .setStyle(ButtonStyle.Success)
-            ;
+                ;
 
             const cancel = new ButtonBuilder()
                 .setCustomId("cancel")
                 .setLabel("Cancel")
                 .setStyle(ButtonStyle.Danger)
-            ;
+                ;
 
             const row = new ActionRowBuilder<ButtonBuilder>().addComponents(confirm, cancel);
 
@@ -92,7 +92,7 @@ export default async function handleInteractionCreate(interaction: Interaction) 
                 withResponse: true,
                 components: [row],
             }).catch(logger.error);
-            
+
             try {
                 const confirmation = await response?.awaitMessageComponent({ time: 60_000 });
                 if (!confirmation) throw "No confirmation status received";
@@ -105,24 +105,22 @@ export default async function handleInteractionCreate(interaction: Interaction) 
                     } catch (err) {
                         logger.error(`Failed to execute JIT tsinit in ${guild.name} by ${interaction.user.username}:\n${err}`);
                         await replySafe(interaction, "An error was encountered while creating roles. Please directly run the `tsinit` command.").catch(logger.error);
-                        
+
                         return;
                     }
 
                     await confirmation.editReply({ content: "Talking Stick roles initialized successfully!", components: [] }).catch(logger.error);
-
+                } else {
+                    await confirmation.editReply({ content: "Initialization cancelled.", components: [] }).catch(logger.error);
                     return;
                 }
-
-                await confirmation.editReply({ content: "Initialization cancelled.", components: [] }).catch(logger.error);
-                return;
             } catch {
                 await interaction.editReply({ content: "No confirmation received, cancelling.", components: [] }).catch(logger.error);
                 return;
             }
         }
     }
-    
+
     try {
         await command(interaction);
     } catch (err) {
