@@ -52,6 +52,7 @@ export default async function handleMessageCreate(message: Message) {
                     name: `To ${target.username} (${target.id})`,
                     iconURL: target.avatarURL() ?? target.displayAvatarURL()
                 })
+                .setFooter({ text: `You sent this message from <#${message.channelId}>.`, iconURL: developer.avatarURL() ?? developer.displayAvatarURL() })
             ;
 
             await developer.send({ embeds: [sendEmbedBuilder] });
