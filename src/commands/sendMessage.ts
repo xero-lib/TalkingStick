@@ -12,7 +12,7 @@ import { replyEphemeral, replySafe } from "../exports/functionExports.ts";
  */
 export default async function sendMessage(interaction: ValidInteraction) {
     if (interaction.user.id !== developer.id) {
-        await replyEphemeral(interaction, "You do not have permission to execute this command.");
+        await replyEphemeral(interaction, "You do not have permission to execute this command. (how did you even get here?)");
         return;
     }
 
@@ -41,8 +41,8 @@ export default async function sendMessage(interaction: ValidInteraction) {
 
     const sendEmbedBuilder = new EmbedBuilder()
         .setAuthor({
-            name: interaction.user.username,
-            iconURL: interaction.user.avatarURL() ?? interaction.member.displayAvatarURL()
+            name: developer.username,
+            iconURL: developer.avatarURL() ?? developer.displayAvatarURL()
         })
         .setDescription(message)
         .setFooter({ text: "This message is from the bot developer.", iconURL: client.user.displayAvatarURL() })
@@ -55,13 +55,14 @@ export default async function sendMessage(interaction: ValidInteraction) {
                 name: `To ${target.username} (${target.id})`,
                 iconURL: target.avatarURL() ?? target.displayAvatarURL()
             })
+            .setFooter({ text: `You sent this message from <#${interaction.channelId}>.`, iconURL: developer.avatarURL() ?? developer.displayAvatarURL() })
         ;
 
         await developer.send({ embeds: [sendEmbedBuilder] });
 
-        await replyEphemeral(interaction, `Successfully sent message to ${target.username} (${target.id}). A copy of this message has been sent via the bot to your DMs.`);
+        await replyEphemeral(interaction, `Successfully sent message to ${target.username} (${target.id}). A copy of this message has been sent via the bot to your DMs.`).catch(logger.error);
     } catch (err) {
-        logger.debug(`There was an error sending the message to ${target.username} (${target.id}):\n${err}`);
-        await replyEphemeral(interaction, `There was an error sending the message to ${target.username} (${target.id}). Most likely not in a mutual server.`);
+        logger.error(`There was an error sending the message to ${target.username} (${target.id}):\n${err}`);
+        await replyEphemeral(interaction, `There was an error sending the message to ${target.username} (${target.id}). Most likely not in a mutual server.`).catch(logger.error);
     }
 }
