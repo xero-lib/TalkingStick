@@ -15,6 +15,54 @@ export default async function handleMessageCreate(message: Message) {
 
     const user = message.author;
     const relatedGuilds = message.client.guilds.cache.filter((g) => g.members.cache.has(user.id)).map((g) => g.name).join('\n');
+    
+    if (message.author.id === developer.id && message.reference?.messageId) {
+        const repliedTo = await message.channel.messages.fetch(message.reference.messageId);
+
+        const senderId = repliedTo.embeds[0]?.author?.name.split("(").at(1)?.replace(")", "").trim();
+        if (!senderId) {
+            logger.error("Malformed sender ID: " + senderId);
+            await message.reply("Malformed sender ID: " + senderId).catch(logger.error);
+            return;
+        }
+        const client = message.client;
+        const target = await client.users.fetch(senderId).catch((err) => {
+            logger.error(`Failed to fetch user ID for inline developer reply ${senderId}:\n${err}`);
+            return null;
+        });
+
+        if (!target) {
+            await message.reply(`Failed to fetch user ID for inline developer reply \`${senderId}\`.`).catch(logger.error);
+            return;
+        }
+
+        const sendEmbedBuilder = new EmbedBuilder()
+            .setAuthor({
+                name: developer.displayName,
+                iconURL: developer.avatarURL() ?? developer.displayAvatarURL()
+            })
+            .setDescription(message.content)
+            .setFooter({ text: "This message is from the bot developer.", iconURL: client.user.displayAvatarURL() })
+        ;
+        
+        try {
+            await client.users.send(senderId, { embeds: [sendEmbedBuilder] });
+            sendEmbedBuilder
+                .setAuthor({
+                    name: `To ${target.username} (${target.id})`,
+                    iconURL: target.avatarURL() ?? target.displayAvatarURL()
+                })
+            ;
+
+            await developer.send({ embeds: [sendEmbedBuilder] });
+
+            await message.react('🐦').catch(logger.error);
+        } catch (err) {
+            logger.debug(`There was an error sending the message to ${target.username} (${target.id}):\n${err}`);
+            await message.react('❌').catch(logger.error);
+        }
+        return;
+    }
 
     try {
         await developer.send({
@@ -32,5 +80,5 @@ export default async function handleMessageCreate(message: Message) {
         return;
     }
 
-    await message.react('✅').catch(() => null);
+    await message.react('✅').catch(logger.error);
 }
